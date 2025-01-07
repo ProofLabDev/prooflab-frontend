@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import useDataLoader from '../../hooks/useDataLoader';
 import { formatDuration, formatMemory, formatCpuUsage, formatDurationShort } from '../../utils/dataTransforms';
+import { Link } from 'react-router-dom';
 
 const formatProofSize = (bytes) => {
   if (!bytes && bytes !== 0) return 'N/A';
@@ -37,6 +38,7 @@ const LeaderboardTable = () => {
     key: 'timing.proof_generation',
     direction: 'asc'
   });
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -102,7 +104,36 @@ const LeaderboardTable = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-6">
+        <button
+          onClick={() => setIsHelpOpen(!isHelpOpen)}
+          className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+        >
+          <span className="text-xl mr-2">🤔</span>
+          <span className="text-lg font-medium">Confused?</span>
+          <span className={`ml-2 transition-transform duration-200 ${isHelpOpen ? 'rotate-180' : ''}`}>
+            ▼
+          </span>
+        </button>
+        
+        {isHelpOpen && (
+          <div className="mt-4 bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+            <p className="text-gray-700 mb-4">
+              ProofLab is a benchmarking platform for Zero Knowledge Virtual Machines (zkVMs). 
+              We help you compare different zkVM implementations using real-world code examples.
+            </p>
+            <Link 
+              to="/faq" 
+              className="text-blue-600 hover:text-blue-800 font-medium flex items-center"
+            >
+              Learn more in our FAQ
+              <span className="ml-1">→</span>
+            </Link>
+          </div>
+        )}
+      </div>
+
       <h2 className="text-2xl font-bold mb-6">ZK Proof Benchmarks</h2>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
