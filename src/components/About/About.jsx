@@ -6,7 +6,7 @@ const About = () => {
       <div className="text-center mb-16">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">ProofLab</h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          The Zero Knowledge Proof Benchmarking Platform
+          Benchmarking and Developer Tools for Zero Knowledge Systems
         </p>
       </div>
       
@@ -14,14 +14,16 @@ const About = () => {
         <section className="prose max-w-3xl mx-auto">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
-              ProofLab serves as the central infrastructure layer for zero knowledge proof development, 
-              combining specialized version control for ZK programs with flexible proving infrastructure.
+              ProofLab combines engaging performance benchmarks with powerful developer tools 
+              for the Zero Knowledge ecosystem. We're building the infrastructure that makes 
+              ZK development more accessible, measurable, and fun.
             </p>
             
             <p className="text-lg text-gray-700 leading-relaxed">
-              Our platform bridges the gap between traditional software development practices and the 
-              unique requirements of ZK systems, making it easier for developers to write, share, and 
-              deploy ZK applications.
+              Through our zkRust SDK, developers can write their ZK programs once and deploy 
+              to any supported zkVM. Combined with our comprehensive benchmarks, this creates 
+              a powerful feedback loop: see how different zkVMs perform, then easily migrate 
+              your code to the best one for your needs.
             </p>
           </div>
         </section>
@@ -30,31 +32,31 @@ const About = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Core Features</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <h3 className="text-xl font-semibold mb-4 text-gray-900">Benchmarking Leaderboard</h3>
+              <h3 className="text-xl font-semibold mb-4 text-gray-900">Real-World Benchmarks</h3>
               <p className="text-gray-600 leading-relaxed">
-                Compare performance metrics across different ZK implementations with our 
-                comprehensive benchmarking system.
+                Compare zkVM performance with actual production code. No synthetic tests - 
+                see how they handle real programs in real conditions.
               </p>
             </div>
             <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <h3 className="text-xl font-semibold mb-4 text-gray-900">Data Visualization</h3>
+              <h3 className="text-xl font-semibold mb-4 text-gray-900">Write Once, Prove Anywhere</h3>
               <p className="text-gray-600 leading-relaxed">
-                Interactive charts and detailed breakdowns of proving times, resource usage, 
-                and system performance.
+                Our zkRust SDK lets you write code once and run it on any supported zkVM. 
+                No vendor lock-in, no rewriting code.
               </p>
             </div>
             <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <h3 className="text-xl font-semibold mb-4 text-gray-900">Standardized Testing</h3>
+              <h3 className="text-xl font-semibold mb-4 text-gray-900">Deep Performance Insights</h3>
               <p className="text-gray-600 leading-relaxed">
-                Consistent benchmarking environment ensures fair and accurate comparisons 
-                between different proving systems.
+                Detailed breakdowns of proving times, resource usage, and system performance. 
+                Understand exactly where time and resources are spent.
               </p>
             </div>
             <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <h3 className="text-xl font-semibold mb-4 text-gray-900">Open Platform</h3>
+              <h3 className="text-xl font-semibold mb-4 text-gray-900">Community-Driven</h3>
               <p className="text-gray-600 leading-relaxed">
-                Built for the ZK community, ProofLab welcomes contributions and feedback 
-                to improve the platform.
+                Open platform built for ZK developers by ZK developers. Share insights, 
+                contribute benchmarks, and help shape the future of ZK development.
               </p>
             </div>
           </div>
