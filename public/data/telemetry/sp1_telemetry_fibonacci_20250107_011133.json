@@ -1,0 +1,77 @@
+{
+  "timing": {
+    "workspace_setup_duration": {
+      "secs": 0,
+      "nanos": 8559000
+    },
+    "compilation_duration": {
+      "secs": 0,
+      "nanos": 1613667
+    },
+    "proof_generation_duration": {
+      "secs": 177,
+      "nanos": 699562165
+    },
+    "core_prove_duration": {
+      "secs": 23,
+      "nanos": 924100095
+    },
+    "core_verify_duration": {
+      "secs": 0,
+      "nanos": 316861501
+    },
+    "compress_prove_duration": {
+      "secs": 129,
+      "nanos": 361297934
+    },
+    "compress_verify_duration": {
+      "secs": 0,
+      "nanos": 153096625
+    },
+    "total_duration": {
+      "secs": 177,
+      "nanos": 712469499
+    }
+  },
+  "resources": {
+    "max_memory_kb": 6438620,
+    "min_memory_kb": 648584,
+    "avg_memory_kb": 3980912,
+    "max_cpu_percent": 100.0,
+    "min_cpu_percent": 0.0,
+    "avg_cpu_percent": 76.958015,
+    "samples": 164
+  },
+  "proving_system": "SP1",
+  "precompiles_enabled": false,
+  "program": {
+    "file_path": "examples/fibonacci",
+    "file_name": "fibonacci",
+    "absolute_path": "/zkrust/examples/fibonacci",
+    "cargo_metadata": {
+      "package_name": "fibonacci",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        "zk_rust_io"
+      ]
+    }
+  },
+  "zk_metrics": {
+    "cycles": 12883,
+    "num_segments": 1,
+    "core_proof_size": 2656986,
+    "recursive_proof_size": 1274775,
+    "execution_speed": 72.49877176420785
+  },
+  "system_info": {
+    "os_name": "Ubuntu",
+    "os_version": "22.04",
+    "kernel_version": "6.6.26-linuxkit",
+    "total_memory_kb": 8028988,
+    "cpu_brand": "",
+    "cpu_cores": 10,
+    "cpu_frequency_mhz": 0
+  }
+}

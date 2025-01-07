@@ -1,8 +1,25 @@
-# Getting Started with Create React App
+# ProofLab Frontend
+
+ProofLab Frontend is a web-based dashboard that serves as the "Huggingface for ZK" - a platform for benchmarking and comparing different Zero Knowledge proof implementations. The initial version focuses on providing a public good benchmarking leaderboard.
+
+## Features
+
+- **Benchmarking Leaderboard**: Compare performance metrics across different ZK implementations
+- **Data Visualization**: Performance comparison charts and resource usage graphs
+- **Detailed Analytics**: In-depth analysis of ZK implementation metrics
+
+## Tech Stack
+
+- React
+- GitHub Pages deployment
+- Static JSON telemetry data
+- Modern UI framework (TBD)
+
+## Development Setup
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### Available Scripts
 
 In the project directory, you can run:
 
