@@ -60,29 +60,52 @@ const About = () => {
           </div>
         </section>
 
-        <section className="max-w-2xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Creator</h2>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
-            <div className="mb-4">
-              <p className="text-2xl font-semibold text-gray-900 mb-2">Conner Swann</p>
-              <a 
-                href="https://x.com/YourBuddyConner" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-                @YourBuddyConner
-              </a>
+        <section>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Creator</h2>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+            <div className="flex items-center space-x-6">
+              <div className="flex-shrink-0">
+                <img
+                  className="h-24 w-24 rounded-full object-cover shadow-md"
+                  src="https://pbs.twimg.com/profile_images/1609309028462784513/Z8Cco7rb_400x400.jpg"
+                  alt="Conner Swann"
+                />
+              </div>
+              <div>
+                <h3 className="text-xl font-medium text-gray-900">Conner Swann</h3>
+                <p className="text-gray-600 mt-2 mb-3 leading-relaxed">
+                  Infrastructure builder with nearly a decade of experience in crypto and distributed systems. 
+                  Through ProofLab, I'm working to make Zero Knowledge technology more accessible 
+                  by establishing clear benchmarks and standards for the developer community.
+                </p>
+                <div className="mt-2 flex items-center space-x-4">
+                  <a
+                    href="https://x.com/connerswann"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 font-medium flex items-center"
+                  >
+                    <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                    @connerswann
+                  </a>
+                  <a
+                    href="https://burningbridges.substack.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 font-medium flex items-center"
+                  >
+                    <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
+                    </svg>
+                    Substack
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </section>
-
-        <footer className="text-center text-gray-500 text-sm">
-          <p>Built with ❤️ for the Zero Knowledge community</p>
-        </footer>
       </div>
     </div>
   );

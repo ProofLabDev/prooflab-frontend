@@ -215,8 +215,8 @@ const FAQ = () => {
                 <div>
                   <a href="https://zkbench.dev" className="text-blue-600 hover:text-blue-800 underline font-medium">zkbench.dev</a>
                   <p className="mt-1">
-                    A pioneering platform for ZK framework benchmarking that helped establish standards for 
-                    comparing different ZK implementations.
+                    A pioneering open-source project that established early methodologies for 
+                    comparing ZK framework performance and helped shape the benchmarking landscape.
                   </p>
                 </div>
               </li>
