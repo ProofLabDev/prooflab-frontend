@@ -80,7 +80,7 @@ const About = () => {
                 </p>
                 <div className="mt-2 flex items-center space-x-4">
                   <a
-                    href="https://x.com/connerswann"
+                    href="https://x.com/yourbuddyconner"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:text-blue-800 font-medium flex items-center"
@@ -88,7 +88,7 @@ const About = () => {
                     <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
-                    @connerswann
+                    @YourBuddyConner
                   </a>
                   <a
                     href="https://burningbridges.substack.com"
