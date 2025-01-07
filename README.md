@@ -1,12 +1,54 @@
 # ProofLab Frontend
 
-ProofLab Frontend is a web-based dashboard that serves as the "Huggingface for ZK" - a platform for benchmarking and comparing different Zero Knowledge proof implementations. The initial version focuses on providing a public good benchmarking leaderboard.
+ProofLab is your gateway to understanding and comparing Zero Knowledge proof systems. Our platform provides comprehensive benchmarking and performance analysis tools for the ZK ecosystem, making it easier to evaluate and choose the right proving system for your needs.
+
+## What is ProofLab?
+
+ProofLab's leaderboard serves as the central hub for Zero Knowledge proof system benchmarking. Think of it as the "HuggingFace for ZK" - a platform where developers can:
+
+- Compare performance metrics across different ZK implementations
+- Analyze resource usage and efficiency
+- Make informed decisions about which proving system best suits their needs
 
 ## Features
 
-- **Benchmarking Leaderboard**: Compare performance metrics across different ZK implementations
-- **Data Visualization**: Performance comparison charts and resource usage graphs
-- **Detailed Analytics**: In-depth analysis of ZK implementation metrics
+### Comprehensive Benchmarking
+- Side-by-side performance comparisons
+- Detailed resource utilization metrics
+- Standardized testing environments
+
+### Rich Data Visualization
+- Interactive performance charts
+- Resource usage analysis
+- Timing breakdowns for different proving phases
+
+### Detailed Analytics
+- Memory usage patterns
+- CPU utilization metrics
+- Proof generation timings
+- System-specific metrics
+
+## Contributing
+
+We welcome contributions from the ZK community! Whether it's submitting new benchmarks, improving documentation, or enhancing the platform, please feel free to:
+
+1. Fork the repository
+2. Create your feature branch
+3. Submit a pull request
+
+## Development Setup
+
+This project uses modern web technologies to deliver a responsive and intuitive experience.
+
+### Prerequisites
+- Node.js (14.x or higher)
+- Yarn package manager
+
+### Tech Stack
+- React for the frontend
+- GitHub Pages for deployment
+- Static JSON for telemetry data
+- Modern UI framework (TBD)
 
 ## Tech Stack
 
@@ -14,10 +56,6 @@ ProofLab Frontend is a web-based dashboard that serves as the "Huggingface for Z
 - GitHub Pages deployment
 - Static JSON telemetry data
 - Modern UI framework (TBD)
-
-## Development Setup
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ### Available Scripts
 
