@@ -1,0 +1,78 @@
+{
+  "timing": {
+    "workspace_setup_duration": {
+      "secs": 0,
+      "nanos": 3723750
+    },
+    "compilation_duration": {
+      "secs": 0,
+      "nanos": 1607500
+    },
+    "proof_generation_duration": {
+      "secs": 392,
+      "nanos": 136224180
+    },
+    "core_prove_duration": {
+      "secs": 80,
+      "nanos": 177839495
+    },
+    "core_verify_duration": {
+      "secs": 0,
+      "nanos": 508070000
+    },
+    "compress_prove_duration": {
+      "secs": 262,
+      "nanos": 444667371
+    },
+    "compress_verify_duration": {
+      "secs": 0,
+      "nanos": 152983542
+    },
+    "total_duration": {
+      "secs": 392,
+      "nanos": 145140973
+    }
+  },
+  "resources": {
+    "max_memory_kb": 7412568,
+    "min_memory_kb": 658316,
+    "avg_memory_kb": 5001247,
+    "max_cpu_percent": 100.0,
+    "min_cpu_percent": 0.0,
+    "avg_cpu_percent": 83.115974,
+    "samples": 353
+  },
+  "proving_system": "SP1",
+  "precompiles_enabled": true,
+  "program": {
+    "file_path": "examples/regex",
+    "file_name": "regex",
+    "absolute_path": "/zkrust/examples/regex",
+    "cargo_metadata": {
+      "package_name": "regex",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        "regex",
+        "zk_rust_io"
+      ]
+    }
+  },
+  "zk_metrics": {
+    "cycles": 191399,
+    "num_segments": 1,
+    "core_proof_size": 4145819,
+    "recursive_proof_size": 1274812,
+    "execution_speed": 488.0931375320818
+  },
+  "system_info": {
+    "os_name": "Ubuntu",
+    "os_version": "22.04",
+    "kernel_version": "6.6.26-linuxkit",
+    "total_memory_kb": 8028988,
+    "cpu_brand": "",
+    "cpu_cores": 10,
+    "cpu_frequency_mhz": 0
+  }
+}
