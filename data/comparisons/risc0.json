@@ -1,0 +1,169 @@
+{
+  "name": "RISC0",
+  "features": {
+    "language": {
+      "value": "Rust (core/std), C, C++",
+      "details": "Risc0 provides native support for Rust with optional std library support via feature flag. Guest code runs in a RISC-V environment with core library by default. C and C++ support through LLVM."
+    },
+    "zktype": {
+      "value": "STARK / RISC-V zkVM with STARK→SNARK",
+      "details": {
+        "summary": "Three-circuit architecture for flexible proving:",
+        "items": [
+          {
+            "title": "RISC-V Circuit",
+            "description": "STARK circuit proving correct RISC-V execution"
+          },
+          {
+            "title": "Recursion Circuit",
+            "description": "STARK circuit optimized for cryptography and proof verification"
+          },
+          {
+            "title": "STARK-to-SNARK Circuit",
+            "description": "R1CS circuit for generating Groth16 proofs (~200kB) for EVM verification"
+          }
+        ],
+        "links": [
+          {
+            "text": "Recursion Documentation",
+            "url": "https://dev.risczero.com/api/recursion"
+          }
+        ]
+      }
+    },
+    "unbounded": {
+      "value": "✅ (via Segments & Recursion)",
+      "details": {
+        "summary": "Multi-stage proving process for unbounded computation:",
+        "items": [
+          {
+            "title": "Segmentation",
+            "description": "Program execution split into Segments"
+          },
+          {
+            "title": "Lifting",
+            "description": "Each SegmentReceipt converted to SuccinctReceipt"
+          },
+          {
+            "title": "Joining",
+            "description": "Pairs of SuccinctReceipts recursively joined"
+          },
+          {
+            "title": "Compression",
+            "description": "Final proof converted to ~200kB Groth16Receipt"
+          }
+        ],
+        "note": "Supports composite, succinct, or groth16 receipts via prove_with_opts."
+      }
+    },
+    "libraries": {
+      "value": "✅ (with std feature flag)",
+      "details": "Supports Rust standard library when enabled via feature flag. Guest code can use external libraries, with some limitations in no_std mode. Includes built-in support for serde and SHA-256."
+    },
+    "evm": {
+      "value": "✅ Groth16 (~270k gas), PLONK (~300k gas)",
+      "details": {
+        "summary": "Multiple SNARK verification options for EVM chains:",
+        "items": [
+          {
+            "title": "Groth16",
+            "description": "~270k gas, ~260 bytes proof size"
+          },
+          {
+            "title": "PLONK",
+            "description": "~300k gas, proof size comparable to SP1"
+          },
+          {
+            "title": "Trusted Setup",
+            "description": "Custom ceremony for Groth16, reuses Aztec Ignition for PLONK"
+          }
+        ],
+        "note": "Supports both standard and succinct receipts with verifier parameters for each."
+      }
+    },
+    "gpu": {
+      "value": "✅ Metal, CUDA",
+      "details": {
+        "summary": "GPU acceleration options:",
+        "items": [
+          {
+            "title": "Apple Silicon",
+            "description": "Metal GPU acceleration enabled by default"
+          },
+          {
+            "title": "CUDA",
+            "description": "Requires CUDA toolkit installation"
+          }
+        ],
+        "links": [
+          {
+            "text": "Documentation",
+            "url": "https://dev.risczero.com/api/zkvm/cuda"
+          }
+        ]
+      }
+    },
+    "features": {
+      "value": "✅ Precompiles, Dev mode, Segments API",
+      "details": "Extensive precompile support including SHA-256, RSA, ECDSA (k256), EdDSA (curve25519), and modular multiplication. Includes development mode for faster testing and Segments API for partial execution proofs."
+    },
+    "precompiles": {
+      "value": "✅ Extensive Crypto Suite",
+      "details": {
+        "summary": "Specialized extension circuits for cryptographic operations:",
+        "items": [
+          {
+            "title": "Hash Functions",
+            "description": "sha2 (0.10.6-0.10.8)"
+          },
+          {
+            "title": "Elliptic Curves",
+            "description": "k256 (0.13.1-0.13.4), curve25519-dalek (4.1.0-4.1.2)"
+          },
+          {
+            "title": "RSA",
+            "description": "rsa (0.9.6)"
+          },
+          {
+            "title": "Additional",
+            "description": "Modular multiplication, accelerated versions of popular crypto crates"
+          }
+        ],
+        "links": [
+          {
+            "text": "Documentation",
+            "url": "https://dev.risczero.com/api/zkvm/precompiles"
+          }
+        ]
+      }
+    },
+    "tooling": {
+      "value": "✅ rzup, cargo-risczero",
+      "details": "Includes rzup installer for toolchain management and cargo-risczero for project scaffolding. Extensive examples and tutorials available."
+    },
+    "audit": {
+      "value": "✅ Multiple audits completed",
+      "details": {
+        "summary": "Risc0 has completed multiple security audits:",
+        "items": [
+          "Hexens zkVM audit (October 2023)",
+          "Additional audits available in their security repository"
+        ],
+        "links": [
+          {
+            "text": "View Audit Reports",
+            "url": "https://github.com/risc0/rz-security/tree/main/audits"
+          }
+        ]
+      }
+    },
+    "license": {
+      "value": "MIT",
+      "details": "Risc0 is open source under the MIT license."
+    },
+    "production": {
+      "value": "⚠️",
+      "details": "Has production-ready features like disable-dev-mode flag to prevent security issues in production, but limited known production deployments."
+    }
+  }
+} 
