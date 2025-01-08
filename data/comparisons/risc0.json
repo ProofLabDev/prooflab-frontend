@@ -81,18 +81,26 @@
         "note": "Supports both standard and succinct receipts with verifier parameters for each."
       }
     },
-    "gpu": {
-      "value": "✅ Metal, CUDA",
+    "hardware": {
+      "value": "✅ CPU (AVX), GPU (CUDA), Apple Metal",
       "details": {
-        "summary": "GPU acceleration options:",
+        "summary": "Comprehensive hardware support with specific requirements for different platforms:",
         "items": [
           {
-            "title": "Apple Silicon",
-            "description": "Metal GPU acceleration enabled by default"
+            "title": "CPU Support",
+            "description": "Multi-core CPU support with AVX2/AVX-512 acceleration on x86 processors. Recommended 16GB+ RAM for optimal performance."
           },
           {
-            "title": "CUDA",
-            "description": "Requires CUDA toolkit installation"
+            "title": "NVIDIA GPU",
+            "description": "CUDA acceleration support. Requires CUDA toolkit installation and compatible NVIDIA GPU."
+          },
+          {
+            "title": "Apple Silicon",
+            "description": "Native Metal GPU acceleration enabled by default on M-series chips."
+          },
+          {
+            "title": "Storage",
+            "description": "Sufficient disk space needed for toolchain and proving artifacts."
           }
         ],
         "links": [
@@ -162,8 +170,8 @@
       "details": "Risc0 is open source under the MIT license."
     },
     "production": {
-      "value": "⚠️",
-      "details": "Has production-ready features like disable-dev-mode flag to prevent security issues in production, but limited known production deployments."
+      "value": "✅ (zkVM 1.0)",
+      "details": "Production-ready with zkVM 1.0 release featuring stable APIs, production deployments like Citrea's Bitcoin zkRollup, and enhanced security through trusted setup ceremony and multiple audits."
     }
   }
 } 
