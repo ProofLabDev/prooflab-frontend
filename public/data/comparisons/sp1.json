@@ -38,29 +38,30 @@
         "note": "STARK→SNARK wrapping system generates small SNARK proofs for efficient verification on EVM chains."
       }
     },
-    "gpu": {
-      "value": "✅ Metal, CUDA, AVX",
+    "hardware": {
+      "value": "✅ CPU (AVX), GPU (CUDA)",
       "details": {
-        "summary": "Multiple hardware acceleration options:",
+        "summary": "Comprehensive hardware support with specific requirements for different platforms:",
         "items": [
           {
-            "title": "CPU Acceleration",
-            "description": "Supports AVX256 and AVX512 on x86 CPUs via Plonky3"
+            "title": "CPU Support",
+            "description": "16+ cores recommended with high single-core performance. Supports AVX256/AVX512 acceleration on x86 via Plonky3. Minimum 16GB RAM, more recommended for multi-core setups."
           },
           {
-            "title": "Apple Silicon",
-            "description": "Metal GPU acceleration"
+            "title": "NVIDIA GPU",
+            "description": "CUDA 12 & Container Toolkit required. 24GB+ VRAM for core/compressed proofs, 40GB+ for shrink/wrap proofs. Experimental support."
           },
           {
-            "title": "CUDA (Experimental)",
-            "subitems": [
-              "Requires CUDA 12 & CUDA Container Toolkit",
-              "24GB+ GPU for core/compressed proofs",
-              "40GB+ GPU for shrink/wrap proofs"
-            ]
+            "title": "Storage",
+            "description": "10GB+ disk space required for toolchain, circuit artifacts, and checkpointing."
           }
         ],
+        "note": "For production use, Succinct recommends using their prover network for optimal performance and cost-effectiveness",
         "links": [
+          {
+            "text": "Hardware Requirements",
+            "url": "https://docs.succinct.xyz/docs/getting-started/hardware-requirements"
+          },
           {
             "text": "AVX Guide",
             "url": "https://docs.succinct.xyz/docs/generating-proofs/hardware-acceleration/avx"

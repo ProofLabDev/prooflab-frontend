@@ -148,10 +148,22 @@ const ZKVMComparison = () => {
           </div>
         </div>
 
-        <div className="prose max-w-none">
+        <div className="prose max-w-none space-y-4">
           <p className="text-gray-600">
             Note: This comparison table is maintained by the ProofLab team and is updated regularly. 
             For the most up-to-date information, please refer to the official documentation of each project.
+          </p>
+          <p className="text-gray-600">
+            We welcome corrections and contributions! The comparison data is maintained in our{' '}
+            <a 
+              href="https://github.com/ProofLabDev/frontend/tree/main/public/data/comparisons" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800"
+            >
+              public repository
+            </a>. 
+            Feel free to submit a pull request or open an issue if you notice any inaccuracies or have suggestions for improvement.
           </p>
         </div>
       </div>
