@@ -1,0 +1,400 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "zkVM Comparison Schema",
+  "description": "Schema and instructions for comparing zkVM implementations",
+  "type": "object",
+  "required": ["name", "features"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the zkVM implementation"
+    },
+    "features": {
+      "type": "object",
+      "description": "Core features and characteristics of the zkVM",
+      "required": [
+        "language",
+        "zktype",
+        "unbounded",
+        "libraries",
+        "evm",
+        "gpu",
+        "features",
+        "precompiles",
+        "tooling",
+        "audit",
+        "license",
+        "production"
+      ],
+      "properties": {
+        "language": {
+          "type": "object",
+          "description": "Programming languages supported by the zkVM",
+          "required": ["value", "details"],
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Short summary of supported languages (e.g., 'Rust, C++')"
+            },
+            "details": {
+              "type": "string",
+              "description": "Detailed explanation of language support including: native languages, compilation targets, standard library support, and any language-specific limitations"
+            }
+          }
+        },
+        "zktype": {
+          "type": "object",
+          "description": "Type of zero-knowledge proof system used",
+          "required": ["value", "details"],
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Short description of the proof system (e.g., 'STARK / RISC-V zkVM')"
+            },
+            "details": {
+              "type": "object",
+              "description": "Detailed explanation of the proving system architecture",
+              "required": ["summary", "items"],
+              "properties": {
+                "summary": {
+                  "type": "string",
+                  "description": "Brief overview of the proving system"
+                },
+                "items": {
+                  "type": "array",
+                  "description": "List of key components or characteristics",
+                  "items": {
+                    "type": "object",
+                    "required": ["title", "description"],
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Name of the component"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Detailed explanation of the component"
+                      }
+                    }
+                  }
+                },
+                "links": {
+                  "type": "array",
+                  "description": "Optional relevant documentation links",
+                  "items": {
+                    "type": "object",
+                    "required": ["text", "url"],
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "description": "Link text"
+                      },
+                      "url": {
+                        "type": "string",
+                        "description": "Documentation URL"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "unbounded": {
+          "type": "object",
+          "description": "Support for unbounded computation",
+          "required": ["value", "details"],
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Short status (e.g., '✅ (via Recursion)', '❌', or '⚠️ Limited')"
+            },
+            "details": {
+              "type": "object",
+              "description": "Detailed explanation of unbounded computation support",
+              "required": ["summary", "items"],
+              "properties": {
+                "summary": {
+                  "type": "string",
+                  "description": "Brief overview of unbounded computation capabilities"
+                },
+                "items": {
+                  "type": "array",
+                  "description": "List of key aspects of unbounded computation support",
+                  "items": {
+                    "type": "object",
+                    "required": ["title", "description"],
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Name of the feature"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Detailed explanation"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "libraries": {
+          "type": "object",
+          "description": "Support for standard libraries and external dependencies",
+          "required": ["value", "details"],
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Short status (e.g., '✅', '❌', or '⚠️ Limited')"
+            },
+            "details": {
+              "type": "string",
+              "description": "Detailed explanation of library support, including standard library availability and external dependency limitations"
+            }
+          }
+        },
+        "evm": {
+          "type": "object",
+          "description": "EVM compatibility and verification costs",
+          "required": ["value", "details"],
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Short summary of EVM support with gas costs"
+            },
+            "details": {
+              "type": "object",
+              "description": "Detailed explanation of EVM verification options",
+              "required": ["summary", "items"],
+              "properties": {
+                "summary": {
+                  "type": "string",
+                  "description": "Brief overview of EVM verification options"
+                },
+                "items": {
+                  "type": "array",
+                  "description": "List of verification options with costs",
+                  "items": {
+                    "type": "object",
+                    "required": ["title", "description"],
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Name of verification option"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Details including gas costs and proof sizes"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "gpu": {
+          "type": "object",
+          "description": "GPU acceleration support",
+          "required": ["value", "details"],
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Short status with supported platforms (e.g., '✅ Metal, CUDA')"
+            },
+            "details": {
+              "type": "object",
+              "description": "Detailed explanation of GPU support",
+              "required": ["summary", "items"],
+              "properties": {
+                "summary": {
+                  "type": "string",
+                  "description": "Brief overview of GPU acceleration options"
+                },
+                "items": {
+                  "type": "array",
+                  "description": "List of supported GPU platforms",
+                  "items": {
+                    "type": "object",
+                    "required": ["title", "description"],
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Platform name"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Platform-specific details"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "features": {
+          "type": "object",
+          "description": "Additional notable features",
+          "required": ["value", "details"],
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Short list of key features"
+            },
+            "details": {
+              "type": "string",
+              "description": "Detailed explanation of additional features including development tools, testing capabilities, and special functionalities"
+            }
+          }
+        },
+        "precompiles": {
+          "type": "object",
+          "description": "Built-in precompiled operations",
+          "required": ["value", "details"],
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Short summary of precompile support"
+            },
+            "details": {
+              "type": "object",
+              "description": "Detailed explanation of precompiled operations",
+              "required": ["summary", "items"],
+              "properties": {
+                "summary": {
+                  "type": "string",
+                  "description": "Brief overview of precompile support"
+                },
+                "items": {
+                  "type": "array",
+                  "description": "List of precompile categories",
+                  "items": {
+                    "type": "object",
+                    "required": ["title", "description"],
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Category name"
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "Available precompiles in this category"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tooling": {
+          "type": "object",
+          "description": "Development and deployment tools",
+          "required": ["value", "details"],
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Short list of available tools"
+            },
+            "details": {
+              "type": "string",
+              "description": "Detailed explanation of development tools, including CLI tools, IDEs, and debugging capabilities"
+            }
+          }
+        },
+        "audit": {
+          "type": "object",
+          "description": "Security audit status",
+          "required": ["value", "details"],
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Short audit status (e.g., '✅ Multiple audits', '❌ No audits')"
+            },
+            "details": {
+              "type": "object",
+              "description": "Detailed audit information",
+              "required": ["summary", "items"],
+              "properties": {
+                "summary": {
+                  "type": "string",
+                  "description": "Brief overview of audit status"
+                },
+                "items": {
+                  "type": "array",
+                  "description": "List of completed audits",
+                  "items": {
+                    "type": "string",
+                    "description": "Individual audit details"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "license": {
+          "type": "object",
+          "description": "Software license",
+          "required": ["value", "details"],
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "License name (e.g., 'MIT', 'Apache 2.0')"
+            },
+            "details": {
+              "type": "string",
+              "description": "Additional licensing details if applicable"
+            }
+          }
+        },
+        "production": {
+          "type": "object",
+          "description": "Production readiness status",
+          "required": ["value", "details"],
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "Short status (e.g., '✅', '❌', or '⚠️')"
+            },
+            "details": {
+              "type": "string",
+              "description": "Detailed explanation of production readiness, including known deployments and stability considerations"
+            }
+          }
+        }
+      }
+    }
+  },
+  "instructions": {
+    "general": [
+      "1. Review the official documentation thoroughly",
+      "2. Check GitHub repositories for additional details",
+      "3. Look for blog posts and technical articles",
+      "4. Review community discussions and issues",
+      "5. Test claims when possible"
+    ],
+    "value_format": {
+      "positive": "✅",
+      "negative": "❌",
+      "warning": "⚠️",
+      "format": "Use emoji followed by brief description in parentheses if needed"
+    },
+    "documentation_guidelines": [
+      "1. Be objective and factual",
+      "2. Include version numbers when relevant",
+      "3. Cite sources when possible",
+      "4. Note any limitations or caveats",
+      "5. Keep summaries concise but informative"
+    ],
+    "comparison_tips": [
+      "1. Compare similar features across different zkVMs",
+      "2. Note unique capabilities and limitations",
+      "3. Consider real-world use cases",
+      "4. Include performance characteristics when available",
+      "5. Document any assumptions made"
+    ]
+  }
+} 
