@@ -223,7 +223,7 @@ const LeaderboardTable = () => {
                             <TimingGantt timing={entry.timing} />
                           </div>
 
-                          <div className="border-t pt-4 grid grid-cols-3 gap-x-12 gap-y-6 justify-items-start">
+                          <div className="border-t pt-4 grid grid-cols-4 gap-x-12 gap-y-6 justify-items-start">
                             <div className="space-y-2 w-full">
                               <h3 className="text-sm font-semibold text-gray-900">ZK Metrics</h3>
                               <ul className="space-y-1 text-sm text-gray-600 list-none">
@@ -257,6 +257,21 @@ const LeaderboardTable = () => {
                                 <li>Core Verify: {formatDuration(entry.timing.core_verify_duration)}</li>
                                 <li>Compress Prove: {formatDuration(entry.timing.compress_prove_duration)}</li>
                                 <li>Compress Verify: {formatDuration(entry.timing.compress_verify_duration)}</li>
+                              </ul>
+                            </div>
+
+                            <div className="space-y-2 w-full">
+                              <h3 className="text-sm font-semibold text-gray-900">Compute Environment</h3>
+                              <ul className="space-y-1 text-sm text-gray-600 list-none">
+                                <li>OS: {entry.system_info.os_name} {entry.system_info.os_version}</li>
+                                {entry.system_info.cpu_brand && (
+                                  <li>CPU: {entry.system_info.cpu_brand}</li>
+                                )}
+                                <li>CPU Cores: {entry.system_info.cpu_cores}</li>
+                                {entry.system_info.cpu_frequency_mhz > 0 && (
+                                  <li>CPU Frequency: {(entry.system_info.cpu_frequency_mhz / 1000).toFixed(2)} GHz</li>
+                                )}
+                                <li>Total Memory: {formatMemory(entry.system_info.total_memory_kb)}</li>
                               </ul>
                             </div>
                           </div>

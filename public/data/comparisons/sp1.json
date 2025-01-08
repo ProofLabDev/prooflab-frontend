@@ -1,0 +1,144 @@
+{
+  "name": "SP1",
+  "features": {
+    "language": {
+      "value": "Rust (any LLVM-compiled language)",
+      "details": "SP1 supports any language that can compile to LLVM IR, with primary support for Rust. This enables developers to write ZK programs in familiar languages."
+    },
+    "zktype": {
+      "value": "STARK + FRI (Baby Bear field) with STARK→SNARK wrapping",
+      "details": "SP1 uses STARKs with FRI over the Baby Bear field and includes a STARK→SNARK wrapping system for generating small SNARK proofs that can be efficiently verified on EVM chains."
+    },
+    "unbounded": {
+      "value": "✅ (via STARK recursion)",
+      "details": "SP1 uses performant STARK recursion that allows proving the execution of arbitrarily long programs, making it suitable for complex computations."
+    },
+    "libraries": {
+      "value": "✅ (revm, reth, tendermint-rs, serde)",
+      "details": "SP1 enables teams to reuse existing Rust crates like revm, reth, tendermint-rs, and serde to write ZKP logic in maintainable Rust code."
+    },
+    "evm": {
+      "value": "✅ PLONK (~300k gas)",
+      "details": {
+        "summary": "SNARK verification options for EVM chains:",
+        "items": [
+          {
+            "title": "PLONK",
+            "description": "~300k gas, ~868 bytes proof size"
+          },
+          {
+            "title": "Trusted Setup",
+            "description": "No trusted setup required, reuses Aztec Ignition ceremony"
+          },
+          {
+            "title": "Status",
+            "description": "PLONK verifier available, Groth16 not supported"
+          }
+        ],
+        "note": "STARK→SNARK wrapping system generates small SNARK proofs for efficient verification on EVM chains."
+      }
+    },
+    "gpu": {
+      "value": "✅ Metal, CUDA, AVX",
+      "details": {
+        "summary": "Multiple hardware acceleration options:",
+        "items": [
+          {
+            "title": "CPU Acceleration",
+            "description": "Supports AVX256 and AVX512 on x86 CPUs via Plonky3"
+          },
+          {
+            "title": "Apple Silicon",
+            "description": "Metal GPU acceleration"
+          },
+          {
+            "title": "CUDA (Experimental)",
+            "subitems": [
+              "Requires CUDA 12 & CUDA Container Toolkit",
+              "24GB+ GPU for core/compressed proofs",
+              "40GB+ GPU for shrink/wrap proofs"
+            ]
+          }
+        ],
+        "links": [
+          {
+            "text": "AVX Guide",
+            "url": "https://docs.succinct.xyz/docs/generating-proofs/hardware-acceleration/avx"
+          },
+          {
+            "text": "CUDA Guide",
+            "url": "https://docs.succinct.xyz/docs/generating-proofs/hardware-acceleration/cuda"
+          }
+        ]
+      }
+    },
+    "features": {
+      "value": "✅ Precompiles, STARK recursion",
+      "details": "Includes performant precompiles for hash functions and cryptographic signature verification. Supports STARK recursion for proving long computations."
+    },
+    "precompiles": {
+      "value": "✅ Extensive Crypto Suite",
+      "details": {
+        "summary": "Accelerated cryptographic operations through optimized implementations:",
+        "items": [
+          {
+            "title": "Hash Functions",
+            "description": "sha2 (0.9.8-0.10.8), sha3, tiny-keccak"
+          },
+          {
+            "title": "Elliptic Curves",
+            "description": "secp256k1, ed25519-dalek, curve25519-dalek"
+          },
+          {
+            "title": "Pairing Crypto",
+            "description": "BLS12-381, BN254"
+          },
+          {
+            "title": "Performance",
+            "description": "Up to 22x faster for BN254 pairing, 9.77x for KZG proofs"
+          }
+        ],
+        "links": [
+          {
+            "text": "Precompiles Documentation",
+            "url": "https://docs.succinct.xyz/docs/writing-programs/precompiles"
+          },
+          {
+            "text": "Patched Crates List",
+            "url": "https://docs.succinct.xyz/docs/writing-programs/patched-crates"
+          }
+        ]
+      }
+    },
+    "tooling": {
+      "value": "✅ SDK, CLI tools",
+      "details": "Provides SDK for proof generation and CLI tools for development workflow."
+    },
+    "audit": {
+      "value": "✅ Multiple audits completed",
+      "details": {
+        "summary": "SP1 has completed multiple security audits from leading firms:",
+        "items": [
+          "Cantina Security Audit",
+          "Kalos Security Audit",
+          "RKM0959 Security Audit",
+          "Veridise Security Audit"
+        ],
+        "links": [
+          {
+            "text": "View Audit Reports",
+            "url": "https://github.com/succinctlabs/sp1/tree/dev/audits"
+          }
+        ]
+      }
+    },
+    "license": {
+      "value": "MIT / Apache 2.0",
+      "details": "SP1 is 100% open-source under MIT/Apache 2.0 licenses with no code obfuscation and built to be contributor friendly."
+    },
+    "production": {
+      "value": "✅ (Blobstream, Vector, etc.)",
+      "details": "SP1 is used in production by multiple projects including Blobstream (Celestia bridge) and Vector (Avail bridge)."
+    }
+  }
+} 
