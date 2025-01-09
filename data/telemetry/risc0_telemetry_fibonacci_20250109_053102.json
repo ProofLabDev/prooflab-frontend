@@ -2,47 +2,47 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 510101
+      "nanos": 1135245
     },
     "compilation_duration": {
       "secs": 0,
-      "nanos": 86624
+      "nanos": 1796009
     },
     "proof_generation_duration": {
-      "secs": 77,
-      "nanos": 720083378
+      "secs": 328,
+      "nanos": 252280475
     },
     "core_prove_duration": {
-      "secs": 5,
-      "nanos": 80726779
+      "secs": 2,
+      "nanos": 681717813
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 170112823
+      "nanos": 16613347
     },
     "compress_prove_duration": {
-      "secs": 30,
-      "nanos": 93181762
+      "secs": 3,
+      "nanos": 17445980
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 86174907
+      "nanos": 15833804
     },
     "total_duration": {
-      "secs": 77,
-      "nanos": 720967050
+      "secs": 328,
+      "nanos": 255415990
     }
   },
   "resources": {
-    "max_memory_kb": 10911012,
-    "min_memory_kb": 4725776,
-    "avg_memory_kb": 8105848,
-    "max_cpu_percent": 97.060745,
+    "max_memory_kb": 4093608,
+    "min_memory_kb": 2639500,
+    "avg_memory_kb": 3664214,
+    "max_cpu_percent": 87.2284,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 51.795654,
-    "samples": 37
+    "avg_cpu_percent": 9.641804,
+    "samples": 40
   },
-  "proving_system": "SP1",
+  "proving_system": "RISC0",
   "precompiles_enabled": false,
   "program": {
     "file_path": "examples/fibonacci",
@@ -59,20 +59,22 @@
     }
   },
   "zk_metrics": {
-    "cycles": 12883,
+    "cycles": 17307,
     "num_segments": 1,
-    "core_proof_size": 2656986,
-    "recursive_proof_size": 1274775,
-    "execution_speed": 165.76153086895368,
-    "compiled_program_size": 138672
+    "core_proof_size": 242652,
+    "recursive_proof_size": 222668,
+    "execution_speed": 52.72469082303334,
+    "compiled_program_size": 128816
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 129785352,
-    "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
+    "total_memory_kb": 129095160,
+    "cpu_brand": "AMD EPYC 9R14",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3499
+    "cpu_frequency_mhz": 3699,
+    "is_ec2": true,
+    "ec2_instance_type": "c7a.16xlarge"
   }
 }

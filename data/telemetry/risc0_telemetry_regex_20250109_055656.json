@@ -2,70 +2,70 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 1028000
+      "nanos": 1108105
     },
     "compilation_duration": {
       "secs": 0,
-      "nanos": 152550
+      "nanos": 2338902
     },
     "proof_generation_duration": {
-      "secs": 73,
-      "nanos": 460318229
+      "secs": 353,
+      "nanos": 956261724
     },
     "core_prove_duration": {
-      "secs": 4,
-      "nanos": 577578915
+      "secs": 20,
+      "nanos": 486567646
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 204240819
+      "nanos": 19641985
     },
     "compress_prove_duration": {
-      "secs": 28,
-      "nanos": 678130049
+      "secs": 3,
+      "nanos": 94292958
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 102883568
+      "nanos": 15769197
     },
     "total_duration": {
-      "secs": 73,
-      "nanos": 461739579
+      "secs": 353,
+      "nanos": 959992382
     }
   },
   "resources": {
-    "max_memory_kb": 11107404,
-    "min_memory_kb": 4867292,
-    "avg_memory_kb": 8348112,
-    "max_cpu_percent": 85.29285,
+    "max_memory_kb": 11114040,
+    "min_memory_kb": 2854912,
+    "avg_memory_kb": 5417458,
+    "max_cpu_percent": 100.0,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 38.205727,
-    "samples": 37
+    "avg_cpu_percent": 23.987226,
+    "samples": 64
   },
-  "proving_system": "SP1",
+  "proving_system": "RISC0",
   "precompiles_enabled": false,
   "program": {
-    "file_path": "examples/sha",
-    "file_name": "sha",
-    "absolute_path": "/zkrust/examples/sha",
+    "file_path": "examples/regex",
+    "file_name": "regex",
+    "absolute_path": "/zkrust/examples/regex",
     "cargo_metadata": {
-      "package_name": "sha",
+      "package_name": "regex",
       "version": "0.1.0",
       "authors": null,
       "edition": "2021",
       "dependencies": [
-        "sha2",
+        "regex",
         "zk_rust_io"
       ]
     }
   },
   "zk_metrics": {
-    "cycles": 10303,
+    "cycles": 220661,
     "num_segments": 1,
-    "core_proof_size": 2657050,
-    "recursive_proof_size": 1274839,
-    "execution_speed": 140.25259144511404,
-    "compiled_program_size": 154928
+    "core_proof_size": 279836,
+    "recursive_proof_size": 222668,
+    "execution_speed": 623.4131836663538,
+    "compiled_program_size": 2253832
   },
   "system_info": {
     "os_name": "Ubuntu",
@@ -74,6 +74,8 @@
     "total_memory_kb": 129095160,
     "cpu_brand": "AMD EPYC 9R14",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 2599
+    "cpu_frequency_mhz": 3699,
+    "is_ec2": true,
+    "ec2_instance_type": "c7a.16xlarge"
   }
 }

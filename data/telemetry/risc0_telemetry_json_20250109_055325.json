@@ -2,47 +2,47 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 708747
+      "nanos": 749266
     },
     "compilation_duration": {
       "secs": 0,
-      "nanos": 114016
+      "nanos": 2182753
     },
     "proof_generation_duration": {
-      "secs": 79,
-      "nanos": 530356537
+      "secs": 320,
+      "nanos": 275786195
     },
     "core_prove_duration": {
-      "secs": 4,
-      "nanos": 517798648
+      "secs": 3,
+      "nanos": 33390859
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 171098300
+      "nanos": 14772270
     },
     "compress_prove_duration": {
-      "secs": 29,
-      "nanos": 580652220
+      "secs": 3,
+      "nanos": 447139040
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 86143766
+      "nanos": 14037368
     },
     "total_duration": {
-      "secs": 79,
-      "nanos": 531451895
+      "secs": 320,
+      "nanos": 278955224
     }
   },
   "resources": {
-    "max_memory_kb": 10718344,
-    "min_memory_kb": 4609820,
-    "avg_memory_kb": 7870778,
-    "max_cpu_percent": 97.579025,
+    "max_memory_kb": 4296024,
+    "min_memory_kb": 3108944,
+    "avg_memory_kb": 3756191,
+    "max_cpu_percent": 92.54534,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 50.000885,
-    "samples": 37
+    "avg_cpu_percent": 10.686331,
+    "samples": 43
   },
-  "proving_system": "SP1",
+  "proving_system": "RISC0",
   "precompiles_enabled": false,
   "program": {
     "file_path": "examples/json",
@@ -62,20 +62,22 @@
     }
   },
   "zk_metrics": {
-    "cycles": 9512,
+    "cycles": 13626,
     "num_segments": 1,
-    "core_proof_size": 2657207,
-    "recursive_proof_size": 1274996,
-    "execution_speed": 119.60212947838001,
-    "compiled_program_size": 238740
+    "core_proof_size": 242652,
+    "recursive_proof_size": 222668,
+    "execution_speed": 42.54458372230427,
+    "compiled_program_size": 226036
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 129785364,
+    "total_memory_kb": 129785324,
     "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3640
+    "cpu_frequency_mhz": 3428,
+    "is_ec2": true,
+    "ec2_instance_type": "c7i.16xlarge"
   }
 }

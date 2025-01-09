@@ -1,0 +1,81 @@
+{
+  "timing": {
+    "workspace_setup_duration": {
+      "secs": 0,
+      "nanos": 1020684
+    },
+    "compilation_duration": {
+      "secs": 0,
+      "nanos": 170531
+    },
+    "proof_generation_duration": {
+      "secs": 74,
+      "nanos": 51553234
+    },
+    "core_prove_duration": {
+      "secs": 4,
+      "nanos": 669978716
+    },
+    "core_verify_duration": {
+      "secs": 0,
+      "nanos": 204700640
+    },
+    "compress_prove_duration": {
+      "secs": 29,
+      "nanos": 28505303
+    },
+    "compress_verify_duration": {
+      "secs": 0,
+      "nanos": 102984371
+    },
+    "total_duration": {
+      "secs": 74,
+      "nanos": 52946230
+    }
+  },
+  "resources": {
+    "max_memory_kb": 11568080,
+    "min_memory_kb": 3574136,
+    "avg_memory_kb": 8354418,
+    "max_cpu_percent": 95.49641,
+    "min_cpu_percent": 0.0,
+    "avg_cpu_percent": 37.885246,
+    "samples": 38
+  },
+  "proving_system": "SP1",
+  "precompiles_enabled": false,
+  "program": {
+    "file_path": "examples/sha",
+    "file_name": "sha",
+    "absolute_path": "/zkrust/examples/sha",
+    "cargo_metadata": {
+      "package_name": "sha",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        "sha2",
+        "zk_rust_io"
+      ]
+    }
+  },
+  "zk_metrics": {
+    "cycles": 10303,
+    "num_segments": 1,
+    "core_proof_size": 2657050,
+    "recursive_proof_size": 1274839,
+    "execution_speed": 139.13280073198365,
+    "compiled_program_size": 154928
+  },
+  "system_info": {
+    "os_name": "Ubuntu",
+    "os_version": "22.04",
+    "kernel_version": "6.8.0-1021-aws",
+    "total_memory_kb": 129095164,
+    "cpu_brand": "AMD EPYC 9R14",
+    "cpu_count": 64,
+    "cpu_frequency_mhz": 3699,
+    "is_ec2": true,
+    "ec2_instance_type": "c7a.16xlarge"
+  }
+}
