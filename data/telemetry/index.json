@@ -1,8 +1,11 @@
 {
   "files": [
-    "risc0_telemetry_fibonacci_20250107_003220.json",
-    "sp1_telemetry_fibonacci_20250107_011133.json",
-    "sp1_telemetry_regex_20250107_042943.json"
+    "sp1_telemetry_bubble_sort_20250109_013731.json",
+    "sp1_telemetry_ecdsa_20250109_011422.json",
+    "sp1_telemetry_fibonacci_20250109_003739.json",
+    "sp1_telemetry_json_20250109_012344.json",
+    "sp1_telemetry_regex_20250109_005753.json",
+    "sp1_telemetry_sha_20250109_005450.json"
   ],
-  "lastUpdated": "2025-01-07T04:33:12.093Z"
+  "lastUpdated": "2025-01-09T02:13:50.296Z"
 }
