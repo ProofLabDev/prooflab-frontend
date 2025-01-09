@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import useDataLoader from '../../hooks/useDataLoader';
 import { formatDuration, formatMemory, formatCpuUsage, formatDurationShort } from '../../utils/dataTransforms';
 import { Link } from 'react-router-dom';
@@ -41,6 +41,7 @@ const LeaderboardTable = () => {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [cpuBrandFilter, setCpuBrandFilter] = useState('');
   const [coreCountFilter, setCoreCountFilter] = useState('');
+  const [proofType, setProofType] = useState('core'); // 'core' or 'compress'
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -66,18 +67,19 @@ const LeaderboardTable = () => {
     });
   };
 
-  const calculateProofGeneration = (timing) => {
-    return {
-      secs: timing.core_prove_duration.secs + timing.compress_prove_duration.secs,
-      nanos: timing.core_prove_duration.nanos + timing.compress_prove_duration.nanos
-    };
-  };
-
   const calculateThroughput = (cycles, timing) => {
     if (!cycles) return 0;
-    const proofGen = calculateProofGeneration(timing);
-    const totalNanos = proofGen.secs * 1000000000 + proofGen.nanos;
+    const duration = proofType === 'core' ? timing.core_prove_duration : timing.compress_prove_duration;
+    const totalNanos = duration.secs * 1000000000 + duration.nanos;
     return totalNanos > 0 ? (cycles / (totalNanos / 1000000000)) : 0;
+  };
+
+  const getProofSize = (entry) => {
+    return proofType === 'core' ? entry.zk_metrics.core_proof_size : entry.zk_metrics.recursive_proof_size;
+  };
+
+  const getProofDuration = (timing) => {
+    return proofType === 'core' ? timing.core_prove_duration : timing.compress_prove_duration;
   };
 
   const getSortedData = () => {
@@ -86,8 +88,8 @@ const LeaderboardTable = () => {
       let aValue, bValue;
 
       if (sortConfig.key === 'timing.proof_generation') {
-        const aProofGen = calculateProofGeneration(a.timing);
-        const bProofGen = calculateProofGeneration(b.timing);
+        const aProofGen = getProofDuration(a.timing);
+        const bProofGen = getProofDuration(b.timing);
         aValue = aProofGen.secs * 1000000000 + aProofGen.nanos;
         bValue = bProofGen.secs * 1000000000 + bProofGen.nanos;
       } else if (sortConfig.key === 'zk_metrics.execution_speed') {
@@ -152,6 +154,18 @@ const LeaderboardTable = () => {
       
       <div className="mb-6 flex flex-wrap gap-4">
         <div className="flex items-center space-x-2">
+          <label className="text-sm font-medium text-gray-700">Proof Type:</label>
+          <select
+            className="form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            value={proofType}
+            onChange={(e) => setProofType(e.target.value)}
+          >
+            <option value="core">Core (Size ∝ Computation)</option>
+            <option value="compress">Compressed (Fixed Size)</option>
+          </select>
+        </div>
+
+        <div className="flex items-center space-x-2">
           <label className="text-sm font-medium text-gray-700">CPU Brand:</label>
           <select
             className="form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
@@ -202,7 +216,7 @@ const LeaderboardTable = () => {
               </th>
               <th className="hidden lg:table-cell px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => handleSort('timing.proof_generation')}>
-                Proof Gen {getSortIcon('timing.proof_generation')}
+                {proofType === 'core' ? 'Core Prove Time' : 'Compress Time'} {getSortIcon('timing.proof_generation')}
               </th>
               <th className="hidden xl:table-cell px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => handleSort('system_info.cpu_brand')}>
@@ -227,7 +241,7 @@ const LeaderboardTable = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {getSortedData().map((entry, index) => {
-              const proofGeneration = calculateProofGeneration(entry.timing);
+              const proofDuration = getProofDuration(entry.timing);
               const throughput = calculateThroughput(entry.zk_metrics.cycles, entry.timing);
               
               return (
@@ -246,7 +260,7 @@ const LeaderboardTable = () => {
                       {formatFrequency(throughput)}
                     </td>
                     <td className="hidden lg:table-cell px-3 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatDuration(proofGeneration)}
+                      {formatDuration(proofDuration)}
                     </td>
                     <td className="hidden xl:table-cell px-3 py-4 whitespace-nowrap text-sm text-gray-500">
                       {entry.system_info.cpu_brand || 'N/A'}
@@ -258,7 +272,7 @@ const LeaderboardTable = () => {
                       {formatCpuUsage(entry.resources.avg_cpu_percent)}
                     </td>
                     <td className="hidden lg:table-cell px-3 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatProofSize(entry.zk_metrics.core_proof_size)}
+                      {formatProofSize(getProofSize(entry))}
                     </td>
                     <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
                       <button className="text-blue-500 hover:text-blue-700">
@@ -272,7 +286,7 @@ const LeaderboardTable = () => {
                         <div className="space-y-6">
                           <div>
                             <h3 className="text-sm font-semibold text-gray-900 mb-4">Timing Breakdown</h3>
-                            <TimingGantt timing={entry.timing} />
+                            <TimingGantt timing={entry.timing} proofType={proofType} />
                           </div>
 
                           <div className="border-t pt-4 grid grid-cols-4 gap-x-12 gap-y-6 justify-items-start">
@@ -283,7 +297,7 @@ const LeaderboardTable = () => {
                                 <li>Segments: {entry.zk_metrics.num_segments}</li>
                                 <li>Core Proof Size: {formatProofSize(entry.zk_metrics.core_proof_size)}</li>
                                 <li>Recursive Proof Size: {formatProofSize(entry.zk_metrics.recursive_proof_size)}</li>
-                                <li>Execution Speed: {formatFrequency(entry.zk_metrics.execution_speed)}</li>
+                                <li>Throughput: {formatFrequency(throughput)}</li>
                               </ul>
                             </div>
                             
@@ -304,7 +318,6 @@ const LeaderboardTable = () => {
                                 <li>Total Duration: {formatDuration(entry.timing.total_duration)}</li>
                                 <li>Setup: {formatDuration(entry.timing.workspace_setup_duration)}</li>
                                 <li>Compilation: {formatDuration(entry.timing.compilation_duration)}</li>
-                                <li>Proof Generation: {formatDuration(proofGeneration)}</li>
                                 <li>Core Prove: {formatDuration(entry.timing.core_prove_duration)}</li>
                                 <li>Core Verify: {formatDuration(entry.timing.core_verify_duration)}</li>
                                 <li>Compress Prove: {formatDuration(entry.timing.compress_prove_duration)}</li>
@@ -362,59 +375,82 @@ const Tooltip = ({ content, visible, x, y }) => {
   );
 };
 
-const TimingGantt = ({ timing }) => {
+const TimingGantt = ({ timing, proofType }) => {
   const [tooltip, setTooltip] = useState({
     visible: false,
     content: '',
     x: 0,
     y: 0
   });
+  const [containerWidth, setContainerWidth] = useState(0);
+  const containerRef = useRef(null);
 
-  // Calculate total proving duration for proving scale
-  const totalProvingNanos = 
-    timing.workspace_setup_duration.secs * 1000000000 + timing.workspace_setup_duration.nanos +
-    timing.compilation_duration.secs * 1000000000 + timing.compilation_duration.nanos +
-    timing.core_prove_duration.secs * 1000000000 + timing.core_prove_duration.nanos +
-    timing.compress_prove_duration.secs * 1000000000 + timing.compress_prove_duration.nanos;
+  useEffect(() => {
+    if (containerRef.current) {
+      const resizeObserver = new ResizeObserver(entries => {
+        for (let entry of entries) {
+          setContainerWidth(entry.contentRect.width);
+        }
+      });
 
-  // Calculate total verification duration for verification scale
-  const totalVerifyNanos = 
-    timing.core_verify_duration.secs * 1000000000 + timing.core_verify_duration.nanos +
-    timing.compress_verify_duration.secs * 1000000000 + timing.compress_verify_duration.nanos;
+      resizeObserver.observe(containerRef.current);
+      return () => resizeObserver.disconnect();
+    }
+  }, []);
+
+  // Calculate durations in nanoseconds
+  const setupNanos = timing.workspace_setup_duration.secs * 1000000000 + timing.workspace_setup_duration.nanos;
+  const compilationNanos = timing.compilation_duration.secs * 1000000000 + timing.compilation_duration.nanos;
+  const proveNanos = proofType === 'core' 
+    ? timing.core_prove_duration.secs * 1000000000 + timing.core_prove_duration.nanos
+    : timing.compress_prove_duration.secs * 1000000000 + timing.compress_prove_duration.nanos;
+  const verifyNanos = (proofType === 'core' ? timing.core_verify_duration : timing.compress_verify_duration).secs * 1000000000 
+    + (proofType === 'core' ? timing.core_verify_duration : timing.compress_verify_duration).nanos;
+
+  // Calculate total time
+  const totalNanos = setupNanos + compilationNanos + proveNanos + verifyNanos;
   
-  // Separate width calculations for proving and verifying
-  const getProvingWidth = (duration) => {
-    const nanos = duration.secs * 1000000000 + duration.nanos;
-    return (nanos / totalProvingNanos) * 100;
-  };
-
-  const getVerifyWidth = (duration) => {
-    const nanos = duration.secs * 1000000000 + duration.nanos;
-    return (nanos / totalVerifyNanos) * 100;
-  };
-
-  // Define proving phases and their colors
-  const provingPhases = [
-    { key: 'workspace_setup_duration', label: 'Setup', color: '#e3f2fd' },
-    { key: 'compilation_duration', label: 'Compilation', color: '#bbdefb' },
-    { key: 'core_prove_duration', label: 'Core Prove', color: '#64b5f6' },
-    { key: 'compress_prove_duration', label: 'Compress Prove', color: '#2196f3' }
+  // Define all phases
+  const allPhases = [
+    { key: 'workspace_setup_duration', label: 'Setup', color: '#e3f2fd', duration: setupNanos },
+    { key: 'compilation_duration', label: 'Compilation', color: '#bbdefb', duration: compilationNanos },
+    { 
+      key: proofType === 'core' ? 'core_prove_duration' : 'compress_prove_duration',
+      label: proofType === 'core' ? 'Core Prove' : 'Compress Prove',
+      color: proofType === 'core' ? '#64b5f6' : '#2196f3',
+      duration: proveNanos
+    },
+    {
+      key: proofType === 'core' ? 'core_verify_duration' : 'compress_verify_duration',
+      label: proofType === 'core' ? 'Core Verify' : 'Compress Verify',
+      color: proofType === 'core' ? '#81c784' : '#4caf50',
+      duration: verifyNanos
+    }
   ];
 
-  // Define verification phases
-  const verifyPhases = [
-    { key: 'core_verify_duration', label: 'Core Verify', color: '#81c784' },
-    { key: 'compress_verify_duration', label: 'Compress Verify', color: '#4caf50' }
-  ];
+  // Calculate widths with minimum segment size
+  const getWidth = (duration) => {
+    const MIN_SEGMENT_WIDTH = 60; // minimum width in pixels for each segment
+    const TOTAL_MIN_WIDTH = MIN_SEGMENT_WIDTH * allPhases.length;
+    
+    // Calculate the remaining width after ensuring minimum widths
+    const remainingWidth = Math.max(0, containerWidth - TOTAL_MIN_WIDTH);
+    
+    // Calculate the proportional width from the remaining space
+    const proportionalWidth = (duration / totalNanos) * remainingWidth;
+    
+    // Return the minimum width plus any proportional extra width
+    return MIN_SEGMENT_WIDTH + proportionalWidth;
+  };
 
   // Format percentage for tooltip
-  const getPercentage = (duration, total) => {
-    const durationNanos = duration.secs * 1000000000 + duration.nanos;
-    return ((durationNanos / total) * 100).toFixed(1);
+  const getPercentage = (duration) => {
+    return ((duration / totalNanos) * 100).toFixed(1);
   };
 
-  const handleMouseEnter = (e, phase, duration, totalNanos) => {
-    const percentage = getPercentage(duration, totalNanos);
+  const handleMouseEnter = (e, phase, durationNanos) => {
+    const percentage = getPercentage(durationNanos);
+    const duration = { secs: Math.floor(durationNanos / 1000000000), nanos: durationNanos % 1000000000 };
     const content = `${phase}\nDuration: ${formatDurationShort(duration)}\n${percentage}% of total`;
     
     setTooltip({
@@ -442,74 +478,40 @@ const TimingGantt = ({ timing }) => {
   return (
     <div className="w-full space-y-4">
       <Tooltip {...tooltip} />
-      <div className="w-full">
+      
+      {/* Timeline */}
+      <div className="w-full" ref={containerRef}>
         <div className="flex items-center mb-2">
-          <div className="w-24 text-sm font-medium text-gray-600">Proving</div>
+          <div className="w-24 text-sm font-medium text-gray-600">Timeline</div>
           <div className="text-sm text-gray-500">
-            {formatDurationShort({ secs: totalProvingNanos / 1000000000, nanos: totalProvingNanos % 1000000000 })}
+            {formatDurationShort({ secs: totalNanos / 1000000000, nanos: totalNanos % 1000000000 })}
           </div>
         </div>
-        <div className="relative h-8 flex rounded-lg overflow-hidden bg-gray-100">
-          {provingPhases.map(({ key, label, color }) => {
-            const width = getProvingWidth(timing[key]);
-            return width > 0 ? (
-              <div
-                key={key}
-                className="h-full relative group hover:brightness-95 transition-all"
-                style={{
-                  width: `${width}%`,
-                  backgroundColor: color,
-                }}
-                onMouseEnter={(e) => handleMouseEnter(e, label, timing[key], totalProvingNanos)}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-              >
-                {width > 10 && (
-                  <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-gray-700">
-                    {label}
-                  </span>
-                )}
-              </div>
-            ) : null;
-          })}
+        <div className="relative h-12 flex rounded-lg overflow-hidden bg-gray-100">
+          {allPhases.map(({ key, label, color, duration }) => (
+            <div
+              key={key}
+              className="h-full relative group hover:brightness-95 transition-all"
+              style={{
+                width: containerWidth ? `${getWidth(duration)}px` : '0',
+                backgroundColor: color,
+                minWidth: '60px', // Ensure minimum clickable area
+              }}
+              onMouseEnter={(e) => handleMouseEnter(e, label, duration)}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+            >
+              <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-gray-700">
+                {label}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="w-full">
-        <div className="flex items-center mb-2">
-          <div className="w-24 text-sm font-medium text-gray-600">Verifying</div>
-          <div className="text-sm text-gray-500">
-            {formatDurationShort({ secs: totalVerifyNanos / 1000000000, nanos: totalVerifyNanos % 1000000000 })}
-          </div>
-        </div>
-        <div className="relative h-8 flex rounded-lg overflow-hidden bg-gray-100">
-          {verifyPhases.map(({ key, label, color }) => {
-            const width = getVerifyWidth(timing[key]);
-            return width > 0 ? (
-              <div
-                key={key}
-                className="h-full relative group hover:brightness-95 transition-all"
-                style={{
-                  width: `${width}%`,
-                  backgroundColor: color,
-                }}
-                onMouseEnter={(e) => handleMouseEnter(e, label, timing[key], totalVerifyNanos)}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-              >
-                {width > 10 && (
-                  <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-gray-700">
-                    {label}
-                  </span>
-                )}
-              </div>
-            ) : null;
-          })}
-        </div>
-      </div>
-
+      {/* Legend */}
       <div className="flex flex-wrap gap-3 mt-2">
-        {[...provingPhases, ...verifyPhases].map(({ label, color }) => (
+        {allPhases.map(({ label, color }) => (
           <div key={label} className="flex items-center gap-2">
             <div className="w-3 h-3 rounded" style={{ backgroundColor: color }}></div>
             <span className="text-xs text-gray-600">{label}</span>
