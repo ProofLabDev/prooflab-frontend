@@ -39,9 +39,21 @@ const LeaderboardTable = () => {
     direction: 'asc'
   });
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [cpuBrandFilter, setCpuBrandFilter] = useState('');
+  const [coreCountFilter, setCoreCountFilter] = useState('');
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+
+  // Get unique CPU brands and core counts for filters
+  const uniqueCpuBrands = [...new Set(data.map(entry => entry.system_info.cpu_brand).filter(Boolean))];
+  const uniqueCoreCounts = [...new Set(data.map(entry => entry.system_info.cpu_count).filter(Boolean))].sort((a, b) => a - b);
+
+  const filteredData = data.filter(entry => {
+    const matchesCpuBrand = !cpuBrandFilter || entry.system_info.cpu_brand === cpuBrandFilter;
+    const matchesCoreCount = !coreCountFilter || entry.system_info.cpu_count.toString() === coreCountFilter;
+    return matchesCpuBrand && matchesCoreCount;
+  });
 
   const toggleRowExpansion = (index) => {
     setExpandedRow(expandedRow === index ? null : index);
@@ -69,7 +81,7 @@ const LeaderboardTable = () => {
   };
 
   const getSortedData = () => {
-    const sortedData = [...data];
+    const sortedData = [...filteredData];
     return sortedData.sort((a, b) => {
       let aValue, bValue;
 
@@ -81,11 +93,13 @@ const LeaderboardTable = () => {
       } else if (sortConfig.key === 'zk_metrics.execution_speed') {
         aValue = calculateThroughput(a.zk_metrics.cycles, a.timing);
         bValue = calculateThroughput(b.zk_metrics.cycles, b.timing);
+      } else if (sortConfig.key === 'system_info.cpu_brand') {
+        aValue = a.system_info.cpu_brand || '';
+        bValue = b.system_info.cpu_brand || '';
       } else {
         aValue = sortConfig.key.split('.').reduce((obj, key) => obj[key], a);
         bValue = sortConfig.key.split('.').reduce((obj, key) => obj[key], b);
 
-        // Handle duration objects
         if (typeof aValue === 'object' && 'secs' in aValue) {
           aValue = aValue.secs * 1000000000 + aValue.nanos;
           bValue = bValue.secs * 1000000000 + bValue.nanos;
@@ -135,6 +149,37 @@ const LeaderboardTable = () => {
       </div>
 
       <h2 className="text-2xl font-bold mb-6">ZK Proof Benchmarks</h2>
+      
+      <div className="mb-6 flex flex-wrap gap-4">
+        <div className="flex items-center space-x-2">
+          <label className="text-sm font-medium text-gray-700">CPU Brand:</label>
+          <select
+            className="form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            value={cpuBrandFilter}
+            onChange={(e) => setCpuBrandFilter(e.target.value)}
+          >
+            <option value="">All</option>
+            {uniqueCpuBrands.map(brand => (
+              <option key={brand} value={brand}>{brand}</option>
+            ))}
+          </select>
+        </div>
+        
+        <div className="flex items-center space-x-2">
+          <label className="text-sm font-medium text-gray-700">CPU Cores:</label>
+          <select
+            className="form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            value={coreCountFilter}
+            onChange={(e) => setCoreCountFilter(e.target.value)}
+          >
+            <option value="">All</option>
+            {uniqueCoreCounts.map(count => (
+              <option key={count} value={count}>{count}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -160,12 +205,16 @@ const LeaderboardTable = () => {
                 Proof Gen {getSortIcon('timing.proof_generation')}
               </th>
               <th className="hidden xl:table-cell px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  onClick={() => handleSort('system_info.cpu_brand')}>
+                CPU {getSortIcon('system_info.cpu_brand')}
+              </th>
+              <th className="hidden xl:table-cell px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => handleSort('resources.avg_memory_kb')}>
                 Memory {getSortIcon('resources.avg_memory_kb')}
               </th>
               <th className="hidden xl:table-cell px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => handleSort('resources.avg_cpu_percent')}>
-                CPU {getSortIcon('resources.avg_cpu_percent')}
+                CPU Usage {getSortIcon('resources.avg_cpu_percent')}
               </th>
               <th className="hidden lg:table-cell px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => handleSort('zk_metrics.core_proof_size')}>
@@ -198,6 +247,9 @@ const LeaderboardTable = () => {
                     </td>
                     <td className="hidden lg:table-cell px-3 py-4 whitespace-nowrap text-sm text-gray-500">
                       {formatDuration(proofGeneration)}
+                    </td>
+                    <td className="hidden xl:table-cell px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {entry.system_info.cpu_brand || 'N/A'}
                     </td>
                     <td className="hidden xl:table-cell px-3 py-4 whitespace-nowrap text-sm text-gray-500">
                       {formatMemory(entry.resources.avg_memory_kb)}
@@ -267,7 +319,7 @@ const LeaderboardTable = () => {
                                 {entry.system_info.cpu_brand && (
                                   <li>CPU: {entry.system_info.cpu_brand}</li>
                                 )}
-                                <li>CPU Cores: {entry.system_info.cpu_cores}</li>
+                                <li>CPU Cores: {entry.system_info.cpu_count}</li>
                                 {entry.system_info.cpu_frequency_mhz > 0 && (
                                   <li>CPU Frequency: {(entry.system_info.cpu_frequency_mhz / 1000).toFixed(2)} GHz</li>
                                 )}

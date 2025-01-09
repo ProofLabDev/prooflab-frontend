@@ -1,0 +1,81 @@
+{
+  "timing": {
+    "workspace_setup_duration": {
+      "secs": 0,
+      "nanos": 708747
+    },
+    "compilation_duration": {
+      "secs": 0,
+      "nanos": 114016
+    },
+    "proof_generation_duration": {
+      "secs": 79,
+      "nanos": 530356537
+    },
+    "core_prove_duration": {
+      "secs": 4,
+      "nanos": 517798648
+    },
+    "core_verify_duration": {
+      "secs": 0,
+      "nanos": 171098300
+    },
+    "compress_prove_duration": {
+      "secs": 29,
+      "nanos": 580652220
+    },
+    "compress_verify_duration": {
+      "secs": 0,
+      "nanos": 86143766
+    },
+    "total_duration": {
+      "secs": 79,
+      "nanos": 531451895
+    }
+  },
+  "resources": {
+    "max_memory_kb": 10718344,
+    "min_memory_kb": 4609820,
+    "avg_memory_kb": 7870778,
+    "max_cpu_percent": 97.579025,
+    "min_cpu_percent": 0.0,
+    "avg_cpu_percent": 50.000885,
+    "samples": 37
+  },
+  "proving_system": "SP1",
+  "precompiles_enabled": false,
+  "program": {
+    "file_path": "examples/json",
+    "file_name": "json",
+    "absolute_path": "/zkrust/examples/json",
+    "cargo_metadata": {
+      "package_name": "json",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        "lib",
+        "serde",
+        "serde_json",
+        "zk_rust_io"
+      ]
+    }
+  },
+  "zk_metrics": {
+    "cycles": 9512,
+    "num_segments": 1,
+    "core_proof_size": 2657207,
+    "recursive_proof_size": 1274996,
+    "execution_speed": 119.60212947838001,
+    "compiled_program_size": 238740
+  },
+  "system_info": {
+    "os_name": "Ubuntu",
+    "os_version": "22.04",
+    "kernel_version": "6.8.0-1021-aws",
+    "total_memory_kb": 129785364,
+    "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
+    "cpu_count": 64,
+    "cpu_frequency_mhz": 3640
+  }
+}

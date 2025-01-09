@@ -2,45 +2,45 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 8559000
+      "nanos": 510101
     },
     "compilation_duration": {
       "secs": 0,
-      "nanos": 1613667
+      "nanos": 86624
     },
     "proof_generation_duration": {
-      "secs": 177,
-      "nanos": 699562165
+      "secs": 77,
+      "nanos": 720083378
     },
     "core_prove_duration": {
-      "secs": 23,
-      "nanos": 924100095
+      "secs": 5,
+      "nanos": 80726779
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 316861501
+      "nanos": 170112823
     },
     "compress_prove_duration": {
-      "secs": 129,
-      "nanos": 361297934
+      "secs": 30,
+      "nanos": 93181762
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 153096625
+      "nanos": 86174907
     },
     "total_duration": {
-      "secs": 177,
-      "nanos": 712469499
+      "secs": 77,
+      "nanos": 720967050
     }
   },
   "resources": {
-    "max_memory_kb": 6438620,
-    "min_memory_kb": 648584,
-    "avg_memory_kb": 3980912,
-    "max_cpu_percent": 100.0,
+    "max_memory_kb": 10911012,
+    "min_memory_kb": 4725776,
+    "avg_memory_kb": 8105848,
+    "max_cpu_percent": 97.060745,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 76.958015,
-    "samples": 164
+    "avg_cpu_percent": 51.795654,
+    "samples": 37
   },
   "proving_system": "SP1",
   "precompiles_enabled": false,
@@ -63,15 +63,16 @@
     "num_segments": 1,
     "core_proof_size": 2656986,
     "recursive_proof_size": 1274775,
-    "execution_speed": 72.49877176420785
+    "execution_speed": 165.76153086895368,
+    "compiled_program_size": 138672
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
-    "kernel_version": "6.6.26-linuxkit",
-    "total_memory_kb": 8028988,
-    "cpu_brand": "",
-    "cpu_cores": 10,
-    "cpu_frequency_mhz": 0
+    "kernel_version": "6.8.0-1021-aws",
+    "total_memory_kb": 129785352,
+    "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
+    "cpu_count": 64,
+    "cpu_frequency_mhz": 3499
   }
 }
