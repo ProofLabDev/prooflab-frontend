@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const FAQ = () => {
   return (
@@ -8,10 +9,19 @@ const FAQ = () => {
       <div className="space-y-8">
         <section>
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">What is ProofLab?</h2>
-          <p className="text-lg text-gray-700 leading-relaxed">
-            ProofLab serves as a central benchmarking platform for Zero Knowledge Virtual Machines (zkVMs). 
-            We provide standardized performance metrics and comparisons to help developers make informed 
-            decisions about which zkVM best suits their needs.
+          <p className="text-lg text-gray-700 leading-relaxed mb-4">
+            ProofLab is building the future of zero-knowledge infrastructure. Our mission is to accelerate 
+            the adoption of zero-knowledge technology by providing comprehensive solutions and tools for 
+            developers.
+          </p>
+          <p className="text-lg text-gray-700 leading-relaxed mb-4">
+            Our flagship product is a state-of-the-art benchmarking platform for Zero Knowledge Virtual 
+            Machines (zkVMs), providing standardized performance metrics and comparisons. But that's just 
+            the beginning - we're building a complete ecosystem of tools and services to support the ZK 
+            developer community. Learn more about our vision and roadmap in our{' '}
+            <Link to="/about" className="text-blue-600 hover:text-blue-800 underline">
+              About page
+            </Link>.
           </p>
         </section>
 
