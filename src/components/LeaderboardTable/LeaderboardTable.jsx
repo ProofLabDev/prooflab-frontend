@@ -208,8 +208,8 @@ const LeaderboardTable = () => {
   const { data, loading, error } = useDataLoader();
   const [expandedRow, setExpandedRow] = useState(null);
   const [sortConfig, setSortConfig] = useState({
-    key: 'timing.proof_generation',
-    direction: 'asc'
+    key: 'zk_metrics.execution_speed',
+    direction: 'desc'
   });
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [cpuBrandFilter, setCpuBrandFilter] = useState('');
@@ -270,8 +270,10 @@ const LeaderboardTable = () => {
 
   const calculateThroughput = (cycles, timing) => {
     if (!cycles) return 0;
-    const duration = proofType === 'core' ? timing.core_prove_duration : timing.compress_prove_duration;
-    const totalNanos = duration.secs * 1000000000 + duration.nanos;
+    const totalNanos = proofType === 'core' 
+      ? (timing.core_prove_duration.secs * 1000000000 + timing.core_prove_duration.nanos)
+      : ((timing.core_prove_duration.secs + timing.compress_prove_duration.secs) * 1000000000 + 
+         timing.core_prove_duration.nanos + timing.compress_prove_duration.nanos);
     return totalNanos > 0 ? (cycles / (totalNanos / 1000000000)) : 0;
   };
 
@@ -280,7 +282,15 @@ const LeaderboardTable = () => {
   };
 
   const getProofDuration = (timing) => {
-    return proofType === 'core' ? timing.core_prove_duration : timing.compress_prove_duration;
+    if (proofType === 'core') {
+      return timing.core_prove_duration;
+    } else {
+      // For compressed proofs, combine core prove and compress prove times
+      return {
+        secs: timing.core_prove_duration.secs + timing.compress_prove_duration.secs,
+        nanos: timing.core_prove_duration.nanos + timing.compress_prove_duration.nanos
+      };
+    }
   };
 
   const getSortedData = () => {
@@ -777,36 +787,34 @@ const TimingGantt = ({ timing, proofType }) => {
   // Calculate durations in nanoseconds
   const setupNanos = timing.workspace_setup_duration.secs * 1000000000 + timing.workspace_setup_duration.nanos;
   const compilationNanos = timing.compilation_duration.secs * 1000000000 + timing.compilation_duration.nanos;
-  const proveNanos = proofType === 'core' 
-    ? timing.core_prove_duration.secs * 1000000000 + timing.core_prove_duration.nanos
-    : timing.compress_prove_duration.secs * 1000000000 + timing.compress_prove_duration.nanos;
-  const verifyNanos = (proofType === 'core' ? timing.core_verify_duration : timing.compress_verify_duration).secs * 1000000000 
-    + (proofType === 'core' ? timing.core_verify_duration : timing.compress_verify_duration).nanos;
+  const coreProveNanos = timing.core_prove_duration.secs * 1000000000 + timing.core_prove_duration.nanos;
+  const coreVerifyNanos = timing.core_verify_duration.secs * 1000000000 + timing.core_verify_duration.nanos;
+  const compressProveNanos = timing.compress_prove_duration.secs * 1000000000 + timing.compress_prove_duration.nanos;
+  const compressVerifyNanos = timing.compress_verify_duration.secs * 1000000000 + timing.compress_verify_duration.nanos;
 
-  // Calculate total time
-  const totalNanos = setupNanos + compilationNanos + proveNanos + verifyNanos;
+  // Calculate total time based on proof type
+  const totalNanos = setupNanos + compilationNanos + 
+    (proofType === 'core' 
+      ? (coreProveNanos + coreVerifyNanos)
+      : (coreProveNanos + compressProveNanos + compressVerifyNanos));
   
   // Define all phases
   const allPhases = [
     { key: 'workspace_setup_duration', label: 'Setup', color: '#e3f2fd', duration: setupNanos },
-    { key: 'compilation_duration', label: 'Compilation', color: '#bbdefb', duration: compilationNanos },
-    { 
-      key: proofType === 'core' ? 'core_prove_duration' : 'compress_prove_duration',
-      label: proofType === 'core' ? 'Core Prove' : 'Compress Prove',
-      color: proofType === 'core' ? '#64b5f6' : '#2196f3',
-      duration: proveNanos
-    },
-    {
-      key: proofType === 'core' ? 'core_verify_duration' : 'compress_verify_duration',
-      label: proofType === 'core' ? 'Core Verify' : 'Compress Verify',
-      color: proofType === 'core' ? '#81c784' : '#4caf50',
-      duration: verifyNanos
-    }
+    { key: 'compilation_duration', label: 'Compile', color: '#bbdefb', duration: compilationNanos },
+    ...(proofType === 'core' ? [
+      { key: 'core_prove_duration', label: 'Core Prove', color: '#64b5f6', duration: coreProveNanos },
+      { key: 'core_verify_duration', label: 'Core Verify', color: '#81c784', duration: coreVerifyNanos }
+    ] : [
+      { key: 'core_prove_duration', label: 'Core Prove', color: '#64b5f6', duration: coreProveNanos },
+      { key: 'compress_prove_duration', label: 'Compress', color: '#2196f3', duration: compressProveNanos },
+      { key: 'compress_verify_duration', label: 'Verify', color: '#4caf50', duration: compressVerifyNanos }
+    ])
   ];
 
   // Calculate widths with minimum segment size
   const getWidth = (duration) => {
-    const MIN_SEGMENT_WIDTH = 60; // minimum width in pixels for each segment
+    const MIN_SEGMENT_WIDTH = 50; // reduced minimum width for better mobile layout
     const TOTAL_MIN_WIDTH = MIN_SEGMENT_WIDTH * allPhases.length;
     
     // Calculate the remaining width after ensuring minimum widths
@@ -871,13 +879,13 @@ const TimingGantt = ({ timing, proofType }) => {
               style={{
                 width: containerWidth ? `${getWidth(duration)}px` : '0',
                 backgroundColor: color,
-                minWidth: '60px', // Ensure minimum clickable area
+                minWidth: '50px', // reduced for better mobile layout
               }}
               onMouseEnter={(e) => handleMouseEnter(e, label, duration)}
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
             >
-              <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-gray-700">
+              <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-gray-700 px-1 text-center break-words">
                 {label}
               </span>
             </div>
