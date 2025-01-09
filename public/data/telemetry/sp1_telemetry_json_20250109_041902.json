@@ -2,44 +2,44 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 708747
+      "nanos": 1394766
     },
     "compilation_duration": {
       "secs": 0,
-      "nanos": 114016
+      "nanos": 182241
     },
     "proof_generation_duration": {
-      "secs": 79,
-      "nanos": 530356537
+      "secs": 72,
+      "nanos": 953682504
     },
     "core_prove_duration": {
       "secs": 4,
-      "nanos": 517798648
+      "nanos": 216774208
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 171098300
+      "nanos": 204396872
     },
     "compress_prove_duration": {
-      "secs": 29,
-      "nanos": 580652220
+      "secs": 28,
+      "nanos": 598285042
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 86143766
+      "nanos": 103043962
     },
     "total_duration": {
-      "secs": 79,
-      "nanos": 531451895
+      "secs": 72,
+      "nanos": 955533012
     }
   },
   "resources": {
-    "max_memory_kb": 10718344,
-    "min_memory_kb": 4609820,
-    "avg_memory_kb": 7870778,
-    "max_cpu_percent": 97.579025,
+    "max_memory_kb": 11460308,
+    "min_memory_kb": 4192452,
+    "avg_memory_kb": 8464727,
+    "max_cpu_percent": 96.3042,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 50.000885,
+    "avg_cpu_percent": 37.36751,
     "samples": 37
   },
   "proving_system": "SP1",
@@ -66,16 +66,18 @@
     "num_segments": 1,
     "core_proof_size": 2657207,
     "recursive_proof_size": 1274996,
-    "execution_speed": 119.60212947838001,
+    "execution_speed": 130.38409677919225,
     "compiled_program_size": 238740
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 129785364,
-    "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
+    "total_memory_kb": 129095164,
+    "cpu_brand": "AMD EPYC 9R14",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3640
+    "cpu_frequency_mhz": 3699,
+    "is_ec2": true,
+    "ec2_instance_type": "c7a.16xlarge"
   }
 }

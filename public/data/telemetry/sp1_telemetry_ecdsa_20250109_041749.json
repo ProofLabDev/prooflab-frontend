@@ -2,45 +2,45 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 1047982
+      "nanos": 1016666
     },
     "compilation_duration": {
       "secs": 0,
-      "nanos": 162140
+      "nanos": 596673
     },
     "proof_generation_duration": {
-      "secs": 276,
-      "nanos": 870860109
+      "secs": 285,
+      "nanos": 292065598
     },
     "core_prove_duration": {
-      "secs": 84,
-      "nanos": 908356999
+      "secs": 88,
+      "nanos": 687187351
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 756538635
+      "nanos": 757195085
     },
     "compress_prove_duration": {
-      "secs": 149,
-      "nanos": 494952394
+      "secs": 153,
+      "nanos": 355496504
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 102951190
+      "nanos": 102700252
     },
     "total_duration": {
-      "secs": 276,
-      "nanos": 872291042
+      "secs": 285,
+      "nanos": 293946308
     }
   },
   "resources": {
-    "max_memory_kb": 43737884,
-    "min_memory_kb": 4511032,
-    "avg_memory_kb": 25120642,
+    "max_memory_kb": 44580496,
+    "min_memory_kb": 4796864,
+    "avg_memory_kb": 25602551,
     "max_cpu_percent": 100.0,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 62.30764,
-    "samples": 237
+    "avg_cpu_percent": 63.25979,
+    "samples": 244
   },
   "proving_system": "SP1",
   "precompiles_enabled": false,
@@ -62,20 +62,22 @@
     }
   },
   "zk_metrics": {
-    "cycles": 4640420,
+    "cycles": 4645524,
     "num_segments": 1,
     "core_proof_size": 9233537,
     "recursive_proof_size": 1275086,
-    "execution_speed": 16760.23254369613,
+    "execution_speed": 16283.3971223929,
     "compiled_program_size": 281124
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 129095156,
+    "total_memory_kb": 129095164,
     "cpu_brand": "AMD EPYC 9R14",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3648
+    "cpu_frequency_mhz": 2600,
+    "is_ec2": true,
+    "ec2_instance_type": "c7a.16xlarge"
   }
 }

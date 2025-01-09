@@ -2,44 +2,44 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 551966
+      "nanos": 1062775
     },
     "compilation_duration": {
       "secs": 0,
-      "nanos": 87098
+      "nanos": 555062
     },
     "proof_generation_duration": {
-      "secs": 76,
-      "nanos": 505919468
+      "secs": 72,
+      "nanos": 67701972
     },
     "core_prove_duration": {
       "secs": 4,
-      "nanos": 510129370
+      "nanos": 231452484
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 170405827
+      "nanos": 204618563
     },
     "compress_prove_duration": {
-      "secs": 29,
-      "nanos": 885602631
+      "secs": 28,
+      "nanos": 933272983
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 85920394
+      "nanos": 103006278
     },
     "total_duration": {
-      "secs": 76,
-      "nanos": 506757112
+      "secs": 72,
+      "nanos": 69561501
     }
   },
   "resources": {
-    "max_memory_kb": 10648864,
-    "min_memory_kb": 4633540,
-    "avg_memory_kb": 7984526,
-    "max_cpu_percent": 96.83035,
+    "max_memory_kb": 11275548,
+    "min_memory_kb": 5579548,
+    "avg_memory_kb": 8555142,
+    "max_cpu_percent": 97.006516,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 52.727932,
+    "avg_cpu_percent": 38.76936,
     "samples": 36
   },
   "proving_system": "SP1",
@@ -63,16 +63,18 @@
     "num_segments": 1,
     "core_proof_size": 2657078,
     "recursive_proof_size": 1274867,
-    "execution_speed": 99.58706532749777,
+    "execution_speed": 105.72003534898562,
     "compiled_program_size": 149940
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 129785328,
-    "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
+    "total_memory_kb": 129095164,
+    "cpu_brand": "AMD EPYC 9R14",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3557
+    "cpu_frequency_mhz": 2600,
+    "is_ec2": true,
+    "ec2_instance_type": "c7a.16xlarge"
   }
 }
