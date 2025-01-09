@@ -2,18 +2,25 @@
   "files": [
     "risc0_telemetry_bubble_sort_20250109_060755.json",
     "risc0_telemetry_bubble_sort_20250109_060938.json",
+    "risc0_telemetry_bubble_sort_20250109_081511.json",
     "risc0_telemetry_fibonacci_20250109_053102.json",
     "risc0_telemetry_fibonacci_20250109_053318.json",
+    "risc0_telemetry_fibonacci_20250109_070216.json",
     "risc0_telemetry_is-even_20250109_061326.json",
     "risc0_telemetry_is-even_20250109_061454.json",
+    "risc0_telemetry_is-even_20250109_082020.json",
     "risc0_telemetry_json_20250109_055101.json",
     "risc0_telemetry_json_20250109_055325.json",
+    "risc0_telemetry_json_20250109_072211.json",
     "risc0_telemetry_regex_20250109_055656.json",
     "risc0_telemetry_regex_20250109_055907.json",
+    "risc0_telemetry_regex_20250109_072749.json",
     "risc0_telemetry_rsa_20250109_054113.json",
     "risc0_telemetry_rsa_20250109_054403.json",
+    "risc0_telemetry_rsa_20250109_071259.json",
     "risc0_telemetry_sha_20250109_060225.json",
     "risc0_telemetry_sha_20250109_060422.json",
+    "risc0_telemetry_sha_20250109_073301.json",
     "sp1_telemetry_bubble_sort_20250109_042304.json",
     "sp1_telemetry_bubble_sort_20250109_043009.json",
     "sp1_telemetry_bubble_sort_20250109_073413.json",
@@ -39,5 +46,5 @@
     "sp1_telemetry_sha_20250109_042847.json",
     "sp1_telemetry_sha_20250109_071219.json"
   ],
-  "lastUpdated": "2025-01-09T07:53:00.943Z"
+  "lastUpdated": "2025-01-09T19:51:50.516Z"
 }
