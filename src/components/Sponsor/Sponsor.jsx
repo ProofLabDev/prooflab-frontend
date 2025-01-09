@@ -10,6 +10,21 @@ const Sponsor = () => {
     return total + calculateEC2Cost(entry.timing.total_duration, entry.system_info?.ec2_instance_type);
   }, 500) || 500;
 
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="text-center">
+          <p className="text-gray-600">Loading cost data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    // Still show the page but without the cost section
+    console.error('Error loading cost data:', error);
+  }
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       <div className="text-center mb-16">
