@@ -1,13 +1,21 @@
 {
   "files": [
     "sp1_telemetry_bubble_sort_20250109_042304.json",
+    "sp1_telemetry_bubble_sort_20250109_043009.json",
     "sp1_telemetry_ecdsa_20250109_041749.json",
+    "sp1_telemetry_ecdsa_20250109_042411.json",
     "sp1_telemetry_fibonacci_20250109_040506.json",
+    "sp1_telemetry_fibonacci_20250109_040743.json",
     "sp1_telemetry_is-even_20250109_042417.json",
+    "sp1_telemetry_is-even_20250109_043130.json",
     "sp1_telemetry_json_20250109_041902.json",
+    "sp1_telemetry_json_20250109_042534.json",
     "sp1_telemetry_regex_20250109_042037.json",
+    "sp1_telemetry_regex_20250109_042722.json",
     "sp1_telemetry_rsa_20250109_041302.json",
-    "sp1_telemetry_sha_20250109_042152.json"
+    "sp1_telemetry_rsa_20250109_041812.json",
+    "sp1_telemetry_sha_20250109_042152.json",
+    "sp1_telemetry_sha_20250109_042847.json"
   ],
-  "lastUpdated": "2025-01-09T04:32:39.652Z"
+  "lastUpdated": "2025-01-09T04:40:20.417Z"
 }

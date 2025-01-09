@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import useDataLoader from '../../hooks/useDataLoader';
-import { formatDuration, formatMemory, formatCpuUsage, formatDurationShort } from '../../utils/dataTransforms';
+import { formatDuration, formatMemory, formatCpuUsage, formatDurationShort, calculateEC2Cost, formatCost } from '../../utils/dataTransforms';
 import { Link } from 'react-router-dom';
 
 const formatProofSize = (bytes) => {
@@ -31,6 +31,58 @@ const formatFrequency = (hz) => {
   return `${freq.toFixed(2)} ${units[unitIndex]}`;
 };
 
+const ColumnSelector = ({ columns, visibleColumns, onChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        <span>Columns</span>
+        <span className="text-gray-500">({visibleColumns.length})</span>
+      </button>
+
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+          <div className="p-2 space-y-1">
+            {columns.map(column => (
+              <label key={column.key} className="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={visibleColumns.includes(column.key)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      onChange([...visibleColumns, column.key]);
+                    } else {
+                      onChange(visibleColumns.filter(key => key !== column.key));
+                    }
+                  }}
+                  className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                />
+                <span className="ml-2 text-sm text-gray-700">{column.label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const LeaderboardTable = () => {
   const { data, loading, error } = useDataLoader();
   const [expandedRow, setExpandedRow] = useState(null);
@@ -41,19 +93,44 @@ const LeaderboardTable = () => {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [cpuBrandFilter, setCpuBrandFilter] = useState('');
   const [coreCountFilter, setCoreCountFilter] = useState('');
-  const [proofType, setProofType] = useState('core'); // 'core' or 'compress'
+  const [instanceTypeFilter, setInstanceTypeFilter] = useState('');
+  const [proofType, setProofType] = useState('core');
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+
+  const columns = [
+    { key: 'proving_system', label: 'System', defaultVisible: true },
+    { key: 'program.file_name', label: 'Program', defaultVisible: true },
+    { key: 'zk_metrics.cycles', label: 'Cycles', defaultVisible: true },
+    { key: 'zk_metrics.execution_speed', label: 'Throughput', defaultVisible: true },
+    { key: 'timing.proof_generation', label: 'Proof Time', defaultVisible: true },
+    { key: 'cost', label: 'Cost', defaultVisible: true },
+    { key: 'system_info.ec2_instance_type', label: 'Instance Type', defaultVisible: true },
+    { key: 'system_info.cpu_brand', label: 'CPU', defaultVisible: false },
+    { key: 'resources.avg_memory_kb', label: 'Memory', defaultVisible: false },
+    { key: 'resources.avg_cpu_percent', label: 'CPU Usage', defaultVisible: false },
+    { key: 'zk_metrics.core_proof_size', label: 'Proof Size', defaultVisible: true },
+  ];
+
+  const [visibleColumns, setVisibleColumns] = useState(
+    columns.filter(col => col.defaultVisible).map(col => col.key)
+  );
+
+  const isColumnVisible = (key) => visibleColumns.includes(key);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  // Get unique CPU brands and core counts for filters
+  // Get unique values for filters
   const uniqueCpuBrands = [...new Set(data.map(entry => entry.system_info.cpu_brand).filter(Boolean))];
   const uniqueCoreCounts = [...new Set(data.map(entry => entry.system_info.cpu_count).filter(Boolean))].sort((a, b) => a - b);
+  const uniqueInstanceTypes = [...new Set(data.map(entry => entry.system_info?.ec2_instance_type).filter(Boolean))].sort();
 
   const filteredData = data.filter(entry => {
     const matchesCpuBrand = !cpuBrandFilter || entry.system_info.cpu_brand === cpuBrandFilter;
     const matchesCoreCount = !coreCountFilter || entry.system_info.cpu_count.toString() === coreCountFilter;
-    return matchesCpuBrand && matchesCoreCount;
+    const matchesInstanceType = !instanceTypeFilter || entry.system_info?.ec2_instance_type === instanceTypeFilter;
+    return matchesCpuBrand && matchesCoreCount && matchesInstanceType;
   });
 
   const toggleRowExpansion = (index) => {
@@ -119,6 +196,114 @@ const LeaderboardTable = () => {
     return sortConfig.direction === 'asc' ? '↑' : '↓';
   };
 
+  const paginatedData = () => {
+    const sortedData = getSortedData();
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return sortedData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  };
+
+  const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
+
+  const handlePageChange = (page) => {
+    setExpandedRow(null); // Close expanded row when changing pages
+    setCurrentPage(page);
+  };
+
+  const Pagination = () => {
+    const pageNumbers = [];
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    // Adjust start if we're near the end
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+
+    return (
+      <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6">
+        <div className="flex items-center">
+          <p className="text-sm text-gray-700">
+            Showing{' '}
+            <span className="font-medium">
+              {Math.min((currentPage - 1) * ITEMS_PER_PAGE + 1, filteredData.length)}
+            </span>
+            {' '}-{' '}
+            <span className="font-medium">
+              {Math.min(currentPage * ITEMS_PER_PAGE, filteredData.length)}
+            </span>
+            {' '}of{' '}
+            <span className="font-medium">{filteredData.length}</span>
+            {' '}results
+          </p>
+        </div>
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => handlePageChange(1)}
+            disabled={currentPage === 1}
+            className={`px-2 py-1 text-sm rounded ${
+              currentPage === 1
+                ? 'text-gray-400 cursor-not-allowed'
+                : 'text-blue-600 hover:text-blue-800'
+            }`}
+          >
+            First
+          </button>
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className={`px-2 py-1 text-sm rounded ${
+              currentPage === 1
+                ? 'text-gray-400 cursor-not-allowed'
+                : 'text-blue-600 hover:text-blue-800'
+            }`}
+          >
+            ←
+          </button>
+          {pageNumbers.map(number => (
+            <button
+              key={number}
+              onClick={() => handlePageChange(number)}
+              className={`px-3 py-1 text-sm rounded ${
+                currentPage === number
+                  ? 'bg-blue-600 text-white'
+                  : 'text-blue-600 hover:bg-blue-50'
+              }`}
+            >
+              {number}
+            </button>
+          ))}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className={`px-2 py-1 text-sm rounded ${
+              currentPage === totalPages
+                ? 'text-gray-400 cursor-not-allowed'
+                : 'text-blue-600 hover:text-blue-800'
+            }`}
+          >
+            →
+          </button>
+          <button
+            onClick={() => handlePageChange(totalPages)}
+            disabled={currentPage === totalPages}
+            className={`px-2 py-1 text-sm rounded ${
+              currentPage === totalPages
+                ? 'text-gray-400 cursor-not-allowed'
+                : 'text-blue-600 hover:text-blue-800'
+            }`}
+          >
+            Last
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
@@ -150,7 +335,14 @@ const LeaderboardTable = () => {
         )}
       </div>
 
-      <h2 className="text-2xl font-bold mb-6">ZK Proof Benchmarks</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">ZK Proof Benchmarks</h2>
+        <ColumnSelector
+          columns={columns}
+          visibleColumns={visibleColumns}
+          onChange={setVisibleColumns}
+        />
+      </div>
       
       <div className="mb-6 flex flex-wrap gap-4">
         <div className="flex items-center space-x-2">
@@ -162,6 +354,20 @@ const LeaderboardTable = () => {
           >
             <option value="core">Core (Size ∝ Computation)</option>
             <option value="compress">Compressed (Fixed Size)</option>
+          </select>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <label className="text-sm font-medium text-gray-700">Instance Type:</label>
+          <select
+            className="form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            value={instanceTypeFilter}
+            onChange={(e) => setInstanceTypeFilter(e.target.value)}
+          >
+            <option value="">All</option>
+            {uniqueInstanceTypes.map(type => (
+              <option key={type} value={type}>{type}</option>
+            ))}
           </select>
         </div>
 
@@ -198,82 +404,90 @@ const LeaderboardTable = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="sticky left-0 bg-gray-50 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" 
-                  onClick={() => handleSort('proving_system')}>
-                System {getSortIcon('proving_system')}
-              </th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => handleSort('program.file_name')}>
-                Program {getSortIcon('program.file_name')}
-              </th>
-              <th className="hidden md:table-cell px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => handleSort('zk_metrics.cycles')}>
-                Cycles {getSortIcon('zk_metrics.cycles')}
-              </th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => handleSort('zk_metrics.execution_speed')}>
-                Throughput {getSortIcon('zk_metrics.execution_speed')}
-              </th>
-              <th className="hidden lg:table-cell px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => handleSort('timing.proof_generation')}>
-                {proofType === 'core' ? 'Core Prove Time' : 'Compress Time'} {getSortIcon('timing.proof_generation')}
-              </th>
-              <th className="hidden xl:table-cell px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => handleSort('system_info.cpu_brand')}>
-                CPU {getSortIcon('system_info.cpu_brand')}
-              </th>
-              <th className="hidden xl:table-cell px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => handleSort('resources.avg_memory_kb')}>
-                Memory {getSortIcon('resources.avg_memory_kb')}
-              </th>
-              <th className="hidden xl:table-cell px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => handleSort('resources.avg_cpu_percent')}>
-                CPU Usage {getSortIcon('resources.avg_cpu_percent')}
-              </th>
-              <th className="hidden lg:table-cell px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => handleSort('zk_metrics.core_proof_size')}>
-                Proof Size {getSortIcon('zk_metrics.core_proof_size')}
-              </th>
+              {columns.map(column => (
+                isColumnVisible(column.key) && (
+                  <th
+                    key={column.key}
+                    className={`px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer ${
+                      column.key === 'proving_system' ? 'sticky left-0 bg-gray-50' : ''
+                    }`}
+                    onClick={() => handleSort(column.key)}
+                  >
+                    {column.key === 'timing.proof_generation' 
+                      ? (proofType === 'core' ? 'Core Prove Time' : 'Compress Time')
+                      : column.label} {getSortIcon(column.key)}
+                  </th>
+                )
+              ))}
               <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Details
               </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {getSortedData().map((entry, index) => {
+            {paginatedData().map((entry, index) => {
               const proofDuration = getProofDuration(entry.timing);
               const throughput = calculateThroughput(entry.zk_metrics.cycles, entry.timing);
+              const cost = calculateEC2Cost(proofDuration, entry.system_info?.ec2_instance_type);
               
               return (
                 <React.Fragment key={index}>
                   <tr className="hover:bg-gray-50 cursor-pointer" onClick={() => toggleRowExpansion(index)}>
-                    <td className="sticky left-0 bg-white px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {entry.proving_system}
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {entry.program.file_name}
-                    </td>
-                    <td className="hidden md:table-cell px-3 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {entry.zk_metrics.cycles?.toLocaleString() || 'N/A'}
-                    </td>
-                    <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatFrequency(throughput)}
-                    </td>
-                    <td className="hidden lg:table-cell px-3 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatDuration(proofDuration)}
-                    </td>
-                    <td className="hidden xl:table-cell px-3 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {entry.system_info.cpu_brand || 'N/A'}
-                    </td>
-                    <td className="hidden xl:table-cell px-3 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatMemory(entry.resources.avg_memory_kb)}
-                    </td>
-                    <td className="hidden xl:table-cell px-3 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatCpuUsage(entry.resources.avg_cpu_percent)}
-                    </td>
-                    <td className="hidden lg:table-cell px-3 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatProofSize(getProofSize(entry))}
-                    </td>
+                    {isColumnVisible('proving_system') && (
+                      <td className="sticky left-0 bg-white px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {entry.proving_system}
+                      </td>
+                    )}
+                    {isColumnVisible('program.file_name') && (
+                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {entry.program.file_name}
+                      </td>
+                    )}
+                    {isColumnVisible('zk_metrics.cycles') && (
+                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {entry.zk_metrics.cycles?.toLocaleString() || 'N/A'}
+                      </td>
+                    )}
+                    {isColumnVisible('zk_metrics.execution_speed') && (
+                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {formatFrequency(throughput)}
+                      </td>
+                    )}
+                    {isColumnVisible('timing.proof_generation') && (
+                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {formatDuration(proofDuration)}
+                      </td>
+                    )}
+                    {isColumnVisible('cost') && (
+                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {formatCost(cost)}
+                      </td>
+                    )}
+                    {isColumnVisible('system_info.ec2_instance_type') && (
+                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {entry.system_info?.ec2_instance_type || 'N/A'}
+                      </td>
+                    )}
+                    {isColumnVisible('system_info.cpu_brand') && (
+                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {entry.system_info.cpu_brand || 'N/A'}
+                      </td>
+                    )}
+                    {isColumnVisible('resources.avg_memory_kb') && (
+                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {formatMemory(entry.resources.avg_memory_kb)}
+                      </td>
+                    )}
+                    {isColumnVisible('resources.avg_cpu_percent') && (
+                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {formatCpuUsage(entry.resources.avg_cpu_percent)}
+                      </td>
+                    )}
+                    {isColumnVisible('zk_metrics.core_proof_size') && (
+                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {formatProofSize(getProofSize(entry))}
+                      </td>
+                    )}
                     <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
                       <button className="text-blue-500 hover:text-blue-700">
                         {expandedRow === index ? '▼' : '▶'}
@@ -337,6 +551,12 @@ const LeaderboardTable = () => {
                                   <li>CPU Frequency: {(entry.system_info.cpu_frequency_mhz / 1000).toFixed(2)} GHz</li>
                                 )}
                                 <li>Total Memory: {formatMemory(entry.system_info.total_memory_kb)}</li>
+                                {entry.system_info.is_ec2 && (
+                                  <>
+                                    <li>Instance Type: {entry.system_info.ec2_instance_type}</li>
+                                    <li>Estimated Cost: {formatCost(cost)}</li>
+                                  </>
+                                )}
                               </ul>
                             </div>
                           </div>
@@ -349,6 +569,7 @@ const LeaderboardTable = () => {
             })}
           </tbody>
         </table>
+        <Pagination />
       </div>
     </div>
   );
