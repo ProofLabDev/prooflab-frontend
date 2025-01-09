@@ -1,0 +1,80 @@
+{
+  "timing": {
+    "workspace_setup_duration": {
+      "secs": 0,
+      "nanos": 1078296
+    },
+    "compilation_duration": {
+      "secs": 0,
+      "nanos": 2154760
+    },
+    "proof_generation_duration": {
+      "secs": 328,
+      "nanos": 964776633
+    },
+    "core_prove_duration": {
+      "secs": 1,
+      "nanos": 398420873
+    },
+    "core_verify_duration": {
+      "secs": 0,
+      "nanos": 15727915
+    },
+    "compress_prove_duration": {
+      "secs": 3,
+      "nanos": 74582627
+    },
+    "compress_verify_duration": {
+      "secs": 0,
+      "nanos": 15782785
+    },
+    "total_duration": {
+      "secs": 328,
+      "nanos": 968217420
+    }
+  },
+  "resources": {
+    "max_memory_kb": 4367220,
+    "min_memory_kb": 2884292,
+    "avg_memory_kb": 3920977,
+    "max_cpu_percent": 78.691956,
+    "min_cpu_percent": 0.0,
+    "avg_cpu_percent": 7.806218,
+    "samples": 39
+  },
+  "proving_system": "RISC0",
+  "precompiles_enabled": false,
+  "program": {
+    "file_path": "examples/bubble_sort",
+    "file_name": "bubble_sort",
+    "absolute_path": "/zkrust/examples/bubble_sort",
+    "cargo_metadata": {
+      "package_name": "bubble_sort",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        "zk_rust_io"
+      ]
+    }
+  },
+  "zk_metrics": {
+    "cycles": 5113,
+    "num_segments": 1,
+    "core_proof_size": 219612,
+    "recursive_proof_size": 222668,
+    "execution_speed": 15.542697465461995,
+    "compiled_program_size": 131808
+  },
+  "system_info": {
+    "os_name": "Ubuntu",
+    "os_version": "22.04",
+    "kernel_version": "6.8.0-1021-aws",
+    "total_memory_kb": 129095160,
+    "cpu_brand": "AMD EPYC 9R14",
+    "cpu_count": 64,
+    "cpu_frequency_mhz": 3700,
+    "is_ec2": true,
+    "ec2_instance_type": "c7a.16xlarge"
+  }
+}

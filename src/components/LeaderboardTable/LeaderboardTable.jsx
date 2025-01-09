@@ -83,6 +83,127 @@ const ColumnSelector = ({ columns, visibleColumns, onChange }) => {
   );
 };
 
+const FilterLabel = ({ label, tooltip }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const labelRef = useRef(null);
+  
+  return (
+    <div className="relative inline-block" ref={labelRef}>
+      <label 
+        className="text-sm font-medium text-gray-700 flex items-center gap-1 cursor-help group"
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+      >
+        {label}
+        <span className="text-gray-400 group-hover:text-gray-600">ⓘ</span>
+      </label>
+      {showTooltip && (
+        <div 
+          className="absolute z-50 bottom-full left-0 mb-2 w-64 transform"
+        >
+          <div className="bg-gray-900 text-white text-xs rounded py-2 px-3">
+            {tooltip}
+            <div className="absolute top-full left-4 -mt-px">
+              <div className="w-2 h-2 bg-gray-900 transform rotate-45" />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const MultiSelect = ({ label, tooltip, options, selected, onChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <FilterLabel label={label} tooltip={tooltip} />
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="mt-1 w-full form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm text-left"
+      >
+        {selected.length === 0 && 'All'}
+        {selected.length === 1 && selected[0]}
+        {selected.length > 1 && `${selected.length} selected`}
+      </button>
+
+      {isOpen && (
+        <div className="absolute z-50 mt-1 w-64 bg-white border border-gray-200 rounded-md shadow-lg">
+          <div className="p-2 space-y-1 max-h-60 overflow-auto">
+            <label className="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+              <input
+                type="checkbox"
+                checked={selected.length === 0}
+                onChange={() => onChange([])}
+                className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+              />
+              <span className="ml-2 text-sm text-gray-700">All</span>
+            </label>
+            {options.map(option => (
+              <label key={option} className="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={selected.includes(option)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      onChange([...selected, option]);
+                    } else {
+                      onChange(selected.filter(item => item !== option));
+                    }
+                  }}
+                  className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                />
+                <span className="ml-2 text-sm text-gray-700">{option}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const MetricsTabs = () => {
+  return (
+    <div className="border-b border-gray-200 mb-6">
+      <nav className="-mb-px flex space-x-8" aria-label="Metrics">
+        <button
+          className="border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
+          aria-current="page"
+        >
+          CPU Metrics
+        </button>
+        <div className="relative group">
+          <button
+            className="border-transparent text-gray-400 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-not-allowed"
+            disabled
+          >
+            GPU Metrics
+          </button>
+          <div className="absolute left-1/2 transform -translate-x-1/2 translate-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+              Coming soon!
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  );
+};
+
 const LeaderboardTable = () => {
   const { data, loading, error } = useDataLoader();
   const [expandedRow, setExpandedRow] = useState(null);
@@ -97,6 +218,7 @@ const LeaderboardTable = () => {
   const [proofType, setProofType] = useState('core');
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
+  const [selectedPrograms, setSelectedPrograms] = useState([]);
 
   const columns = [
     { key: 'proving_system', label: 'System', defaultVisible: true },
@@ -125,12 +247,14 @@ const LeaderboardTable = () => {
   const uniqueCpuBrands = [...new Set(data.map(entry => entry.system_info.cpu_brand).filter(Boolean))];
   const uniqueCoreCounts = [...new Set(data.map(entry => entry.system_info.cpu_count).filter(Boolean))].sort((a, b) => a - b);
   const uniqueInstanceTypes = [...new Set(data.map(entry => entry.system_info?.ec2_instance_type).filter(Boolean))].sort();
+  const uniquePrograms = [...new Set(data.map(entry => entry.program.file_name))].sort();
 
   const filteredData = data.filter(entry => {
     const matchesCpuBrand = !cpuBrandFilter || entry.system_info.cpu_brand === cpuBrandFilter;
     const matchesCoreCount = !coreCountFilter || entry.system_info.cpu_count.toString() === coreCountFilter;
     const matchesInstanceType = !instanceTypeFilter || entry.system_info?.ec2_instance_type === instanceTypeFilter;
-    return matchesCpuBrand && matchesCoreCount && matchesInstanceType;
+    const matchesProgram = selectedPrograms.length === 0 || selectedPrograms.includes(entry.program.file_name);
+    return matchesCpuBrand && matchesCoreCount && matchesInstanceType && matchesProgram;
   });
 
   const toggleRowExpansion = (index) => {
@@ -335,68 +459,99 @@ const LeaderboardTable = () => {
         )}
       </div>
 
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">ZK Proof Benchmarks</h2>
-        <ColumnSelector
-          columns={columns}
-          visibleColumns={visibleColumns}
-          onChange={setVisibleColumns}
-        />
-      </div>
+      <h2 className="text-2xl font-bold mb-4">ZK Proof Benchmarks</h2>
+      <MetricsTabs />
       
-      <div className="mb-6 flex flex-wrap gap-4">
-        <div className="flex items-center space-x-2">
-          <label className="text-sm font-medium text-gray-700">Proof Type:</label>
-          <select
-            className="form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            value={proofType}
-            onChange={(e) => setProofType(e.target.value)}
-          >
-            <option value="core">Core (Size ∝ Computation)</option>
-            <option value="compress">Compressed (Fixed Size)</option>
-          </select>
+      <div className="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-sm font-medium text-gray-700">Filters</h3>
+          <ColumnSelector
+            columns={columns}
+            visibleColumns={visibleColumns}
+            onChange={setVisibleColumns}
+          />
         </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Proof Type Selection */}
+          <div className="space-y-1">
+            <FilterLabel 
+              label="Proof Type" 
+              tooltip="Choose between Core proofs (faster generation, size scales with computation) or Compressed proofs (slower generation, constant size). Core proofs are typically used during development, while Compressed proofs are used in production."
+            />
+            <select
+              className="mt-1 w-full form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              value={proofType}
+              onChange={(e) => setProofType(e.target.value)}
+            >
+              <option value="core">Core (Size ∝ Computation)</option>
+              <option value="compress">Compressed (Fixed Size)</option>
+            </select>
+          </div>
 
-        <div className="flex items-center space-x-2">
-          <label className="text-sm font-medium text-gray-700">Instance Type:</label>
-          <select
-            className="form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            value={instanceTypeFilter}
-            onChange={(e) => setInstanceTypeFilter(e.target.value)}
-          >
-            <option value="">All</option>
-            {uniqueInstanceTypes.map(type => (
-              <option key={type} value={type}>{type}</option>
-            ))}
-          </select>
-        </div>
+          {/* Program Selection */}
+          <div className="space-y-1">
+            <MultiSelect
+              label="Programs"
+              tooltip="Select one or more benchmark programs to compare. Each program tests different aspects of the zkVM: Fibonacci (basic computation), SHA (cryptographic hashing), ECDSA (elliptic curve operations), JSON (parsing), etc."
+              options={uniquePrograms}
+              selected={selectedPrograms}
+              onChange={setSelectedPrograms}
+            />
+          </div>
 
-        <div className="flex items-center space-x-2">
-          <label className="text-sm font-medium text-gray-700">CPU Brand:</label>
-          <select
-            className="form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            value={cpuBrandFilter}
-            onChange={(e) => setCpuBrandFilter(e.target.value)}
-          >
-            <option value="">All</option>
-            {uniqueCpuBrands.map(brand => (
-              <option key={brand} value={brand}>{brand}</option>
-            ))}
-          </select>
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          <label className="text-sm font-medium text-gray-700">CPU Cores:</label>
-          <select
-            className="form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            value={coreCountFilter}
-            onChange={(e) => setCoreCountFilter(e.target.value)}
-          >
-            <option value="">All</option>
-            {uniqueCoreCounts.map(count => (
-              <option key={count} value={count}>{count}</option>
-            ))}
-          </select>
+          {/* Instance Type Selection */}
+          <div className="space-y-1">
+            <FilterLabel 
+              label="Instance Type" 
+              tooltip="Filter by AWS EC2 instance type. The instance type determines the available compute resources and cost per hour. For example, c7a.16xlarge provides 64 vCPUs at $2.448/hour."
+            />
+            <select
+              className="mt-1 w-full form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              value={instanceTypeFilter}
+              onChange={(e) => setInstanceTypeFilter(e.target.value)}
+            >
+              <option value="">All</option>
+              {uniqueInstanceTypes.map(type => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* CPU Brand Selection */}
+          <div className="space-y-1">
+            <FilterLabel 
+              label="CPU Brand" 
+              tooltip="Filter by CPU manufacturer and model. Different CPU architectures can impact proving performance. For example, AMD EPYC vs Intel Xeon processors may show different characteristics."
+            />
+            <select
+              className="mt-1 w-full form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              value={cpuBrandFilter}
+              onChange={(e) => setCpuBrandFilter(e.target.value)}
+            >
+              <option value="">All</option>
+              {uniqueCpuBrands.map(brand => (
+                <option key={brand} value={brand}>{brand}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* CPU Count Selection */}
+          <div className="space-y-1">
+            <FilterLabel 
+              label="# CPUs" 
+              tooltip="Filter by the number of virtual CPUs (vCPUs) available to the instance. More CPUs generally allow for faster proof generation, though the scaling isn't always linear due to the nature of the computation."
+            />
+            <select
+              className="mt-1 w-full form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              value={coreCountFilter}
+              onChange={(e) => setCoreCountFilter(e.target.value)}
+            >
+              <option value="">All</option>
+              {uniqueCoreCounts.map(count => (
+                <option key={count} value={count}>{count}</option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 

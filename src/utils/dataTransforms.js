@@ -44,6 +44,15 @@ const EC2_PRICING = {
   'c7i.large': 0.0425,
 
   // Add more instance types as needed
+  'r7i.large': 0.168,
+  'r7i.xlarge': 0.336,
+  'r7i.2xlarge': 0.672,
+  'r7i.4xlarge': 1.344,
+  'r7i.8xlarge': 2.688,
+  'r7i.12xlarge': 4.032,
+  'r7i.16xlarge': 5.376,
+  'r7i.24xlarge': 8.064,
+  'r7i.metal': 8.064,
 };
 
 export const calculateEC2Cost = (duration, instanceType) => {
