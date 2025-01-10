@@ -1,0 +1,131 @@
+{
+  "timing": {
+    "workspace_setup_duration": {
+      "secs": 0,
+      "nanos": 490562
+    },
+    "compilation_duration": {
+      "secs": 40,
+      "nanos": 909317179
+    },
+    "proof_generation_duration": {
+      "secs": 193,
+      "nanos": 8950870
+    },
+    "core_prove_duration": {
+      "secs": 69,
+      "nanos": 237485930
+    },
+    "core_verify_duration": {
+      "secs": 0,
+      "nanos": 402906029
+    },
+    "compress_prove_duration": {
+      "secs": 119,
+      "nanos": 820757455
+    },
+    "compress_verify_duration": {
+      "secs": 0,
+      "nanos": 85844903
+    },
+    "total_duration": {
+      "secs": 233,
+      "nanos": 919028901
+    }
+  },
+  "resources": {
+    "max_memory_kb": 35496760,
+    "min_memory_kb": 7852308,
+    "avg_memory_kb": 25477447,
+    "max_cpu_percent": 100.0,
+    "min_cpu_percent": 0.0,
+    "avg_cpu_percent": 72.598946,
+    "samples": 191
+  },
+  "proving_system": "SP1",
+  "precompiles_enabled": false,
+  "program": {
+    "file_path": "examples/ecdsa",
+    "file_name": "ecdsa",
+    "absolute_path": "/zkrust/examples/ecdsa",
+    "guest_metadata": {
+      "package_name": "ecdsa",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        [
+          "hex-literal",
+          "0.4"
+        ],
+        [
+          "k256",
+          "=0.13.3"
+        ],
+        [
+          "rand_core",
+          "0.6.4"
+        ],
+        [
+          "zk_rust_io",
+          "git:https://github.com/yetanotherco/zkRust.git"
+        ]
+      ]
+    },
+    "host_metadata": {
+      "package_name": "method",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        [
+          "bincode",
+          "1.3"
+        ],
+        [
+          "serde",
+          "1.0"
+        ],
+        [
+          "serde_json",
+          "1.0"
+        ],
+        [
+          "sp1-prover",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-sdk",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "tracing",
+          "0.1"
+        ],
+        [
+          "tracing-subscriber",
+          "0.3"
+        ]
+      ]
+    }
+  },
+  "zk_metrics": {
+    "cycles": 4639131,
+    "num_segments": 1,
+    "core_proof_size": 5945417,
+    "recursive_proof_size": 1275086,
+    "execution_speed": 24035.833463105337,
+    "compiled_program_size": 281124
+  },
+  "system_info": {
+    "os_name": "Ubuntu",
+    "os_version": "22.04",
+    "kernel_version": "6.8.0-1021-aws",
+    "total_memory_kb": 519855368,
+    "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
+    "cpu_count": 64,
+    "cpu_frequency_mhz": 3400,
+    "is_ec2": true,
+    "ec2_instance_type": "r7i.16xlarge"
+  }
+}
