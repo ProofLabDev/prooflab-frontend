@@ -207,6 +207,7 @@ const MetricsTabs = () => {
 const LeaderboardTable = () => {
   const { data, loading, error } = useDataLoader();
   const [expandedRow, setExpandedRow] = useState(null);
+  const [expandedMetadata, setExpandedMetadata] = useState(null);
   const [sortConfig, setSortConfig] = useState({
     key: 'zk_metrics.execution_speed',
     direction: 'desc'
@@ -222,6 +223,7 @@ const LeaderboardTable = () => {
 
   const columns = [
     { key: 'proving_system', label: 'System', defaultVisible: true },
+    { key: 'zkvm_version', label: 'zkVM Version', defaultVisible: true },
     { key: 'program.file_name', label: 'Program', defaultVisible: true },
     { key: 'zk_metrics.cycles', label: 'Cycles', defaultVisible: true },
     { key: 'zk_metrics.execution_speed', label: 'Throughput', defaultVisible: true },
@@ -240,7 +242,11 @@ const LeaderboardTable = () => {
 
   const isColumnVisible = (key) => visibleColumns.includes(key);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return (
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+    </div>
+  );
   if (error) return <div>Error: {error}</div>;
 
   // Get unique values for filters
@@ -438,6 +444,30 @@ const LeaderboardTable = () => {
     );
   };
 
+  const getZkVMVersion = (entry) => {
+    const deps = entry.program.host_metadata?.dependencies;
+    if (!deps) return 'N/A';
+
+    // Look for SP1 or RISC0 package
+    const sp1Package = deps.find(([name]) => name === 'sp1-sdk');
+    const risc0Package = deps.find(([name]) => name === 'risc0-zkvm');
+
+    if (sp1Package) {
+      const [, version] = sp1Package;
+      // Extract tag from git dependency
+      const tagMatch = version.match(/tag:([^,\s}]+)/);
+      return tagMatch ? tagMatch[1] : version;
+    }
+    if (risc0Package) {
+      const [, version] = risc0Package;
+      // Extract tag from git dependency
+      const tagMatch = version.match(/tag:([^,\s}]+)/);
+      return tagMatch ? tagMatch[1] : version;
+    }
+
+    return 'N/A';
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
@@ -603,6 +633,11 @@ const LeaderboardTable = () => {
                         {entry.proving_system}
                       </td>
                     )}
+                    {isColumnVisible('zkvm_version') && (
+                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {getZkVMVersion(entry)}
+                      </td>
+                    )}
                     {isColumnVisible('program.file_name') && (
                       <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
                         {entry.program.file_name}
@@ -661,7 +696,7 @@ const LeaderboardTable = () => {
                   </tr>
                   {expandedRow === index && (
                     <tr>
-                      <td colSpan="9" className="px-6 py-4">
+                      <td colSpan={visibleColumns.length + 1} className="px-6 py-4">
                         <div className="space-y-6">
                           <div>
                             <h3 className="text-sm font-semibold text-gray-900 mb-4">Timing Breakdown</h3>
@@ -724,6 +759,53 @@ const LeaderboardTable = () => {
                                 )}
                               </ul>
                             </div>
+                          </div>
+
+                          {/* Program Metadata */}
+                          <div className="border-t pt-4">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setExpandedMetadata(expandedMetadata === index ? null : index);
+                              }}
+                              className="flex items-center justify-between w-full text-left"
+                            >
+                              <h3 className="text-sm font-semibold text-gray-900">Program Metadata</h3>
+                              <span className="text-gray-500">
+                                {expandedMetadata === index ? '▼' : '▶'}
+                              </span>
+                            </button>
+                            
+                            {expandedMetadata === index && (
+                              <div className="mt-4 space-y-6">
+                                <div>
+                                  <h4 className="text-sm font-medium text-gray-700 mb-2">Guest Program</h4>
+                                  <div className="bg-gray-50 rounded p-4">
+                                    <pre className="text-xs text-gray-600 overflow-x-auto">
+                                      {JSON.stringify(entry.program.guest_metadata, null, 2)}
+                                    </pre>
+                                  </div>
+                                </div>
+                                
+                                <div>
+                                  <h4 className="text-sm font-medium text-gray-700 mb-2">Host Program</h4>
+                                  <div className="bg-gray-50 rounded p-4">
+                                    <pre className="text-xs text-gray-600 overflow-x-auto">
+                                      {JSON.stringify(entry.program.host_metadata, null, 2)}
+                                    </pre>
+                                  </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                  <h4 className="text-sm font-medium text-gray-700">File Details</h4>
+                                  <ul className="space-y-1 text-sm text-gray-600">
+                                    <li>Path: {entry.program.file_path}</li>
+                                    <li>Name: {entry.program.file_name}</li>
+                                    <li>Absolute Path: {entry.program.absolute_path}</li>
+                                  </ul>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </td>
