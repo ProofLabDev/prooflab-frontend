@@ -57,7 +57,7 @@ const EC2_PRICING = {
   'c7i.xlarge': 0.1700,
   'c7i.large': 0.0425,
 
-  // Add more instance types as needed
+  // Memory optimized instances
   'r7i.large': 0.168,
   'r7i.xlarge': 0.336,
   'r7i.2xlarge': 0.672,
@@ -67,6 +67,10 @@ const EC2_PRICING = {
   'r7i.16xlarge': 5.376,
   'r7i.24xlarge': 8.064,
   'r7i.metal': 8.064,
+
+  // Memory optimized instances with Intel Xeon processors
+  'r7iz.12xlarge': 4.464,
+  'r7iz.16xlarge': 5.952,
 };
 
 export const calculateEC2Cost = (duration, instanceType) => {

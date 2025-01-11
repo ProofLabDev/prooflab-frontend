@@ -226,7 +226,43 @@ const MetricsTabs = ({ activeTab, onTabChange }) => {
   );
 };
 
+const MetricSelector = ({ selectedMetric, onChange }) => {
+  const metrics = [
+    { key: 'throughput', label: 'Throughput (cycles/second)', tooltip: 'Higher is better. Shows how fast the zkVM can execute instructions.' },
+    { key: 'proofTime', label: 'Proof Time (seconds)', tooltip: 'Lower is better. Total time taken to generate the proof.' },
+    { key: 'cost', label: 'Cost (USD)', tooltip: 'Lower is better. Estimated AWS cost to generate the proof.' },
+    { key: 'memory', label: 'Memory Usage (GB)', tooltip: 'Lower is better. Average memory consumption during proof generation.' },
+  ];
+
+  return (
+    <div className="mb-6">
+      <h3 className="text-sm font-medium text-gray-700 mb-2">Select Metric to Visualize</h3>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {metrics.map(metric => (
+          <div key={metric.key} className="relative group">
+            <button
+              onClick={() => onChange(metric.key)}
+              className={`w-full px-4 py-2 text-sm font-medium rounded-md ${
+                selectedMetric === metric.key
+                  ? 'bg-blue-100 text-blue-700 border-blue-200'
+                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+              } border shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
+            >
+              {metric.label}
+            </button>
+            <div className="hidden group-hover:block absolute z-10 w-64 p-2 mt-2 text-sm text-gray-500 bg-white border border-gray-200 rounded-md shadow-lg">
+              {metric.tooltip}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const LeaderboardGraphs = ({ data, proofType, selectedPrograms, comparisonAxis }) => {
+  const [selectedMetric, setSelectedMetric] = useState('throughput');
+
   // Helper function to prepare data based on comparison axis
   const prepareData = (data, valueExtractor) => {
     return data.reduce((acc, entry) => {
@@ -247,25 +283,56 @@ const LeaderboardGraphs = ({ data, proofType, selectedPrograms, comparisonAxis }
     }, {});
   };
 
-  // Prepare data for charts
-  const throughputData = prepareData(data, entry => 
-    calculateThroughput(entry.zk_metrics.cycles, entry.timing, proofType)
-  );
+  // Get data based on selected metric
+  const getData = () => {
+    switch (selectedMetric) {
+      case 'throughput':
+        return {
+          data: prepareData(data, entry => 
+            calculateThroughput(entry.zk_metrics.cycles, entry.timing, proofType)
+          ),
+          valueFormatter: value => formatFrequency(value),
+          yAxisFormatter: value => formatFrequency(value).split(' ')[0],
+          title: 'Throughput Comparison',
+          description: 'Higher values indicate faster execution of instructions.'
+        };
+      case 'proofTime':
+        return {
+          data: prepareData(data, entry => {
+            const duration = getProofDuration(entry.timing, proofType);
+            return duration.secs + duration.nanos / 1e9;
+          }),
+          valueFormatter: value => `${value.toFixed(2)}s`,
+          yAxisFormatter: value => `${value.toFixed(1)}s`,
+          title: 'Proof Time Comparison',
+          description: 'Lower values indicate faster proof generation.'
+        };
+      case 'cost':
+        return {
+          data: prepareData(data, entry => 
+            calculateEC2Cost(entry.timing.total_duration, entry.system_info?.ec2_instance_type)
+          ),
+          valueFormatter: value => formatCost(value),
+          yAxisFormatter: value => `$${value.toFixed(3)}`,
+          title: 'Cost Analysis',
+          description: 'Estimated AWS cost to generate proofs.'
+        };
+      case 'memory':
+        return {
+          data: prepareData(data, entry => 
+            entry.resources.avg_memory_kb / 1024 / 1024
+          ),
+          valueFormatter: value => `${value.toFixed(2)} GB`,
+          yAxisFormatter: value => `${value.toFixed(1)} GB`,
+          title: 'Memory Usage',
+          description: 'Average memory consumption during proof generation.'
+        };
+      default:
+        return null;
+    }
+  };
 
-  const proofTimeData = prepareData(data, entry => {
-    const duration = getProofDuration(entry.timing, proofType);
-    return duration.secs + duration.nanos / 1e9;
-  });
-
-  const costData = prepareData(data, entry => 
-    calculateEC2Cost(entry.timing.total_duration, entry.system_info?.ec2_instance_type)
-  );
-
-  const memoryData = prepareData(data, entry => 
-    entry.resources.avg_memory_kb / 1024 / 1024
-  );
-
-  // Get unique comparison keys for the legend
+  const graphData = getData();
   const comparisonKeys = [...new Set(data.map(entry => 
     comparisonAxis === 'system' ? entry.proving_system : entry.system_info?.ec2_instance_type
   ))].filter(Boolean).sort();
@@ -291,89 +358,28 @@ const LeaderboardGraphs = ({ data, proofType, selectedPrograms, comparisonAxis }
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Throughput Comparison */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Throughput Comparison</h3>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={Object.values(throughputData)}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis tickFormatter={(value) => formatFrequency(value).split(' ')[0]} />
-                <Tooltip content={(props) => (
-                  <CustomTooltip {...props} valueFormatter={(value) => formatFrequency(value)} />
-                )} />
-                <Legend />
-                {comparisonKeys.map((key, index) => (
-                  <Bar key={key} dataKey={key} fill={colors[index % colors.length]} />
-                ))}
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+      <MetricSelector selectedMetric={selectedMetric} onChange={setSelectedMetric} />
+      
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="mb-4">
+          <h3 className="text-lg font-medium text-gray-900">{graphData.title}</h3>
+          <p className="text-sm text-gray-500 mt-1">{graphData.description}</p>
         </div>
-
-        {/* Proof Time Comparison */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Proof Time Comparison</h3>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={Object.values(proofTimeData)}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis tickFormatter={(value) => `${value.toFixed(1)}s`} />
-                <Tooltip content={(props) => (
-                  <CustomTooltip {...props} valueFormatter={(value) => `${value.toFixed(2)}s`} />
-                )} />
-                <Legend />
-                {comparisonKeys.map((key, index) => (
-                  <Bar key={key} dataKey={key} fill={colors[index % colors.length]} />
-                ))}
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Cost Analysis */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Cost Analysis</h3>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={Object.values(costData)}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis tickFormatter={(value) => `$${value.toFixed(3)}`} />
-                <Tooltip content={(props) => (
-                  <CustomTooltip {...props} valueFormatter={(value) => formatCost(value)} />
-                )} />
-                <Legend />
-                {comparisonKeys.map((key, index) => (
-                  <Bar key={key} dataKey={key} fill={colors[index % colors.length]} />
-                ))}
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Memory Usage */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Memory Usage</h3>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={Object.values(memoryData)}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis tickFormatter={(value) => `${value.toFixed(1)} GB`} />
-                <Tooltip content={(props) => (
-                  <CustomTooltip {...props} valueFormatter={(value) => `${value.toFixed(2)} GB`} />
-                )} />
-                <Legend />
-                {comparisonKeys.map((key, index) => (
-                  <Bar key={key} dataKey={key} fill={colors[index % colors.length]} />
-                ))}
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+        <div className="h-96">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={Object.values(graphData.data)}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis tickFormatter={graphData.yAxisFormatter} />
+              <Tooltip content={(props) => (
+                <CustomTooltip {...props} valueFormatter={graphData.valueFormatter} />
+              )} />
+              <Legend />
+              {comparisonKeys.map((key, index) => (
+                <Bar key={key} dataKey={key} fill={colors[index % colors.length]} />
+              ))}
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>
@@ -564,6 +570,7 @@ const LeaderboardTable = () => {
   const ITEMS_PER_PAGE = 10;
   const [selectedPrograms, setSelectedPrograms] = useState([]);
   const [comparisonAxis, setComparisonAxis] = useState('system'); // 'system' or 'instance'
+  const [selectedSystems, setSelectedSystems] = useState([]);
 
   const columns = [
     { key: 'proving_system', label: 'System', defaultVisible: true },
@@ -598,13 +605,15 @@ const LeaderboardTable = () => {
   const uniqueCoreCounts = [...new Set(data.map(entry => entry.system_info.cpu_count).filter(Boolean))].sort((a, b) => a - b);
   const uniqueInstanceTypes = [...new Set(data.map(entry => entry.system_info?.ec2_instance_type).filter(Boolean))].sort();
   const uniquePrograms = [...new Set(data.map(entry => entry.program.file_name))].sort();
+  const uniqueSystems = [...new Set(data.map(entry => entry.proving_system))].sort();
 
   const filteredData = data.filter(entry => {
     const matchesCpuBrand = !cpuBrandFilter || entry.system_info.cpu_brand === cpuBrandFilter;
     const matchesCoreCount = !coreCountFilter || entry.system_info.cpu_count.toString() === coreCountFilter;
     const matchesInstanceType = !instanceTypeFilter || entry.system_info?.ec2_instance_type === instanceTypeFilter;
     const matchesProgram = selectedPrograms.length === 0 || selectedPrograms.includes(entry.program.file_name);
-    return matchesCpuBrand && matchesCoreCount && matchesInstanceType && matchesProgram;
+    const matchesSystem = selectedSystems.length === 0 || selectedSystems.includes(entry.proving_system);
+    return matchesCpuBrand && matchesCoreCount && matchesInstanceType && matchesProgram && matchesSystem;
   });
 
   const toggleRowExpansion = (index) => {
@@ -837,6 +846,17 @@ const LeaderboardTable = () => {
           )}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Proof System Selection */}
+          <div className="space-y-1">
+            <MultiSelect
+              label="Proof Systems"
+              tooltip="Select one or more proof systems to compare. Each system has different characteristics and trade-offs."
+              options={uniqueSystems}
+              selected={selectedSystems}
+              onChange={setSelectedSystems}
+            />
+          </div>
+
           {/* Comparison Axis Selection */}
           <div className="space-y-1">
             <FilterLabel 
