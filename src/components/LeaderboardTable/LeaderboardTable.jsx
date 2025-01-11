@@ -260,27 +260,107 @@ const MetricSelector = ({ selectedMetric, onChange }) => {
   );
 };
 
-const LeaderboardGraphs = ({ data, proofType, selectedPrograms, comparisonAxis }) => {
-  const [selectedMetric, setSelectedMetric] = useState('throughput');
+const AxisSelector = ({ onChange, xAxis, yAxis }) => {
+  const axes = [
+    { key: 'program', label: 'Program', tooltip: 'Compare different benchmark programs' },
+    { key: 'system', label: 'System', tooltip: 'Compare different zkVM systems (SP1, RISC0)' },
+    { key: 'instance', label: 'Instance Type', tooltip: 'Compare different EC2 instance types' },
+  ];
 
-  // Helper function to prepare data based on comparison axis
+  return (
+    <div className="mb-6">
+      <h3 className="text-sm font-medium text-gray-700 mb-2">Select Comparison Axes</h3>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">X Axis</label>
+          <select
+            value={xAxis}
+            onChange={(e) => onChange('x', e.target.value)}
+            className="w-full form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            {axes.map(axis => (
+              <option key={axis.key} value={axis.key}>{axis.label}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Y Axis</label>
+          <select
+            value={yAxis}
+            onChange={(e) => onChange('y', e.target.value)}
+            className="w-full form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            {axes.filter(axis => axis.key !== xAxis).map(axis => (
+              <option key={axis.key} value={axis.key}>{axis.label}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const LeaderboardGraphs = ({ data, proofType, selectedPrograms, selectedSystems }) => {
+  const [selectedMetric, setSelectedMetric] = useState('throughput');
+  const [xAxis, setXAxis] = useState('program');
+  const [yAxis, setYAxis] = useState('system');
+
+  const handleAxisChange = (axis, value) => {
+    if (axis === 'x') {
+      setXAxis(value);
+      // If new X axis is same as current Y axis, swap them
+      if (value === yAxis) {
+        setYAxis(xAxis);
+      }
+    } else {
+      setYAxis(value);
+      // If new Y axis is same as current X axis, swap them
+      if (value === xAxis) {
+        setXAxis(yAxis);
+      }
+    }
+  };
+
+  // Helper function to get the key for an entry based on axis type
+  const getAxisKey = (entry, axisType) => {
+    switch (axisType) {
+      case 'program':
+        return entry.program.file_name;
+      case 'system':
+        return entry.proving_system;
+      case 'instance':
+        return entry.system_info?.ec2_instance_type || 'Unknown';
+      default:
+        return '';
+    }
+  };
+
+  // Prepare data for the selected axes
   const prepareData = (data, valueExtractor) => {
-    return data.reduce((acc, entry) => {
-      const program = entry.program.file_name;
-      const key = comparisonAxis === 'system' ? entry.proving_system : entry.system_info?.ec2_instance_type || 'Unknown';
+    const result = {};
+    const yAxisValues = new Set();
+
+    data.forEach(entry => {
+      const xValue = getAxisKey(entry, xAxis);
+      const yValue = getAxisKey(entry, yAxis);
       const value = valueExtractor(entry);
-      
-      if (!acc[program]) {
-        acc[program] = { name: program };
+
+      if (!result[xValue]) {
+        result[xValue] = { name: xValue };
       }
-      if (!acc[program][key]) {
-        acc[program][key] = value;
-      } else if (value > acc[program][key]) {
-        // For same program + key combination, keep the better value
-        acc[program][key] = value;
+
+      // Keep the better value if we have multiple entries for the same x,y combination
+      if (!result[xValue][yValue] || value > result[xValue][yValue]) {
+        result[xValue][yValue] = value;
       }
-      return acc;
-    }, {});
+
+      yAxisValues.add(yValue);
+    });
+
+    return {
+      data: Object.values(result),
+      series: Array.from(yAxisValues).sort()
+    };
   };
 
   // Get data based on selected metric
@@ -333,11 +413,6 @@ const LeaderboardGraphs = ({ data, proofType, selectedPrograms, comparisonAxis }
   };
 
   const graphData = getData();
-  const comparisonKeys = [...new Set(data.map(entry => 
-    comparisonAxis === 'system' ? entry.proving_system : entry.system_info?.ec2_instance_type
-  ))].filter(Boolean).sort();
-
-  // Color scale for the bars
   const colors = ['#60a5fa', '#34d399', '#f87171', '#a78bfa', '#fbbf24', '#ec4899'];
 
   const CustomTooltip = ({ active, payload, label, valueFormatter }) => {
@@ -358,7 +433,17 @@ const LeaderboardGraphs = ({ data, proofType, selectedPrograms, comparisonAxis }
 
   return (
     <div className="space-y-8">
-      <MetricSelector selectedMetric={selectedMetric} onChange={setSelectedMetric} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <AxisSelector 
+          xAxis={xAxis}
+          yAxis={yAxis}
+          onChange={handleAxisChange}
+        />
+        <MetricSelector 
+          selectedMetric={selectedMetric} 
+          onChange={setSelectedMetric} 
+        />
+      </div>
       
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <div className="mb-4">
@@ -367,7 +452,7 @@ const LeaderboardGraphs = ({ data, proofType, selectedPrograms, comparisonAxis }
         </div>
         <div className="h-96">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={Object.values(graphData.data)}>
+            <BarChart data={graphData.data.data}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis tickFormatter={graphData.yAxisFormatter} />
@@ -375,7 +460,7 @@ const LeaderboardGraphs = ({ data, proofType, selectedPrograms, comparisonAxis }
                 <CustomTooltip {...props} valueFormatter={graphData.valueFormatter} />
               )} />
               <Legend />
-              {comparisonKeys.map((key, index) => (
+              {graphData.data.series.map((key, index) => (
                 <Bar key={key} dataKey={key} fill={colors[index % colors.length]} />
               ))}
             </BarChart>
@@ -1185,7 +1270,7 @@ const LeaderboardTable = () => {
           data={filteredData}
           proofType={proofType}
           selectedPrograms={selectedPrograms}
-          comparisonAxis={comparisonAxis}
+          selectedSystems={selectedSystems}
         />
       )}
     </div>
