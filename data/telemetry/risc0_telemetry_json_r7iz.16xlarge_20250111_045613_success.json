@@ -1,0 +1,147 @@
+{
+  "timing": {
+    "workspace_setup_duration": {
+      "secs": 0,
+      "nanos": 712749
+    },
+    "compilation_duration": {
+      "secs": 242,
+      "nanos": 660203854
+    },
+    "proof_generation_duration": {
+      "secs": 37,
+      "nanos": 779614996
+    },
+    "core_prove_duration": {
+      "secs": 2,
+      "nanos": 570665642
+    },
+    "core_verify_duration": {
+      "secs": 0,
+      "nanos": 14080958
+    },
+    "compress_prove_duration": {
+      "secs": 2,
+      "nanos": 967988379
+    },
+    "compress_verify_duration": {
+      "secs": 0,
+      "nanos": 13448480
+    },
+    "total_duration": {
+      "secs": 280,
+      "nanos": 440674952
+    }
+  },
+  "resources": {
+    "max_memory_kb": 8739600,
+    "min_memory_kb": 6937076,
+    "avg_memory_kb": 8076012,
+    "max_cpu_percent": 91.97882,
+    "min_cpu_percent": 0.0,
+    "avg_cpu_percent": 10.550146,
+    "samples": 38
+  },
+  "proving_system": "RISC0",
+  "precompiles_enabled": false,
+  "program": {
+    "file_path": "examples/json",
+    "file_name": "json",
+    "absolute_path": "/zkrust/examples/json",
+    "guest_metadata": {
+      "package_name": "json",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        [
+          "lib",
+          "*"
+        ],
+        [
+          "serde",
+          "1.0.196"
+        ],
+        [
+          "serde_json",
+          "1.0.114"
+        ],
+        [
+          "zk_rust_io",
+          "git:https://github.com/yetanotherco/zkRust.git"
+        ]
+      ]
+    },
+    "host_metadata": {
+      "package_name": "host",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        [
+          "bincode",
+          "1.3.3"
+        ],
+        [
+          "digest",
+          "0.10.7"
+        ],
+        [
+          "methods",
+          "*"
+        ],
+        [
+          "rand",
+          "0.8.5"
+        ],
+        [
+          "risc0-zkvm",
+          "git:https://github.com/risc0/risc0 tag:v1.2.0"
+        ],
+        [
+          "rsa",
+          "0.6.0"
+        ],
+        [
+          "serde",
+          "1.0"
+        ],
+        [
+          "serde_json",
+          "1.0"
+        ],
+        [
+          "sha2",
+          "0.10.8"
+        ],
+        [
+          "tracing-subscriber",
+          "0.3"
+        ],
+        [
+          "zk_rust_io",
+          "git:https://github.com/yetanotherco/zkRust.git branch:feat/v2"
+        ]
+      ]
+    }
+  },
+  "zk_metrics": {
+    "cycles": 13626,
+    "num_segments": 1,
+    "core_proof_size": 242652,
+    "recursive_proof_size": 222668,
+    "execution_speed": 360.67069506776824,
+    "compiled_program_size": 226036
+  },
+  "system_info": {
+    "os_name": "Ubuntu",
+    "os_version": "22.04",
+    "kernel_version": "6.8.0-1021-aws",
+    "total_memory_kb": 519855388,
+    "cpu_brand": "Intel(R) Xeon(R) Gold 6455B",
+    "cpu_count": 64,
+    "cpu_frequency_mhz": 3897,
+    "is_ec2": true,
+    "ec2_instance_type": "r7iz.16xlarge"
+  }
+}

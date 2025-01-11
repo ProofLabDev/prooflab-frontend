@@ -1,0 +1,119 @@
+{
+  "timing": {
+    "workspace_setup_duration": {
+      "secs": 0,
+      "nanos": 432539
+    },
+    "compilation_duration": {
+      "secs": 37,
+      "nanos": 455647563
+    },
+    "proof_generation_duration": {
+      "secs": 32,
+      "nanos": 199278138
+    },
+    "core_prove_duration": {
+      "secs": 4,
+      "nanos": 11924091
+    },
+    "core_verify_duration": {
+      "secs": 0,
+      "nanos": 161929446
+    },
+    "compress_prove_duration": {
+      "secs": 26,
+      "nanos": 363796968
+    },
+    "compress_verify_duration": {
+      "secs": 0,
+      "nanos": 82105607
+    },
+    "total_duration": {
+      "secs": 69,
+      "nanos": 655545885
+    }
+  },
+  "resources": {
+    "max_memory_kb": 14751772,
+    "min_memory_kb": 8566072,
+    "avg_memory_kb": 11813307,
+    "max_cpu_percent": 98.54999,
+    "min_cpu_percent": 0.0,
+    "avg_cpu_percent": 51.54093,
+    "samples": 32
+  },
+  "proving_system": "SP1",
+  "precompiles_enabled": false,
+  "program": {
+    "file_path": "examples/bubble_sort",
+    "file_name": "bubble_sort",
+    "absolute_path": "/zkrust/examples/bubble_sort",
+    "guest_metadata": {
+      "package_name": "bubble_sort",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        [
+          "zk_rust_io",
+          "git:https://github.com/yetanotherco/zkRust.git"
+        ]
+      ]
+    },
+    "host_metadata": {
+      "package_name": "method",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        [
+          "bincode",
+          "1.3"
+        ],
+        [
+          "serde",
+          "1.0"
+        ],
+        [
+          "serde_json",
+          "1.0"
+        ],
+        [
+          "sp1-prover",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-sdk",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "tracing",
+          "0.1"
+        ],
+        [
+          "tracing-subscriber",
+          "0.3"
+        ]
+      ]
+    }
+  },
+  "zk_metrics": {
+    "cycles": 7619,
+    "num_segments": 1,
+    "core_proof_size": 2657078,
+    "recursive_proof_size": 1274867,
+    "execution_speed": 236.62021140183364,
+    "compiled_program_size": 149940
+  },
+  "system_info": {
+    "os_name": "Ubuntu",
+    "os_version": "22.04",
+    "kernel_version": "6.8.0-1021-aws",
+    "total_memory_kb": 519855360,
+    "cpu_brand": "Intel(R) Xeon(R) Gold 6455B",
+    "cpu_count": 64,
+    "cpu_frequency_mhz": 3711,
+    "is_ec2": true,
+    "ec2_instance_type": "r7iz.16xlarge"
+  }
+}
