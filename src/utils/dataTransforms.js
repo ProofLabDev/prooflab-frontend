@@ -25,6 +25,20 @@ export const formatDurationShort = (duration) => {
   return `${(totalMs / 1000).toFixed(1)}s`;
 };
 
+export const formatFrequency = (hz) => {
+  if (!hz && hz !== 0) return 'N/A';
+  
+  if (hz >= 1e9) {
+    return `${(hz / 1e9).toFixed(2)} GHz`;
+  } else if (hz >= 1e6) {
+    return `${(hz / 1e6).toFixed(2)} MHz`;
+  } else if (hz >= 1e3) {
+    return `${(hz / 1e3).toFixed(2)} kHz`;
+  } else {
+    return `${hz.toFixed(2)} Hz`;
+  }
+};
+
 // EC2 pricing in USD per hour (based on us-east-1)
 const EC2_PRICING = {
   // AMD-based instances
