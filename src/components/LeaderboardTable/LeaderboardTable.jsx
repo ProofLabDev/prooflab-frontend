@@ -654,7 +654,6 @@ const LeaderboardTable = () => {
   const [activeTab, setActiveTab] = useState('table');
   const ITEMS_PER_PAGE = 10;
   const [selectedPrograms, setSelectedPrograms] = useState([]);
-  const [comparisonAxis, setComparisonAxis] = useState('system'); // 'system' or 'instance'
   const [selectedSystems, setSelectedSystems] = useState([]);
 
   const columns = [
@@ -940,22 +939,6 @@ const LeaderboardTable = () => {
               selected={selectedSystems}
               onChange={setSelectedSystems}
             />
-          </div>
-
-          {/* Comparison Axis Selection */}
-          <div className="space-y-1">
-            <FilterLabel 
-              label="Compare By" 
-              tooltip="Choose the axis of comparison for the graphs. Compare between different zkVM systems or between instance types."
-            />
-            <select
-              className="mt-1 w-full form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              value={comparisonAxis}
-              onChange={(e) => setComparisonAxis(e.target.value)}
-            >
-              <option value="system">System (SP1 vs RISC0)</option>
-              <option value="instance">Instance Type</option>
-            </select>
           </div>
 
           {/* Proof Type Selection */}
