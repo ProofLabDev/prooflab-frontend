@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import LeaderboardTable from './components/LeaderboardTable/LeaderboardTable';
 import About from './components/About/About';
@@ -6,6 +6,7 @@ import FAQ from './components/FAQ/FAQ';
 import Footer from './components/Footer/Footer';
 import ZKVMComparison from './components/ZKVMComparison/ZKVMComparison';
 import Sponsor from './components/Sponsor/Sponsor';
+import posthog from 'posthog-js';
 
 const Navigation = () => {
   const location = useLocation();
@@ -116,11 +117,36 @@ const Navigation = () => {
   );
 };
 
+// Add PostHog page view tracking
+const PageViewTracker = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    posthog.capture('$pageview');
+  }, [location]);
+
+  return null;
+};
+
 function App() {
+  useEffect(() => {
+    // Initialize PostHog
+    posthog.init(
+      'phc_MiUDhy96LHedTYSD945UgXkQ6vZGsu0xzBHEpxrMOu7',
+      {
+        api_host: 'https://app.posthog.com',
+        loaded: (posthog) => {
+          if (process.env.NODE_ENV === 'development') posthog.debug();
+        }
+      }
+    );
+  }, []);
+
   return (
     <Router>
       <div className="min-h-screen flex flex-col bg-gray-50">
         <Navigation />
+        <PageViewTracker />
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<LeaderboardTable />} />

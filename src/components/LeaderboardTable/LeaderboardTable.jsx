@@ -665,6 +665,7 @@ const LeaderboardTable = () => {
     { key: 'timing.proof_generation', label: 'Proof Time', defaultVisible: true },
     { key: 'cost', label: 'Cost', defaultVisible: true },
     { key: 'system_info.ec2_instance_type', label: 'Instance Type', defaultVisible: true },
+    { key: 'zk_metrics.num_segments', label: 'Segments', defaultVisible: false },
     { key: 'system_info.cpu_brand', label: 'CPU', defaultVisible: false },
     { key: 'resources.avg_memory_kb', label: 'Memory', defaultVisible: false },
     { key: 'resources.avg_cpu_percent', label: 'CPU Usage', defaultVisible: false },
@@ -1096,6 +1097,11 @@ const LeaderboardTable = () => {
                       {isColumnVisible('system_info.ec2_instance_type') && (
                         <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
                           {entry.system_info?.ec2_instance_type || 'N/A'}
+                        </td>
+                      )}
+                      {isColumnVisible('zk_metrics.num_segments') && (
+                        <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {entry.zk_metrics.num_segments?.toLocaleString() || 'N/A'}
                         </td>
                       )}
                       {isColumnVisible('system_info.cpu_brand') && (
