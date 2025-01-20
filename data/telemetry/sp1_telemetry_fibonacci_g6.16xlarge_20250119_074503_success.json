@@ -2,74 +2,59 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 577496
+      "nanos": 1320067
     },
     "compilation_duration": {
-      "secs": 41,
-      "nanos": 513715452
+      "secs": 52,
+      "nanos": 627223735
     },
     "proof_generation_duration": {
-      "secs": 317,
-      "nanos": 787009070
+      "secs": 78,
+      "nanos": 305258251
     },
     "core_prove_duration": {
-      "secs": 120,
-      "nanos": 169854395
+      "secs": 2,
+      "nanos": 805689020
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 639784286
+      "nanos": 210728577
     },
     "compress_prove_duration": {
-      "secs": 193,
-      "nanos": 199400154
+      "secs": 8,
+      "nanos": 714519754
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 85788593
+      "nanos": 107490699
     },
     "total_duration": {
-      "secs": 359,
-      "nanos": 301571727
+      "secs": 130,
+      "nanos": 934050599
     }
   },
   "resources": {
-    "max_memory_kb": 57478020,
-    "min_memory_kb": 8255996,
-    "avg_memory_kb": 39868769,
-    "max_cpu_percent": 100.0,
+    "max_memory_kb": 9935296,
+    "min_memory_kb": 4161904,
+    "avg_memory_kb": 6337212,
+    "max_cpu_percent": 63.294727,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 79.22939,
-    "samples": 313
+    "avg_cpu_percent": 13.742637,
+    "samples": 78
   },
   "proving_system": "SP1",
   "precompiles_enabled": false,
+  "gpu_enabled": true,
   "program": {
-    "file_path": "examples/rsa",
-    "file_name": "rsa",
-    "absolute_path": "/zkrust/examples/rsa",
+    "file_path": "examples/fibonacci",
+    "file_name": "fibonacci",
+    "absolute_path": "/zkrust/examples/fibonacci",
     "guest_metadata": {
-      "package_name": "rsa",
+      "package_name": "fibonacci",
       "version": "0.1.0",
       "authors": null,
       "edition": "2021",
       "dependencies": [
-        [
-          "digest",
-          "0.10.7"
-        ],
-        [
-          "rand",
-          "0.8.5"
-        ],
-        [
-          "rsa",
-          "0.6.0"
-        ],
-        [
-          "sha2",
-          "0.10.8"
-        ],
         [
           "zk_rust_io",
           "git:https://github.com/yetanotherco/zkRust.git"
@@ -95,11 +80,27 @@
           "1.0"
         ],
         [
+          "sp1-core-executor",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-core-machine",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-cuda",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
           "sp1-prover",
           "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
         ],
         [
           "sp1-sdk",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-stark",
           "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
         ],
         [
@@ -109,27 +110,34 @@
         [
           "tracing-subscriber",
           "0.3"
+        ],
+        [
+          "zk_rust_io",
+          "git:https://github.com/yetanotherco/zkRust.git"
         ]
       ]
     }
   },
   "zk_metrics": {
-    "cycles": 9934561,
+    "cycles": 12883,
     "num_segments": 1,
-    "core_proof_size": 9389076,
-    "recursive_proof_size": 1275361,
-    "execution_speed": 31261.696408148895,
-    "compiled_program_size": 302332
+    "core_proof_size": 2656986,
+    "recursive_proof_size": 1274775,
+    "execution_speed": 164.5227956302089,
+    "compiled_program_size": 138672
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 519855368,
-    "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
+    "total_memory_kb": 254236080,
+    "cpu_brand": "AMD EPYC 7R13 Processor",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3319,
+    "cpu_frequency_mhz": 3598,
+    "gpu_enabled": true,
+    "gpus": [],
     "is_ec2": true,
-    "ec2_instance_type": "r7i.16xlarge"
+    "ec2_instance_type": "g6.16xlarge",
+    "llvm_version": "version 14.0.0-1ubuntu1.1"
   }
 }

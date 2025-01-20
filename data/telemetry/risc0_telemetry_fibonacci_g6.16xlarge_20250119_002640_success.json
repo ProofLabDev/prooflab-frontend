@@ -2,70 +2,59 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 802999
+      "nanos": 1422971
     },
     "compilation_duration": {
-      "secs": 303,
-      "nanos": 978121208
+      "secs": 306,
+      "nanos": 595912598
     },
     "proof_generation_duration": {
-      "secs": 45,
-      "nanos": 169207703
+      "secs": 502,
+      "nanos": 700469547
     },
     "core_prove_duration": {
-      "secs": 3,
-      "nanos": 100491081
+      "secs": 0,
+      "nanos": 563752969
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 14776653
+      "nanos": 17406218
     },
     "compress_prove_duration": {
-      "secs": 3,
-      "nanos": 489451765
+      "secs": 0,
+      "nanos": 477935408
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 14027995
+      "nanos": 16638033
     },
     "total_duration": {
-      "secs": 349,
-      "nanos": 148337692
+      "secs": 809,
+      "nanos": 298222826
     }
   },
   "resources": {
-    "max_memory_kb": 8650368,
-    "min_memory_kb": 7183024,
-    "avg_memory_kb": 7996972,
-    "max_cpu_percent": 92.8048,
+    "max_memory_kb": 9592460,
+    "min_memory_kb": 3558480,
+    "avg_memory_kb": 6660881,
+    "max_cpu_percent": 22.742853,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 10.472411,
-    "samples": 45
+    "avg_cpu_percent": 4.1537485,
+    "samples": 500
   },
   "proving_system": "RISC0",
   "precompiles_enabled": false,
+  "gpu_enabled": true,
   "program": {
-    "file_path": "examples/json",
-    "file_name": "json",
-    "absolute_path": "/zkrust/examples/json",
+    "file_path": "examples/fibonacci",
+    "file_name": "fibonacci",
+    "absolute_path": "/zkrust/examples/fibonacci",
     "guest_metadata": {
-      "package_name": "json",
+      "package_name": "fibonacci",
       "version": "0.1.0",
       "authors": null,
       "edition": "2021",
       "dependencies": [
-        [
-          "lib",
-          "*"
-        ],
-        [
-          "serde",
-          "1.0.196"
-        ],
-        [
-          "serde_json",
-          "1.0.114"
-        ],
         [
           "zk_rust_io",
           "git:https://github.com/yetanotherco/zkRust.git"
@@ -117,31 +106,30 @@
         [
           "tracing-subscriber",
           "0.3"
-        ],
-        [
-          "zk_rust_io",
-          "git:https://github.com/yetanotherco/zkRust.git branch:feat/v2"
         ]
       ]
     }
   },
   "zk_metrics": {
-    "cycles": 13626,
+    "cycles": 17307,
     "num_segments": 1,
     "core_proof_size": 242652,
     "recursive_proof_size": 222668,
-    "execution_speed": 301.6656853844927,
-    "compiled_program_size": 226036
+    "execution_speed": 34.428056165525184,
+    "compiled_program_size": 128816
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 519855368,
-    "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
+    "total_memory_kb": 254236076,
+    "cpu_brand": "AMD EPYC 7R13 Processor",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3417,
+    "cpu_frequency_mhz": 1790,
+    "gpu_enabled": true,
+    "gpus": [],
     "is_ec2": true,
-    "ec2_instance_type": "r7i.16xlarge"
+    "ec2_instance_type": "g6.16xlarge",
+    "llvm_version": "version 14.0.0-1ubuntu1.1"
   }
 }

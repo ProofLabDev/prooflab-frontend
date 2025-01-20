@@ -2,54 +2,55 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 432539
+      "nanos": 531898
     },
     "compilation_duration": {
-      "secs": 37,
-      "nanos": 455647563
+      "secs": 46,
+      "nanos": 162892315
     },
     "proof_generation_duration": {
-      "secs": 32,
-      "nanos": 199278138
+      "secs": 37,
+      "nanos": 400063350
     },
     "core_prove_duration": {
-      "secs": 4,
-      "nanos": 11924091
+      "secs": 5,
+      "nanos": 67868046
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 161929446
+      "nanos": 171644327
     },
     "compress_prove_duration": {
-      "secs": 26,
-      "nanos": 363796968
+      "secs": 30,
+      "nanos": 352093113
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 82105607
+      "nanos": 86966300
     },
     "total_duration": {
-      "secs": 69,
-      "nanos": 655545885
+      "secs": 83,
+      "nanos": 563725958
     }
   },
   "resources": {
-    "max_memory_kb": 14751772,
-    "min_memory_kb": 8566072,
-    "avg_memory_kb": 11813307,
-    "max_cpu_percent": 98.54999,
+    "max_memory_kb": 14639348,
+    "min_memory_kb": 7453672,
+    "avg_memory_kb": 11434005,
+    "max_cpu_percent": 97.36882,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 51.54093,
-    "samples": 32
+    "avg_cpu_percent": 53.361115,
+    "samples": 37
   },
   "proving_system": "SP1",
   "precompiles_enabled": false,
+  "gpu_enabled": false,
   "program": {
-    "file_path": "examples/bubble_sort",
-    "file_name": "bubble_sort",
-    "absolute_path": "/zkrust/examples/bubble_sort",
+    "file_path": "examples/fibonacci",
+    "file_name": "fibonacci",
+    "absolute_path": "/zkrust/examples/fibonacci",
     "guest_metadata": {
-      "package_name": "bubble_sort",
+      "package_name": "fibonacci",
       "version": "0.1.0",
       "authors": null,
       "edition": "2021",
@@ -79,11 +80,27 @@
           "1.0"
         ],
         [
+          "sp1-core-executor",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-core-machine",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-cuda",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
           "sp1-prover",
           "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
         ],
         [
           "sp1-sdk",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-stark",
           "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
         ],
         [
@@ -93,27 +110,34 @@
         [
           "tracing-subscriber",
           "0.3"
+        ],
+        [
+          "zk_rust_io",
+          "git:https://github.com/yetanotherco/zkRust.git"
         ]
       ]
     }
   },
   "zk_metrics": {
-    "cycles": 7619,
+    "cycles": 12883,
     "num_segments": 1,
-    "core_proof_size": 2657078,
-    "recursive_proof_size": 1274867,
-    "execution_speed": 236.62021140183364,
-    "compiled_program_size": 149940
+    "core_proof_size": 2656986,
+    "recursive_proof_size": 1274775,
+    "execution_speed": 344.46465717015957,
+    "compiled_program_size": 138672
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 519855360,
-    "cpu_brand": "Intel(R) Xeon(R) Gold 6455B",
+    "total_memory_kb": 519855364,
+    "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3711,
+    "cpu_frequency_mhz": 3292,
+    "gpu_enabled": false,
+    "gpus": [],
     "is_ec2": true,
-    "ec2_instance_type": "r7iz.16xlarge"
+    "ec2_instance_type": "r7i.16xlarge",
+    "llvm_version": "version 14.0.0-1ubuntu1.1"
   }
 }

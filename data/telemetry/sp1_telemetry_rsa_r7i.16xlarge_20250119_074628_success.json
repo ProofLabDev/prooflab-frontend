@@ -2,69 +2,74 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 490562
+      "nanos": 610916
     },
     "compilation_duration": {
-      "secs": 40,
-      "nanos": 909317179
+      "secs": 46,
+      "nanos": 622395880
     },
     "proof_generation_duration": {
-      "secs": 193,
-      "nanos": 8950870
+      "secs": 38,
+      "nanos": 661690470
     },
     "core_prove_duration": {
-      "secs": 69,
-      "nanos": 237485930
+      "secs": 4,
+      "nanos": 643319457
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 402906029
+      "nanos": 171707633
     },
     "compress_prove_duration": {
-      "secs": 119,
-      "nanos": 820757455
+      "secs": 29,
+      "nanos": 929514787
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 85844903
+      "nanos": 87272708
     },
     "total_duration": {
-      "secs": 233,
-      "nanos": 919028901
+      "secs": 85,
+      "nanos": 284940496
     }
   },
   "resources": {
-    "max_memory_kb": 35496760,
-    "min_memory_kb": 7852308,
-    "avg_memory_kb": 25477447,
-    "max_cpu_percent": 100.0,
+    "max_memory_kb": 14468452,
+    "min_memory_kb": 7841248,
+    "avg_memory_kb": 11186561,
+    "max_cpu_percent": 98.327126,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 72.598946,
-    "samples": 191
+    "avg_cpu_percent": 49.831608,
+    "samples": 39
   },
   "proving_system": "SP1",
   "precompiles_enabled": false,
+  "gpu_enabled": false,
   "program": {
-    "file_path": "examples/ecdsa",
-    "file_name": "ecdsa",
-    "absolute_path": "/zkrust/examples/ecdsa",
+    "file_path": "examples/rsa",
+    "file_name": "rsa",
+    "absolute_path": "/zkrust/examples/rsa",
     "guest_metadata": {
-      "package_name": "ecdsa",
+      "package_name": "rsa",
       "version": "0.1.0",
       "authors": null,
       "edition": "2021",
       "dependencies": [
         [
-          "hex-literal",
-          "0.4"
+          "digest",
+          "0.10.7"
         ],
         [
-          "k256",
-          "=0.13.3"
+          "rand",
+          "0.8.5"
         ],
         [
-          "rand_core",
-          "0.6.4"
+          "rsa",
+          "0.6.0"
+        ],
+        [
+          "sha2",
+          "0.10.8"
         ],
         [
           "zk_rust_io",
@@ -91,11 +96,27 @@
           "1.0"
         ],
         [
+          "sp1-core-executor",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-core-machine",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-cuda",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
           "sp1-prover",
           "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
         ],
         [
           "sp1-sdk",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-stark",
           "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
         ],
         [
@@ -105,27 +126,34 @@
         [
           "tracing-subscriber",
           "0.3"
+        ],
+        [
+          "zk_rust_io",
+          "git:https://github.com/yetanotherco/zkRust.git"
         ]
       ]
     }
   },
   "zk_metrics": {
-    "cycles": 4639131,
+    "cycles": 4411,
     "num_segments": 1,
-    "core_proof_size": 5945417,
-    "recursive_proof_size": 1275086,
-    "execution_speed": 24035.833463105337,
-    "compiled_program_size": 281124
+    "core_proof_size": 2657584,
+    "recursive_proof_size": 1275373,
+    "execution_speed": 114.09226928198517,
+    "compiled_program_size": 302332
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 519855368,
+    "total_memory_kb": 519855364,
     "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3400,
+    "cpu_frequency_mhz": 3331,
+    "gpu_enabled": false,
+    "gpus": [],
     "is_ec2": true,
-    "ec2_instance_type": "r7i.16xlarge"
+    "ec2_instance_type": "r7i.16xlarge",
+    "llvm_version": "version 14.0.0-1ubuntu1.1"
   }
 }

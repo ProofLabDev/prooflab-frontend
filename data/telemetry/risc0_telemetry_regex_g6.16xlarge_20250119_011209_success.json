@@ -2,48 +2,49 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 452270
+      "nanos": 1301452
     },
     "compilation_duration": {
-      "secs": 37,
-      "nanos": 339791983
+      "secs": 302,
+      "nanos": 266616122
     },
     "proof_generation_duration": {
-      "secs": 53,
-      "nanos": 286507659
+      "secs": 508,
+      "nanos": 872469453
     },
     "core_prove_duration": {
-      "secs": 14,
-      "nanos": 54613128
+      "secs": 2,
+      "nanos": 410590329
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 161577192
+      "nanos": 21775523
     },
     "compress_prove_duration": {
-      "secs": 36,
-      "nanos": 280882496
+      "secs": 0,
+      "nanos": 509289129
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 82094961
+      "nanos": 17517958
     },
     "total_duration": {
-      "secs": 90,
-      "nanos": 626983397
+      "secs": 811,
+      "nanos": 140957118
     }
   },
   "resources": {
-    "max_memory_kb": 15754972,
-    "min_memory_kb": 8479540,
-    "avg_memory_kb": 12843329,
-    "max_cpu_percent": 100.0,
+    "max_memory_kb": 9916400,
+    "min_memory_kb": 3674704,
+    "avg_memory_kb": 6777985,
+    "max_cpu_percent": 22.820189,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 54.5151,
-    "samples": 53
+    "avg_cpu_percent": 4.143937,
+    "samples": 506
   },
-  "proving_system": "SP1",
+  "proving_system": "RISC0",
   "precompiles_enabled": false,
+  "gpu_enabled": true,
   "program": {
     "file_path": "examples/regex",
     "file_name": "regex",
@@ -65,14 +66,34 @@
       ]
     },
     "host_metadata": {
-      "package_name": "method",
+      "package_name": "host",
       "version": "0.1.0",
       "authors": null,
       "edition": "2021",
       "dependencies": [
         [
           "bincode",
-          "1.3"
+          "1.3.3"
+        ],
+        [
+          "digest",
+          "0.10.7"
+        ],
+        [
+          "methods",
+          "*"
+        ],
+        [
+          "rand",
+          "0.8.5"
+        ],
+        [
+          "risc0-zkvm",
+          "git:https://github.com/risc0/risc0 tag:v1.2.0"
+        ],
+        [
+          "rsa",
+          "0.6.0"
         ],
         [
           "serde",
@@ -83,16 +104,8 @@
           "1.0"
         ],
         [
-          "sp1-prover",
-          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
-        ],
-        [
-          "sp1-sdk",
-          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
-        ],
-        [
-          "tracing",
-          "0.1"
+          "sha2",
+          "0.10.8"
         ],
         [
           "tracing-subscriber",
@@ -102,22 +115,25 @@
     }
   },
   "zk_metrics": {
-    "cycles": 191399,
+    "cycles": 220661,
     "num_segments": 1,
-    "core_proof_size": 2657023,
-    "recursive_proof_size": 1274812,
-    "execution_speed": 3591.8848580738813,
-    "compiled_program_size": 2266024
+    "core_proof_size": 279836,
+    "recursive_proof_size": 222668,
+    "execution_speed": 433.62730987823755,
+    "compiled_program_size": 2253832
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 519855360,
-    "cpu_brand": "Intel(R) Xeon(R) Gold 6455B",
+    "total_memory_kb": 254236076,
+    "cpu_brand": "AMD EPYC 7R13 Processor",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3900,
+    "cpu_frequency_mhz": 1545,
+    "gpu_enabled": true,
+    "gpus": [],
     "is_ec2": true,
-    "ec2_instance_type": "r7iz.16xlarge"
+    "ec2_instance_type": "g6.16xlarge",
+    "llvm_version": "version 14.0.0-1ubuntu1.1"
   }
 }

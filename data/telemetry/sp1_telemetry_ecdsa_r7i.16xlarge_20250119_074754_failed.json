@@ -2,48 +2,37 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 472784
+      "nanos": 500800
     },
     "compilation_duration": {
-      "secs": 38,
-      "nanos": 588340097
+      "secs": 46,
+      "nanos": 434216169
     },
     "proof_generation_duration": {
-      "secs": 173,
-      "nanos": 888342240
+      "secs": 38,
+      "nanos": 803463066
     },
-    "core_prove_duration": {
-      "secs": 62,
-      "nanos": 807675035
-    },
-    "core_verify_duration": {
-      "secs": 0,
-      "nanos": 384028820
-    },
-    "compress_prove_duration": {
-      "secs": 107,
-      "nanos": 452515503
-    },
-    "compress_verify_duration": {
-      "secs": 0,
-      "nanos": 82795990
-    },
+    "core_prove_duration": null,
+    "core_verify_duration": null,
+    "compress_prove_duration": null,
+    "compress_verify_duration": null,
     "total_duration": {
-      "secs": 212,
-      "nanos": 477360117
+      "secs": 85,
+      "nanos": 238251483
     }
   },
   "resources": {
-    "max_memory_kb": 35966100,
-    "min_memory_kb": 8917908,
-    "avg_memory_kb": 26705621,
-    "max_cpu_percent": 100.0,
+    "max_memory_kb": 14616184,
+    "min_memory_kb": 7787244,
+    "avg_memory_kb": 11450138,
+    "max_cpu_percent": 98.370224,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 71.86183,
-    "samples": 172
+    "avg_cpu_percent": 49.413303,
+    "samples": 39
   },
   "proving_system": "SP1",
   "precompiles_enabled": false,
+  "gpu_enabled": false,
   "program": {
     "file_path": "examples/ecdsa",
     "file_name": "ecdsa",
@@ -91,11 +80,27 @@
           "1.0"
         ],
         [
+          "sp1-core-executor",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-core-machine",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-cuda",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
           "sp1-prover",
           "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
         ],
         [
           "sp1-sdk",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-stark",
           "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
         ],
         [
@@ -105,27 +110,34 @@
         [
           "tracing-subscriber",
           "0.3"
+        ],
+        [
+          "zk_rust_io",
+          "git:https://github.com/yetanotherco/zkRust.git"
         ]
       ]
     }
   },
   "zk_metrics": {
-    "cycles": 4639747,
-    "num_segments": 1,
-    "core_proof_size": 5945416,
-    "recursive_proof_size": 1275085,
-    "execution_speed": 26682.334998606406,
+    "cycles": null,
+    "num_segments": null,
+    "core_proof_size": null,
+    "recursive_proof_size": null,
+    "execution_speed": null,
     "compiled_program_size": 281124
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 519855360,
-    "cpu_brand": "Intel(R) Xeon(R) Gold 6455B",
+    "total_memory_kb": 519855364,
+    "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3907,
+    "cpu_frequency_mhz": 3333,
+    "gpu_enabled": false,
+    "gpus": [],
     "is_ec2": true,
-    "ec2_instance_type": "r7iz.16xlarge"
+    "ec2_instance_type": "r7i.16xlarge",
+    "llvm_version": "version 14.0.0-1ubuntu1.1"
   }
 }
