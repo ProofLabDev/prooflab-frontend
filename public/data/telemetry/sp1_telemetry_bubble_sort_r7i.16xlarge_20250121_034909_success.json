@@ -2,55 +2,55 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 531898
+      "nanos": 543866
     },
     "compilation_duration": {
       "secs": 46,
-      "nanos": 162892315
+      "nanos": 162837549
     },
     "proof_generation_duration": {
       "secs": 37,
-      "nanos": 400063350
+      "nanos": 77671814
     },
     "core_prove_duration": {
-      "secs": 5,
-      "nanos": 67868046
+      "secs": 4,
+      "nanos": 542353658
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 171644327
+      "nanos": 172957093
     },
     "compress_prove_duration": {
       "secs": 30,
-      "nanos": 352093113
+      "nanos": 479493586
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 86966300
+      "nanos": 86795171
     },
     "total_duration": {
       "secs": 83,
-      "nanos": 563725958
+      "nanos": 241343863
     }
   },
   "resources": {
-    "max_memory_kb": 14639348,
-    "min_memory_kb": 7453672,
-    "avg_memory_kb": 11434005,
-    "max_cpu_percent": 97.36882,
+    "max_memory_kb": 14402848,
+    "min_memory_kb": 8244196,
+    "avg_memory_kb": 11650080,
+    "max_cpu_percent": 99.68537,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 53.361115,
+    "avg_cpu_percent": 51.82657,
     "samples": 37
   },
   "proving_system": "SP1",
   "precompiles_enabled": false,
   "gpu_enabled": false,
   "program": {
-    "file_path": "examples/fibonacci",
-    "file_name": "fibonacci",
-    "absolute_path": "/zkrust/examples/fibonacci",
+    "file_path": "examples/bubble_sort",
+    "file_name": "bubble_sort",
+    "absolute_path": "/zkrust/examples/bubble_sort",
     "guest_metadata": {
-      "package_name": "fibonacci",
+      "package_name": "bubble_sort",
       "version": "0.1.0",
       "authors": null,
       "edition": "2021",
@@ -119,21 +119,21 @@
     }
   },
   "zk_metrics": {
-    "cycles": 12883,
+    "cycles": 7619,
     "num_segments": 1,
-    "core_proof_size": 2656986,
-    "recursive_proof_size": 1274775,
-    "execution_speed": 344.46465717015957,
-    "compiled_program_size": 138672
+    "core_proof_size": 2657078,
+    "recursive_proof_size": 1274867,
+    "execution_speed": 205.48755159764843,
+    "compiled_program_size": 149940
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 519855364,
+    "total_memory_kb": 519855360,
     "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3292,
+    "cpu_frequency_mhz": 3364,
     "gpu_enabled": false,
     "gpus": [],
     "is_ec2": true,

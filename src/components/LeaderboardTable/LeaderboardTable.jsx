@@ -19,22 +19,24 @@ const formatProofSize = (bytes) => {
 };
 
 const calculateThroughput = (cycles, timing, proofType) => {
-  if (!cycles) return 0;
+  if (!cycles || !timing) return 0;
   const totalNanos = proofType === 'core' 
-    ? (timing.core_prove_duration.secs * 1000000000 + timing.core_prove_duration.nanos)
-    : ((timing.core_prove_duration.secs + timing.compress_prove_duration.secs) * 1000000000 + 
-       timing.core_prove_duration.nanos + timing.compress_prove_duration.nanos);
+    ? ((timing.core_prove_duration?.secs || 0) * 1000000000 + (timing.core_prove_duration?.nanos || 0))
+    : (((timing.core_prove_duration?.secs || 0) + (timing.compress_prove_duration?.secs || 0)) * 1000000000 + 
+       (timing.core_prove_duration?.nanos || 0) + (timing.compress_prove_duration?.nanos || 0));
   return totalNanos > 0 ? (cycles / (totalNanos / 1000000000)) : 0;
 };
 
 const getProofDuration = (timing, proofType) => {
+  if (!timing) return null;
+  
   if (proofType === 'core') {
     return timing.core_prove_duration;
   } else {
     // For compressed proofs, combine core prove and compress prove times
     return {
-      secs: timing.core_prove_duration.secs + timing.compress_prove_duration.secs,
-      nanos: timing.core_prove_duration.nanos + timing.compress_prove_duration.nanos
+      secs: (timing.core_prove_duration?.secs || 0) + (timing.compress_prove_duration?.secs || 0),
+      nanos: (timing.core_prove_duration?.nanos || 0) + (timing.compress_prove_duration?.nanos || 0)
     };
   }
 };

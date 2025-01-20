@@ -1,0 +1,143 @@
+{
+  "timing": {
+    "workspace_setup_duration": {
+      "secs": 0,
+      "nanos": 1251079
+    },
+    "compilation_duration": {
+      "secs": 52,
+      "nanos": 906116939
+    },
+    "proof_generation_duration": {
+      "secs": 116,
+      "nanos": 150299897
+    },
+    "core_prove_duration": {
+      "secs": 2,
+      "nanos": 798926054
+    },
+    "core_verify_duration": {
+      "secs": 0,
+      "nanos": 211620199
+    },
+    "compress_prove_duration": {
+      "secs": 9,
+      "nanos": 243597382
+    },
+    "compress_verify_duration": {
+      "secs": 0,
+      "nanos": 106503233
+    },
+    "total_duration": {
+      "secs": 169,
+      "nanos": 57941578
+    }
+  },
+  "resources": {
+    "max_memory_kb": 10119596,
+    "min_memory_kb": 3742372,
+    "avg_memory_kb": 5652736,
+    "max_cpu_percent": 64.712296,
+    "min_cpu_percent": 0.0,
+    "avg_cpu_percent": 9.433258,
+    "samples": 116
+  },
+  "proving_system": "SP1",
+  "precompiles_enabled": false,
+  "gpu_enabled": true,
+  "program": {
+    "file_path": "examples/fibonacci",
+    "file_name": "fibonacci",
+    "absolute_path": "/zkrust/examples/fibonacci",
+    "guest_metadata": {
+      "package_name": "fibonacci",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        [
+          "zk_rust_io",
+          "git:https://github.com/yetanotherco/zkRust.git"
+        ]
+      ]
+    },
+    "host_metadata": {
+      "package_name": "method",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        [
+          "bincode",
+          "1.3"
+        ],
+        [
+          "serde",
+          "1.0"
+        ],
+        [
+          "serde_json",
+          "1.0"
+        ],
+        [
+          "sp1-core-executor",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-core-machine",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-cuda",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-prover",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-sdk",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-stark",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "tracing",
+          "0.1"
+        ],
+        [
+          "tracing-subscriber",
+          "0.3"
+        ],
+        [
+          "zk_rust_io",
+          "git:https://github.com/yetanotherco/zkRust.git"
+        ]
+      ]
+    }
+  },
+  "zk_metrics": {
+    "cycles": 12883,
+    "num_segments": 1,
+    "core_proof_size": 2656986,
+    "recursive_proof_size": 1274775,
+    "execution_speed": 110.91663139418851,
+    "compiled_program_size": 138672
+  },
+  "system_info": {
+    "os_name": "Ubuntu",
+    "os_version": "22.04",
+    "kernel_version": "6.8.0-1021-aws",
+    "total_memory_kb": 254236088,
+    "cpu_brand": "AMD EPYC 7R13 Processor",
+    "cpu_count": 64,
+    "cpu_frequency_mhz": 2269,
+    "gpu_enabled": true,
+    "gpus": [],
+    "is_ec2": true,
+    "ec2_instance_type": "g6.16xlarge",
+    "llvm_version": "version 14.0.0-1ubuntu1.1"
+  }
+}

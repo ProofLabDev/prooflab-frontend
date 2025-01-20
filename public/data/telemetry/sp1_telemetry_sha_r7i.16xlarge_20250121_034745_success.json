@@ -2,74 +2,62 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 610916
+      "nanos": 574430
     },
     "compilation_duration": {
       "secs": 46,
-      "nanos": 622395880
+      "nanos": 500583095
     },
     "proof_generation_duration": {
-      "secs": 38,
-      "nanos": 661690470
+      "secs": 40,
+      "nanos": 501066088
     },
     "core_prove_duration": {
-      "secs": 4,
-      "nanos": 643319457
+      "secs": 5,
+      "nanos": 164011598
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 171707633
+      "nanos": 171954028
     },
     "compress_prove_duration": {
-      "secs": 29,
-      "nanos": 929514787
+      "secs": 31,
+      "nanos": 149051511
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 87272708
+      "nanos": 87040912
     },
     "total_duration": {
-      "secs": 85,
-      "nanos": 284940496
+      "secs": 87,
+      "nanos": 2507948
     }
   },
   "resources": {
-    "max_memory_kb": 14468452,
-    "min_memory_kb": 7841248,
-    "avg_memory_kb": 11186561,
-    "max_cpu_percent": 98.327126,
+    "max_memory_kb": 14754800,
+    "min_memory_kb": 8199492,
+    "avg_memory_kb": 11751200,
+    "max_cpu_percent": 97.59893,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 49.831608,
-    "samples": 39
+    "avg_cpu_percent": 49.742107,
+    "samples": 40
   },
   "proving_system": "SP1",
   "precompiles_enabled": false,
   "gpu_enabled": false,
   "program": {
-    "file_path": "examples/rsa",
-    "file_name": "rsa",
-    "absolute_path": "/zkrust/examples/rsa",
+    "file_path": "examples/sha",
+    "file_name": "sha",
+    "absolute_path": "/zkrust/examples/sha",
     "guest_metadata": {
-      "package_name": "rsa",
+      "package_name": "sha",
       "version": "0.1.0",
       "authors": null,
       "edition": "2021",
       "dependencies": [
         [
-          "digest",
-          "0.10.7"
-        ],
-        [
-          "rand",
-          "0.8.5"
-        ],
-        [
-          "rsa",
-          "0.6.0"
-        ],
-        [
           "sha2",
-          "0.10.8"
+          "0.10.6"
         ],
         [
           "zk_rust_io",
@@ -135,21 +123,21 @@
     }
   },
   "zk_metrics": {
-    "cycles": 4411,
+    "cycles": 10303,
     "num_segments": 1,
-    "core_proof_size": 2657584,
-    "recursive_proof_size": 1275373,
-    "execution_speed": 114.09226928198517,
-    "compiled_program_size": 302332
+    "core_proof_size": 2657050,
+    "recursive_proof_size": 1274839,
+    "execution_speed": 254.38836542262428,
+    "compiled_program_size": 154928
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 519855364,
+    "total_memory_kb": 519855360,
     "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3331,
+    "cpu_frequency_mhz": 3463,
     "gpu_enabled": false,
     "gpus": [],
     "is_ec2": true,

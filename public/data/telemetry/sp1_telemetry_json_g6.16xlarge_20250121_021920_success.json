@@ -2,58 +2,70 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 500800
+      "nanos": 1718657
     },
     "compilation_duration": {
-      "secs": 46,
-      "nanos": 434216169
+      "secs": 52,
+      "nanos": 615306526
     },
     "proof_generation_duration": {
-      "secs": 38,
-      "nanos": 803463066
+      "secs": 64,
+      "nanos": 998479331
     },
-    "core_prove_duration": null,
-    "core_verify_duration": null,
-    "compress_prove_duration": null,
-    "compress_verify_duration": null,
+    "core_prove_duration": {
+      "secs": 2,
+      "nanos": 841605103
+    },
+    "core_verify_duration": {
+      "secs": 0,
+      "nanos": 212297928
+    },
+    "compress_prove_duration": {
+      "secs": 8,
+      "nanos": 786952115
+    },
+    "compress_verify_duration": {
+      "secs": 0,
+      "nanos": 107065627
+    },
     "total_duration": {
-      "secs": 85,
-      "nanos": 238251483
+      "secs": 117,
+      "nanos": 615724101
     }
   },
   "resources": {
-    "max_memory_kb": 14616184,
-    "min_memory_kb": 7787244,
-    "avg_memory_kb": 11450138,
-    "max_cpu_percent": 98.370224,
+    "max_memory_kb": 9882460,
+    "min_memory_kb": 4969240,
+    "avg_memory_kb": 6806811,
+    "max_cpu_percent": 65.15385,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 49.413303,
-    "samples": 39
+    "avg_cpu_percent": 15.849096,
+    "samples": 65
   },
   "proving_system": "SP1",
   "precompiles_enabled": false,
-  "gpu_enabled": false,
+  "gpu_enabled": true,
   "program": {
-    "file_path": "examples/ecdsa",
-    "file_name": "ecdsa",
-    "absolute_path": "/zkrust/examples/ecdsa",
+    "file_path": "examples/json",
+    "file_name": "json",
+    "absolute_path": "/zkrust/examples/json",
     "guest_metadata": {
-      "package_name": "ecdsa",
+      "package_name": "json",
       "version": "0.1.0",
       "authors": null,
       "edition": "2021",
       "dependencies": [
         [
-          "hex-literal",
-          "0.4"
+          "lib",
+          "*"
         ],
         [
-          "k256",
-          "=0.13.3"
+          "serde",
+          "1.0.196"
         ],
         [
-          "rand_core",
-          "0.6.4"
+          "serde_json",
+          "1.0.114"
         ],
         [
           "zk_rust_io",
@@ -119,25 +131,25 @@
     }
   },
   "zk_metrics": {
-    "cycles": null,
-    "num_segments": null,
-    "core_proof_size": null,
-    "recursive_proof_size": null,
-    "execution_speed": null,
-    "compiled_program_size": 281124
+    "cycles": 9512,
+    "num_segments": 1,
+    "core_proof_size": 2657207,
+    "recursive_proof_size": 1274996,
+    "execution_speed": 146.34188519335717,
+    "compiled_program_size": 238756
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 519855364,
-    "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
+    "total_memory_kb": 254236088,
+    "cpu_brand": "AMD EPYC 7R13 Processor",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3333,
-    "gpu_enabled": false,
+    "cpu_frequency_mhz": 2249,
+    "gpu_enabled": true,
     "gpus": [],
     "is_ec2": true,
-    "ec2_instance_type": "r7i.16xlarge",
+    "ec2_instance_type": "g6.16xlarge",
     "llvm_version": "version 14.0.0-1ubuntu1.1"
   }
 }

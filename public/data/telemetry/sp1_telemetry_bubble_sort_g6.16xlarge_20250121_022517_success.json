@@ -2,55 +2,55 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 1320067
+      "nanos": 1190906
     },
     "compilation_duration": {
-      "secs": 52,
-      "nanos": 627223735
+      "secs": 51,
+      "nanos": 492720002
     },
     "proof_generation_duration": {
-      "secs": 78,
-      "nanos": 305258251
+      "secs": 65,
+      "nanos": 185760172
     },
     "core_prove_duration": {
       "secs": 2,
-      "nanos": 805689020
+      "nanos": 764399797
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 210728577
+      "nanos": 211293261
     },
     "compress_prove_duration": {
-      "secs": 8,
-      "nanos": 714519754
+      "secs": 9,
+      "nanos": 243109733
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 107490699
+      "nanos": 108388306
     },
     "total_duration": {
-      "secs": 130,
-      "nanos": 934050599
+      "secs": 116,
+      "nanos": 680025658
     }
   },
   "resources": {
-    "max_memory_kb": 9935296,
-    "min_memory_kb": 4161904,
-    "avg_memory_kb": 6337212,
-    "max_cpu_percent": 63.294727,
+    "max_memory_kb": 10068968,
+    "min_memory_kb": 4557452,
+    "avg_memory_kb": 7000742,
+    "max_cpu_percent": 65.13192,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 13.742637,
-    "samples": 78
+    "avg_cpu_percent": 15.773291,
+    "samples": 65
   },
   "proving_system": "SP1",
   "precompiles_enabled": false,
   "gpu_enabled": true,
   "program": {
-    "file_path": "examples/fibonacci",
-    "file_name": "fibonacci",
-    "absolute_path": "/zkrust/examples/fibonacci",
+    "file_path": "examples/bubble_sort",
+    "file_name": "bubble_sort",
+    "absolute_path": "/zkrust/examples/bubble_sort",
     "guest_metadata": {
-      "package_name": "fibonacci",
+      "package_name": "bubble_sort",
       "version": "0.1.0",
       "authors": null,
       "edition": "2021",
@@ -119,21 +119,21 @@
     }
   },
   "zk_metrics": {
-    "cycles": 12883,
+    "cycles": 7619,
     "num_segments": 1,
-    "core_proof_size": 2656986,
-    "recursive_proof_size": 1274775,
-    "execution_speed": 164.5227956302089,
-    "compiled_program_size": 138672
+    "core_proof_size": 2657078,
+    "recursive_proof_size": 1274867,
+    "execution_speed": 116.88135537418611,
+    "compiled_program_size": 149940
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 254236080,
+    "total_memory_kb": 254236088,
     "cpu_brand": "AMD EPYC 7R13 Processor",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3598,
+    "cpu_frequency_mhz": 2646,
     "gpu_enabled": true,
     "gpus": [],
     "is_ec2": true,

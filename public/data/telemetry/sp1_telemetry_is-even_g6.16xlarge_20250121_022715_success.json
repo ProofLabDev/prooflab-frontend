@@ -2,37 +2,49 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 472403
+      "nanos": 1299574
     },
     "compilation_duration": {
-      "secs": 44,
-      "nanos": 733998940
+      "secs": 51,
+      "nanos": 877844800
     },
     "proof_generation_duration": {
-      "secs": 36,
-      "nanos": 993200355
+      "secs": 65,
+      "nanos": 65151090
     },
-    "core_prove_duration": null,
-    "core_verify_duration": null,
-    "compress_prove_duration": null,
-    "compress_verify_duration": null,
+    "core_prove_duration": {
+      "secs": 2,
+      "nanos": 752860272
+    },
+    "core_verify_duration": {
+      "secs": 0,
+      "nanos": 213061068
+    },
+    "compress_prove_duration": {
+      "secs": 9,
+      "nanos": 317726015
+    },
+    "compress_verify_duration": {
+      "secs": 0,
+      "nanos": 107397108
+    },
     "total_duration": {
-      "secs": 81,
-      "nanos": 727778978
+      "secs": 116,
+      "nanos": 944630721
     }
   },
   "resources": {
-    "max_memory_kb": 14757064,
-    "min_memory_kb": 8361096,
-    "avg_memory_kb": 12011813,
-    "max_cpu_percent": 99.249344,
+    "max_memory_kb": 10023116,
+    "min_memory_kb": 4601412,
+    "avg_memory_kb": 6830620,
+    "max_cpu_percent": 65.48282,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 51.773987,
-    "samples": 37
+    "avg_cpu_percent": 15.754997,
+    "samples": 65
   },
   "proving_system": "SP1",
   "precompiles_enabled": false,
-  "gpu_enabled": false,
+  "gpu_enabled": true,
   "program": {
     "file_path": "examples/is_even",
     "file_name": "is_even",
@@ -107,25 +119,25 @@
     }
   },
   "zk_metrics": {
-    "cycles": null,
-    "num_segments": null,
-    "core_proof_size": null,
-    "recursive_proof_size": null,
-    "execution_speed": null,
+    "cycles": 768,
+    "num_segments": 1,
+    "core_proof_size": 2656979,
+    "recursive_proof_size": 1274768,
+    "execution_speed": 11.803553624853343,
     "compiled_program_size": 138684
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 519855364,
-    "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
+    "total_memory_kb": 254236088,
+    "cpu_brand": "AMD EPYC 7R13 Processor",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3301,
-    "gpu_enabled": false,
+    "cpu_frequency_mhz": 2855,
+    "gpu_enabled": true,
     "gpus": [],
     "is_ec2": true,
-    "ec2_instance_type": "r7i.16xlarge",
+    "ec2_instance_type": "g6.16xlarge",
     "llvm_version": "version 14.0.0-1ubuntu1.1"
   }
 }

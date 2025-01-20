@@ -1,0 +1,147 @@
+{
+  "timing": {
+    "workspace_setup_duration": {
+      "secs": 0,
+      "nanos": 1223938
+    },
+    "compilation_duration": {
+      "secs": 51,
+      "nanos": 772626474
+    },
+    "proof_generation_duration": {
+      "secs": 68,
+      "nanos": 686204624
+    },
+    "core_prove_duration": {
+      "secs": 4,
+      "nanos": 858711881
+    },
+    "core_verify_duration": {
+      "secs": 0,
+      "nanos": 210983255
+    },
+    "compress_prove_duration": {
+      "secs": 10,
+      "nanos": 812766565
+    },
+    "compress_verify_duration": {
+      "secs": 0,
+      "nanos": 106623734
+    },
+    "total_duration": {
+      "secs": 120,
+      "nanos": 460528443
+    }
+  },
+  "resources": {
+    "max_memory_kb": 9717856,
+    "min_memory_kb": 5019200,
+    "avg_memory_kb": 7002081,
+    "max_cpu_percent": 63.671856,
+    "min_cpu_percent": 0.0,
+    "avg_cpu_percent": 14.974554,
+    "samples": 69
+  },
+  "proving_system": "SP1",
+  "precompiles_enabled": false,
+  "gpu_enabled": true,
+  "program": {
+    "file_path": "examples/regex",
+    "file_name": "regex",
+    "absolute_path": "/zkrust/examples/regex",
+    "guest_metadata": {
+      "package_name": "regex",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        [
+          "regex",
+          "1.10.3"
+        ],
+        [
+          "zk_rust_io",
+          "git:https://github.com/yetanotherco/zkRust.git"
+        ]
+      ]
+    },
+    "host_metadata": {
+      "package_name": "method",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        [
+          "bincode",
+          "1.3"
+        ],
+        [
+          "serde",
+          "1.0"
+        ],
+        [
+          "serde_json",
+          "1.0"
+        ],
+        [
+          "sp1-core-executor",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-core-machine",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-cuda",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-prover",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-sdk",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "sp1-stark",
+          "git:https://github.com/succinctlabs/sp1.git tag:v3.4.0"
+        ],
+        [
+          "tracing",
+          "0.1"
+        ],
+        [
+          "tracing-subscriber",
+          "0.3"
+        ],
+        [
+          "zk_rust_io",
+          "git:https://github.com/yetanotherco/zkRust.git"
+        ]
+      ]
+    }
+  },
+  "zk_metrics": {
+    "cycles": 191399,
+    "num_segments": 1,
+    "core_proof_size": 2657023,
+    "recursive_proof_size": 1274812,
+    "execution_speed": 2786.5712052041713,
+    "compiled_program_size": 2266024
+  },
+  "system_info": {
+    "os_name": "Ubuntu",
+    "os_version": "22.04",
+    "kernel_version": "6.8.0-1021-aws",
+    "total_memory_kb": 254236088,
+    "cpu_brand": "AMD EPYC 7R13 Processor",
+    "cpu_count": 64,
+    "cpu_frequency_mhz": 2603,
+    "gpu_enabled": true,
+    "gpus": [],
+    "is_ec2": true,
+    "ec2_instance_type": "g6.16xlarge",
+    "llvm_version": "version 14.0.0-1ubuntu1.1"
+  }
+}

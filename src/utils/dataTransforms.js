@@ -1,4 +1,5 @@
 export const formatDuration = (duration) => {
+  if (!duration) return 'N/A';
   const { secs, nanos } = duration;
   return `${secs}.${Math.floor(nanos / 1000000)}s`;
 };
@@ -18,6 +19,7 @@ export const formatCpuUsage = (cpuPercent) => {
 };
 
 export const formatDurationShort = (duration) => {
+  if (!duration) return 'N/A';
   const totalMs = duration.secs * 1000 + duration.nanos / 1000000;
   if (totalMs < 1000) {
     return `${totalMs.toFixed(0)}ms`;
@@ -86,7 +88,7 @@ const EC2_PRICING = {
 };
 
 export const calculateEC2Cost = (duration, instanceType) => {
-  if (!instanceType || !EC2_PRICING[instanceType]) return null;
+  if (!duration || !instanceType || !EC2_PRICING[instanceType]) return null;
 
   // Convert duration to hours
   const totalNanos = duration.secs * 1000000000 + duration.nanos;

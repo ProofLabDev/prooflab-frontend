@@ -2,47 +2,63 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 451779
+      "nanos": 1245760
     },
     "compilation_duration": {
-      "secs": 44,
-      "nanos": 560085475
+      "secs": 51,
+      "nanos": 331260453
     },
     "proof_generation_duration": {
-      "secs": 36,
-      "nanos": 367182365
+      "secs": 65,
+      "nanos": 583629247
     },
-    "core_prove_duration": null,
-    "core_verify_duration": null,
-    "compress_prove_duration": null,
-    "compress_verify_duration": null,
+    "core_prove_duration": {
+      "secs": 2,
+      "nanos": 841822929
+    },
+    "core_verify_duration": {
+      "secs": 0,
+      "nanos": 213025088
+    },
+    "compress_prove_duration": {
+      "secs": 9,
+      "nanos": 374966352
+    },
+    "compress_verify_duration": {
+      "secs": 0,
+      "nanos": 105975620
+    },
     "total_duration": {
-      "secs": 80,
-      "nanos": 927787202
+      "secs": 116,
+      "nanos": 916388490
     }
   },
   "resources": {
-    "max_memory_kb": 14837672,
-    "min_memory_kb": 8353184,
-    "avg_memory_kb": 11734184,
-    "max_cpu_percent": 97.161674,
+    "max_memory_kb": 9565824,
+    "min_memory_kb": 4769168,
+    "avg_memory_kb": 6747660,
+    "max_cpu_percent": 65.0355,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 52.521927,
-    "samples": 36
+    "avg_cpu_percent": 15.566373,
+    "samples": 66
   },
   "proving_system": "SP1",
   "precompiles_enabled": false,
-  "gpu_enabled": false,
+  "gpu_enabled": true,
   "program": {
-    "file_path": "examples/bubble_sort",
-    "file_name": "bubble_sort",
-    "absolute_path": "/zkrust/examples/bubble_sort",
+    "file_path": "examples/sha",
+    "file_name": "sha",
+    "absolute_path": "/zkrust/examples/sha",
     "guest_metadata": {
-      "package_name": "bubble_sort",
+      "package_name": "sha",
       "version": "0.1.0",
       "authors": null,
       "edition": "2021",
       "dependencies": [
+        [
+          "sha2",
+          "0.10.6"
+        ],
         [
           "zk_rust_io",
           "git:https://github.com/yetanotherco/zkRust.git"
@@ -107,25 +123,25 @@
     }
   },
   "zk_metrics": {
-    "cycles": null,
-    "num_segments": null,
-    "core_proof_size": null,
-    "recursive_proof_size": null,
-    "execution_speed": null,
-    "compiled_program_size": 149940
+    "cycles": 10303,
+    "num_segments": 1,
+    "core_proof_size": 2657050,
+    "recursive_proof_size": 1274839,
+    "execution_speed": 157.09713107210044,
+    "compiled_program_size": 154928
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 519855364,
-    "cpu_brand": "Intel(R) Xeon(R) Platinum 8488C",
+    "total_memory_kb": 254236088,
+    "cpu_brand": "AMD EPYC 7R13 Processor",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 3245,
-    "gpu_enabled": false,
+    "cpu_frequency_mhz": 2100,
+    "gpu_enabled": true,
     "gpus": [],
     "is_ec2": true,
-    "ec2_instance_type": "r7i.16xlarge",
+    "ec2_instance_type": "g6.16xlarge",
     "llvm_version": "version 14.0.0-1ubuntu1.1"
   }
 }
