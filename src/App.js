@@ -32,9 +32,13 @@ const Navigation = () => {
             <div className="flex-shrink-0 flex items-center">
               <Link
                 to="/"
-                className="text-xl font-bold text-gray-900 hover:text-gray-700 transition-colors"
+                className="flex items-center"
               >
-                ProofLab
+                <img
+                  src="/prooflab-logo.png"
+                  alt="ProofLab"
+                  className="h-8 w-auto"
+                />
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">

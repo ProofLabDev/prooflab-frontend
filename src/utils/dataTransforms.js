@@ -71,6 +71,18 @@ const EC2_PRICING = {
   // Memory optimized instances with Intel Xeon processors
   'r7iz.12xlarge': 4.464,
   'r7iz.16xlarge': 5.952,
+
+  // G6 instance types
+  'g6.xlarge': 0.805,
+  'g6.2xlarge': 0.978,
+  'g6.4xlarge': 1.323,
+  'g6.8xlarge': 2.014,
+  'g6.12xlarge': 4.602,
+  'g6.16xlarge': 3.397,
+  'g6.24xlarge': 6.675,
+  'g6.48xlarge': 13.35,
+  'gr6.4xlarge': 1.539,
+  'gr6.8xlarge': 2.446,
 };
 
 export const calculateEC2Cost = (duration, instanceType) => {

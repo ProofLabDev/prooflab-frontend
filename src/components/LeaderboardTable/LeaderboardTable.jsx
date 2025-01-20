@@ -196,7 +196,7 @@ const MetricsTabs = ({ activeTab, onTabChange }) => {
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
           }`}
         >
-          CPU Metrics
+          Metrics
         </button>
         <button
           onClick={() => onTabChange('graphs')}
@@ -208,19 +208,6 @@ const MetricsTabs = ({ activeTab, onTabChange }) => {
         >
           Graphs
         </button>
-        <div className="relative group">
-          <button
-            className="border-transparent text-gray-400 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-not-allowed"
-            disabled
-          >
-            GPU Metrics
-          </button>
-          <div className="absolute left-1/2 transform -translate-x-1/2 translate-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <div className="bg-gray-900 text-white text-xs rounded py-1 px-2 whitespace-nowrap">
-              Coming soon!
-            </div>
-          </div>
-        </div>
       </nav>
     </div>
   );
@@ -655,6 +642,7 @@ const LeaderboardTable = () => {
   const ITEMS_PER_PAGE = 10;
   const [selectedPrograms, setSelectedPrograms] = useState([]);
   const [selectedSystems, setSelectedSystems] = useState([]);
+  const [gpuEnabled, setGpuEnabled] = useState(null); // null means "all"
 
   const columns = [
     { key: 'proving_system', label: 'System', defaultVisible: true },
@@ -665,6 +653,7 @@ const LeaderboardTable = () => {
     { key: 'timing.proof_generation', label: 'Proof Time', defaultVisible: true },
     { key: 'cost', label: 'Cost', defaultVisible: true },
     { key: 'system_info.ec2_instance_type', label: 'Instance Type', defaultVisible: true },
+    { key: 'gpu_enabled', label: 'GPU Enabled', defaultVisible: true },
     { key: 'zk_metrics.num_segments', label: 'Segments', defaultVisible: false },
     { key: 'system_info.cpu_brand', label: 'CPU', defaultVisible: false },
     { key: 'resources.avg_memory_kb', label: 'Memory', defaultVisible: false },
@@ -698,7 +687,8 @@ const LeaderboardTable = () => {
     const matchesInstanceType = !instanceTypeFilter || entry.system_info?.ec2_instance_type === instanceTypeFilter;
     const matchesProgram = selectedPrograms.length === 0 || selectedPrograms.includes(entry.program.file_name);
     const matchesSystem = selectedSystems.length === 0 || selectedSystems.includes(entry.proving_system);
-    return matchesCpuBrand && matchesCoreCount && matchesInstanceType && matchesProgram && matchesSystem;
+    const matchesGpu = gpuEnabled === null || (gpuEnabled === true ? entry.gpu_enabled === true : !entry.gpu_enabled);
+    return matchesCpuBrand && matchesCoreCount && matchesInstanceType && matchesProgram && matchesSystem && matchesGpu;
   });
 
   const toggleRowExpansion = (index) => {
@@ -922,7 +912,7 @@ const LeaderboardTable = () => {
       <div className="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-sm font-medium text-gray-700">Filters</h3>
-          {activeTab === 'table' && (
+          {activeTab !== 'graphs' && (
             <ColumnSelector
               columns={columns}
               visibleColumns={visibleColumns}
@@ -1022,6 +1012,23 @@ const LeaderboardTable = () => {
               ))}
             </select>
           </div>
+
+          {/* GPU Filter */}
+          <div className="space-y-1">
+            <FilterLabel 
+              label="Acceleration" 
+              tooltip="Filter benchmarks based on acceleration type. GPU-accelerated proving can significantly improve performance for certain operations."
+            />
+            <select
+              className="mt-1 w-full form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              value={gpuEnabled === null ? '' : gpuEnabled.toString()}
+              onChange={(e) => setGpuEnabled(e.target.value === '' ? null : e.target.value === 'true')}
+            >
+              <option value="">All</option>
+              <option value="true">GPU</option>
+              <option value="false">CPU</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -1097,6 +1104,11 @@ const LeaderboardTable = () => {
                       {isColumnVisible('system_info.ec2_instance_type') && (
                         <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
                           {entry.system_info?.ec2_instance_type || 'N/A'}
+                        </td>
+                      )}
+                      {isColumnVisible('gpu_enabled') && (
+                        <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {entry.gpu_enabled === true ? 'GPU' : 'CPU'}
                         </td>
                       )}
                       {isColumnVisible('zk_metrics.num_segments') && (
