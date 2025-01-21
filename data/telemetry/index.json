@@ -14,16 +14,10 @@
     "risc0_telemetry_rsa_r7i.16xlarge_20250119_075942_success.json",
     "risc0_telemetry_sha_g6.16xlarge_20250119_012534_success.json",
     "risc0_telemetry_sha_r7i.16xlarge_20250119_081958_success.json",
-    "sp1_telemetry_bubble_sort_r7i.16xlarge_20250119_075329_failed.json",
-    "sp1_telemetry_ecdsa_r7i.16xlarge_20250119_074754_failed.json",
     "sp1_telemetry_fibonacci_g6.16xlarge_20250119_074503_success.json",
     "sp1_telemetry_fibonacci_r7i.16xlarge_20250119_074502_success.json",
-    "sp1_telemetry_is-even_r7i.16xlarge_20250119_075451_failed.json",
-    "sp1_telemetry_json_r7i.16xlarge_20250119_074919_failed.json",
-    "sp1_telemetry_regex_r7i.16xlarge_20250119_075043_failed.json",
     "sp1_telemetry_rsa_g6.16xlarge_20250119_074703_success.json",
-    "sp1_telemetry_rsa_r7i.16xlarge_20250119_074628_success.json",
-    "sp1_telemetry_sha_r7i.16xlarge_20250119_075207_failed.json"
+    "sp1_telemetry_rsa_r7i.16xlarge_20250119_074628_success.json"
   ],
-  "lastUpdated": "2025-01-20T22:08:02.652Z"
+  "lastUpdated": "2025-01-21T00:33:27.761Z"
 }
