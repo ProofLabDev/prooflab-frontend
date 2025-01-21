@@ -2,74 +2,70 @@
   "timing": {
     "workspace_setup_duration": {
       "secs": 0,
-      "nanos": 1426985
+      "nanos": 1718657
     },
     "compilation_duration": {
       "secs": 52,
-      "nanos": 854202870
+      "nanos": 615306526
     },
     "proof_generation_duration": {
-      "secs": 65,
-      "nanos": 738268507
+      "secs": 64,
+      "nanos": 998479331
     },
     "core_prove_duration": {
       "secs": 2,
-      "nanos": 756650975
+      "nanos": 841605103
     },
     "core_verify_duration": {
       "secs": 0,
-      "nanos": 210843380
+      "nanos": 212297928
     },
     "compress_prove_duration": {
-      "secs": 9,
-      "nanos": 279465229
+      "secs": 8,
+      "nanos": 786952115
     },
     "compress_verify_duration": {
       "secs": 0,
-      "nanos": 106341658
+      "nanos": 107065627
     },
     "total_duration": {
-      "secs": 118,
-      "nanos": 594192193
+      "secs": 117,
+      "nanos": 615724101
     }
   },
   "resources": {
-    "max_memory_kb": 10250204,
-    "min_memory_kb": 4798004,
-    "avg_memory_kb": 6805370,
-    "max_cpu_percent": 63.58704,
+    "max_memory_kb": 9882460,
+    "min_memory_kb": 4969240,
+    "avg_memory_kb": 6806811,
+    "max_cpu_percent": 65.15385,
     "min_cpu_percent": 0.0,
-    "avg_cpu_percent": 15.563758,
-    "samples": 66
+    "avg_cpu_percent": 15.849096,
+    "samples": 65
   },
   "proving_system": "SP1",
   "precompiles_enabled": false,
   "gpu_enabled": true,
   "program": {
-    "file_path": "examples/rsa",
-    "file_name": "rsa",
-    "absolute_path": "/zkrust/examples/rsa",
+    "file_path": "examples/json",
+    "file_name": "json",
+    "absolute_path": "/zkrust/examples/json",
     "guest_metadata": {
-      "package_name": "rsa",
+      "package_name": "json",
       "version": "0.1.0",
       "authors": null,
       "edition": "2021",
       "dependencies": [
         [
-          "digest",
-          "0.10.7"
+          "lib",
+          "*"
         ],
         [
-          "rand",
-          "0.8.5"
+          "serde",
+          "1.0.196"
         ],
         [
-          "rsa",
-          "0.6.0"
-        ],
-        [
-          "sha2",
-          "0.10.8"
+          "serde_json",
+          "1.0.114"
         ],
         [
           "zk_rust_io",
@@ -135,21 +131,21 @@
     }
   },
   "zk_metrics": {
-    "cycles": 4411,
+    "cycles": 9512,
     "num_segments": 1,
-    "core_proof_size": 2657584,
-    "recursive_proof_size": 1275373,
-    "execution_speed": 67.0994247366023,
-    "compiled_program_size": 302332
+    "core_proof_size": 2657207,
+    "recursive_proof_size": 1274996,
+    "execution_speed": 146.34188519335717,
+    "compiled_program_size": 238756
   },
   "system_info": {
     "os_name": "Ubuntu",
     "os_version": "22.04",
     "kernel_version": "6.8.0-1021-aws",
-    "total_memory_kb": 254236080,
+    "total_memory_kb": 254236088,
     "cpu_brand": "AMD EPYC 7R13 Processor",
     "cpu_count": 64,
-    "cpu_frequency_mhz": 2398,
+    "cpu_frequency_mhz": 2249,
     "gpu_enabled": true,
     "gpus": [],
     "is_ec2": true,

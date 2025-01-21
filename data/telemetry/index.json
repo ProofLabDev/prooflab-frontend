@@ -14,10 +14,22 @@
     "risc0_telemetry_rsa_r7i.16xlarge_20250119_075942_success.json",
     "risc0_telemetry_sha_g6.16xlarge_20250119_012534_success.json",
     "risc0_telemetry_sha_r7i.16xlarge_20250119_081958_success.json",
-    "sp1_telemetry_fibonacci_g6.16xlarge_20250119_074503_success.json",
-    "sp1_telemetry_fibonacci_r7i.16xlarge_20250119_074502_success.json",
-    "sp1_telemetry_rsa_g6.16xlarge_20250119_074703_success.json",
-    "sp1_telemetry_rsa_r7i.16xlarge_20250119_074628_success.json"
+    "sp1_telemetry_bubble_sort_g6.16xlarge_20250121_022517_success.json",
+    "sp1_telemetry_bubble_sort_r7i.16xlarge_20250121_034909_success.json",
+    "sp1_telemetry_ecdsa_g6.16xlarge_20250121_021721_success.json",
+    "sp1_telemetry_ecdsa_r7i.16xlarge_20250121_034301_success.json",
+    "sp1_telemetry_fibonacci_g6.16xlarge_20250121_021208_success.json",
+    "sp1_telemetry_fibonacci_r7i.16xlarge_20250121_033244_success.json",
+    "sp1_telemetry_is-even_g6.16xlarge_20250121_022715_success.json",
+    "sp1_telemetry_is-even_r7i.16xlarge_20250121_035034_success.json",
+    "sp1_telemetry_json_g6.16xlarge_20250121_021920_success.json",
+    "sp1_telemetry_json_r7i.16xlarge_20250121_034427_success.json",
+    "sp1_telemetry_regex_g6.16xlarge_20250121_022121_success.json",
+    "sp1_telemetry_regex_r7i.16xlarge_20250121_034617_success.json",
+    "sp1_telemetry_rsa_g6.16xlarge_20250121_021454_success.json",
+    "sp1_telemetry_rsa_r7i.16xlarge_20250121_033856_success.json",
+    "sp1_telemetry_sha_g6.16xlarge_20250121_022319_success.json",
+    "sp1_telemetry_sha_r7i.16xlarge_20250121_034745_success.json"
   ],
-  "lastUpdated": "2025-01-21T00:33:27.761Z"
+  "lastUpdated": "2025-01-21T04:00:59.292Z"
 }
