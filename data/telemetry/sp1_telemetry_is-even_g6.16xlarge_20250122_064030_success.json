@@ -1,0 +1,123 @@
+{
+  "timing": {
+    "workspace_setup_duration": {
+      "secs": 0,
+      "nanos": 1207521
+    },
+    "compilation_duration": {
+      "secs": 56,
+      "nanos": 468880186
+    },
+    "proof_generation_duration": {
+      "secs": 40,
+      "nanos": 868127805
+    },
+    "core_prove_duration": {
+      "secs": 0,
+      "nanos": 535990257
+    },
+    "core_verify_duration": {
+      "secs": 0,
+      "nanos": 194054190
+    },
+    "compress_prove_duration": {
+      "secs": 0,
+      "nanos": 798073510
+    },
+    "compress_verify_duration": {
+      "secs": 0,
+      "nanos": 97490137
+    },
+    "total_duration": {
+      "secs": 97,
+      "nanos": 338531590
+    }
+  },
+  "resources": {
+    "max_memory_kb": 8310964,
+    "min_memory_kb": 5113484,
+    "avg_memory_kb": 6706456,
+    "max_cpu_percent": 25.370998,
+    "min_cpu_percent": 0.0,
+    "avg_cpu_percent": 7.5765185,
+    "samples": 41
+  },
+  "proving_system": "SP1",
+  "precompiles_enabled": false,
+  "gpu_enabled": true,
+  "program": {
+    "file_path": "examples/is_even",
+    "file_name": "is_even",
+    "absolute_path": "/zkrust/examples/is_even",
+    "guest_metadata": {
+      "package_name": "is-even",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        [
+          "zk_rust_io",
+          "git:https://github.com/yetanotherco/zkRust.git"
+        ]
+      ]
+    },
+    "host_metadata": {
+      "package_name": "method",
+      "version": "0.1.0",
+      "authors": null,
+      "edition": "2021",
+      "dependencies": [
+        [
+          "bincode",
+          "1.3"
+        ],
+        [
+          "serde",
+          "1.0"
+        ],
+        [
+          "serde_json",
+          "1.0"
+        ],
+        [
+          "sp1-sdk",
+          "git:https://github.com/succinctlabs/sp1.git tag:v4.0.1"
+        ],
+        [
+          "tracing",
+          "0.1"
+        ],
+        [
+          "tracing-subscriber",
+          "0.3"
+        ],
+        [
+          "zk_rust_io",
+          "git:https://github.com/yetanotherco/zkRust.git"
+        ]
+      ]
+    }
+  },
+  "zk_metrics": {
+    "cycles": 774,
+    "num_segments": 1,
+    "core_proof_size": 1799789,
+    "recursive_proof_size": 1315539,
+    "execution_speed": 18.9389639695045,
+    "compiled_program_size": 137744
+  },
+  "system_info": {
+    "os_name": "Ubuntu",
+    "os_version": "22.04",
+    "kernel_version": "6.8.0-1021-aws",
+    "total_memory_kb": 254236072,
+    "cpu_brand": "AMD EPYC 7R13 Processor",
+    "cpu_count": 64,
+    "cpu_frequency_mhz": 2302,
+    "gpu_enabled": true,
+    "gpus": [],
+    "is_ec2": true,
+    "ec2_instance_type": "g6.16xlarge",
+    "llvm_version": "version 14.0.0-1ubuntu1.1"
+  }
+}
