@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import useDataLoader from '../../hooks/useDataLoader';
 import { formatDuration, formatMemory, formatCpuUsage, formatDurationShort, calculateEC2Cost, formatCost, formatFrequency } from '../../utils/dataTransforms';
 import { Link } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, ErrorBar } from 'recharts';
 
 const formatProofSize = (bytes) => {
   if (!bytes && bytes !== 0) return 'N/A';
@@ -215,243 +215,306 @@ const MetricsTabs = ({ activeTab, onTabChange }) => {
   );
 };
 
-const MetricSelector = ({ selectedMetric, onChange }) => {
-  const metrics = [
-    { key: 'throughput', label: 'Throughput (cycles/second)', tooltip: 'Higher is better. Shows how fast the zkVM can execute instructions.' },
-    { key: 'proofTime', label: 'Proof Time (seconds)', tooltip: 'Lower is better. Total time taken to generate the proof.' },
-    { key: 'cost', label: 'Cost (USD)', tooltip: 'Lower is better. Estimated AWS cost to generate the proof.' },
-    { key: 'memory', label: 'Memory Usage (GB)', tooltip: 'Lower is better. Average memory consumption during proof generation.' },
+const LeaderboardGraphs = ({ data, proofType }) => {
+  const [chartType, setChartType] = useState('performance');
+  const [primaryGroupBy, setPrimaryGroupBy] = useState('program');
+  const [secondaryGroupBy, setSecondaryGroupBy] = useState(null);
+  const [metric, setMetric] = useState('throughput');
+
+  const chartTypes = [
+    { id: 'performance', label: 'Performance Comparison', 
+      description: 'Compare performance metrics across different dimensions' },
+    { id: 'resources', label: 'Resource Usage', 
+      description: 'Analyze memory and CPU utilization' },
+    { id: 'timing', label: 'Timing Breakdown', 
+      description: 'Detailed view of proof generation phases' },
   ];
 
-  return (
-    <div className="mb-6">
-      <h3 className="text-sm font-medium text-gray-700 mb-2">Select Metric to Visualize</h3>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {metrics.map(metric => (
-          <div key={metric.key} className="relative group">
-            <button
-              onClick={() => onChange(metric.key)}
-              className={`w-full px-4 py-2 text-sm font-medium rounded-md ${
-                selectedMetric === metric.key
-                  ? 'bg-blue-100 text-blue-700 border-blue-200'
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-              } border shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
-            >
-              {metric.label}
-            </button>
-            <div className="hidden group-hover:block absolute z-10 w-64 p-2 mt-2 text-sm text-gray-500 bg-white border border-gray-200 rounded-md shadow-lg">
-              {metric.tooltip}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+  const metrics = {
+    performance: [
+      { id: 'throughput', label: 'Throughput (cycles/s)', 
+        getValue: entry => calculateThroughput(entry.zk_metrics.cycles, entry.timing, proofType),
+        format: formatFrequency },
+      { id: 'cycles', label: 'Cycles', 
+        getValue: entry => entry.zk_metrics.cycles,
+        format: val => val?.toLocaleString() },
+      { id: 'proofTime', label: 'Proof Time', 
+        getValue: entry => {
+          const duration = getProofDuration(entry.timing, proofType);
+          return duration ? duration.secs + duration.nanos / 1e9 : null;
+        },
+        format: val => `${val?.toFixed(2)}s` },
+    ],
+    resources: [
+      { id: 'memory', label: 'Memory Usage', 
+        getValue: entry => entry.resources.avg_memory_kb,
+        format: formatMemory },
+      { id: 'cpu', label: 'CPU Usage', 
+        getValue: entry => entry.resources.avg_cpu_percent,
+        format: formatCpuUsage },
+      { id: 'proofSize', label: 'Proof Size', 
+        getValue: entry => proofType === 'core' ? entry.zk_metrics.core_proof_size : entry.zk_metrics.recursive_proof_size,
+        format: formatProofSize },
+    ],
+    timing: [
+      { id: 'setup', label: 'Setup', 
+        getValue: entry => entry.timing.workspace_setup_duration.secs + entry.timing.workspace_setup_duration.nanos / 1e9,
+        format: val => `${val?.toFixed(2)}s` },
+      { id: 'compilation', label: 'Compilation', 
+        getValue: entry => entry.timing.compilation_duration.secs + entry.timing.compilation_duration.nanos / 1e9,
+        format: val => `${val?.toFixed(2)}s` },
+      { id: 'proving', label: 'Proving', 
+        getValue: entry => {
+          const duration = getProofDuration(entry.timing, proofType);
+          return duration ? duration.secs + duration.nanos / 1e9 : null;
+        },
+        format: val => `${val?.toFixed(2)}s` },
+    ],
+  };
 
-const AxisSelector = ({ onChange, xAxis, yAxis }) => {
-  const axes = [
-    { key: 'program', label: 'Program', tooltip: 'Compare different benchmark programs' },
-    { key: 'system', label: 'System', tooltip: 'Compare different zkVM systems (SP1, RISC0)' },
-    { key: 'instance', label: 'Instance Type', tooltip: 'Compare different EC2 instance types' },
+  const groupings = [
+    { id: 'program', label: 'Program', 
+      getValue: entry => entry.program.file_name },
+    { id: 'system', label: 'Proving System', 
+      getValue: entry => entry.proving_system },
+    { id: 'instance', label: 'Instance Type', 
+      getValue: entry => entry.system_info?.ec2_instance_type || 'Local' },
+    { id: 'acceleration', label: 'Acceleration', 
+      getValue: entry => entry.gpu_enabled ? 'GPU' : 'CPU' },
   ];
 
-  return (
-    <div className="mb-6">
-      <h3 className="text-sm font-medium text-gray-700 mb-2">Select Comparison Axes</h3>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">X Axis</label>
-          <select
-            value={xAxis}
-            onChange={(e) => onChange('x', e.target.value)}
-            className="w-full form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          >
-            {axes.map(axis => (
-              <option key={axis.key} value={axis.key}>{axis.label}</option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Y Axis</label>
-          <select
-            value={yAxis}
-            onChange={(e) => onChange('y', e.target.value)}
-            className="w-full form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          >
-            {axes.filter(axis => axis.key !== xAxis).map(axis => (
-              <option key={axis.key} value={axis.key}>{axis.label}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const LeaderboardGraphs = ({ data, proofType, selectedPrograms, selectedSystems }) => {
-  const [selectedMetric, setSelectedMetric] = useState('throughput');
-  const [xAxis, setXAxis] = useState('program');
-  const [yAxis, setYAxis] = useState('system');
-
-  const handleAxisChange = (axis, value) => {
-    if (axis === 'x') {
-      setXAxis(value);
-      // If new X axis is same as current Y axis, swap them
-      if (value === yAxis) {
-        setYAxis(xAxis);
-      }
-    } else {
-      setYAxis(value);
-      // If new Y axis is same as current X axis, swap them
-      if (value === xAxis) {
-        setXAxis(yAxis);
-      }
-    }
-  };
-
-  // Helper function to get the key for an entry based on axis type
-  const getAxisKey = (entry, axisType) => {
-    switch (axisType) {
-      case 'program':
-        return entry.program.file_name;
-      case 'system':
-        return entry.proving_system;
-      case 'instance':
-        return entry.system_info?.ec2_instance_type || 'Unknown';
-      default:
-        return '';
-    }
-  };
-
-  // Prepare data for the selected axes
-  const prepareData = (data, valueExtractor) => {
-    const result = {};
-    const yAxisValues = new Set();
-
+  const prepareChartData = () => {
+    const currentMetrics = metrics[chartType];
+    const primaryGrouping = groupings.find(g => g.id === primaryGroupBy);
+    const secondaryGrouping = secondaryGroupBy ? groupings.find(g => g.id === secondaryGroupBy) : null;
+    
+    // First level grouping
+    const primaryGroups = new Map();
     data.forEach(entry => {
-      const xValue = getAxisKey(entry, xAxis);
-      const yValue = getAxisKey(entry, yAxis);
-      const value = valueExtractor(entry);
-
-      if (!result[xValue]) {
-        result[xValue] = { name: xValue };
+      const primaryKey = primaryGrouping.getValue(entry);
+      if (!primaryGroups.has(primaryKey)) {
+        primaryGroups.set(primaryKey, []);
       }
-
-      // Keep the better value if we have multiple entries for the same x,y combination
-      if (!result[xValue][yValue] || value > result[xValue][yValue]) {
-        result[xValue][yValue] = value;
-      }
-
-      yAxisValues.add(yValue);
+      primaryGroups.get(primaryKey).push(entry);
     });
 
-    return {
-      data: Object.values(result),
-      series: Array.from(yAxisValues).sort()
+    const chartData = [];
+    primaryGroups.forEach((entries, primaryKey) => {
+      if (secondaryGrouping) {
+        // Second level grouping
+        const secondaryGroups = new Map();
+        entries.forEach(entry => {
+          const secondaryKey = secondaryGrouping.getValue(entry);
+          if (!secondaryGroups.has(secondaryKey)) {
+            secondaryGroups.set(secondaryKey, []);
+          }
+          secondaryGroups.get(secondaryKey).push(entry);
+        });
+
+        secondaryGroups.forEach((subEntries, secondaryKey) => {
+          const dataPoint = {
+            name: primaryKey,
+            subgroup: secondaryKey,
+          };
+          currentMetrics.forEach(m => {
+            const values = subEntries.map(e => m.getValue(e)).filter(v => v != null);
+            if (values.length > 0) {
+              dataPoint[`${m.id}_${secondaryKey}`] = {
+                min: Math.min(...values),
+                max: Math.max(...values),
+                avg: values.reduce((a, b) => a + b, 0) / values.length,
+              };
+            }
+          });
+          chartData.push(dataPoint);
+        });
+      } else {
+        // Single level grouping
+        const dataPoint = { name: primaryKey };
+        currentMetrics.forEach(m => {
+          const values = entries.map(e => m.getValue(e)).filter(v => v != null);
+          if (values.length > 0) {
+            dataPoint[m.id] = {
+              min: Math.min(...values),
+              max: Math.max(...values),
+              avg: values.reduce((a, b) => a + b, 0) / values.length,
+            };
+          }
+        });
+        chartData.push(dataPoint);
+      }
+    });
+
+    return chartData.sort((a, b) => {
+      if (secondaryGrouping) {
+        const aValue = a[`${metric}_${a.subgroup}`]?.avg || 0;
+        const bValue = b[`${metric}_${b.subgroup}`]?.avg || 0;
+        return bValue - aValue;
+      }
+      const aValue = a[metric]?.avg || 0;
+      const bValue = b[metric]?.avg || 0;
+      return bValue - aValue;
+    });
+  };
+
+  const currentMetric = metrics[chartType].find(m => m.id === metric);
+  const chartData = prepareChartData();
+
+  const getBarColor = (subgroup) => {
+    const colors = {
+      'SP1': '#60a5fa',
+      'RISC0': '#4ade80',
+      'GPU': '#f59e0b',
+      'CPU': '#6366f1',
+      'Local': '#d946ef',
     };
-  };
-
-  // Get data based on selected metric
-  const getData = () => {
-    switch (selectedMetric) {
-      case 'throughput':
-        return {
-          data: prepareData(data, entry => 
-            calculateThroughput(entry.zk_metrics.cycles, entry.timing, proofType)
-          ),
-          valueFormatter: value => formatFrequency(value),
-          yAxisFormatter: value => formatFrequency(value).split(' ')[0],
-          title: 'Throughput Comparison',
-          description: 'Higher values indicate faster execution of instructions.'
-        };
-      case 'proofTime':
-        return {
-          data: prepareData(data, entry => {
-            const duration = getProofDuration(entry.timing, proofType);
-            return duration.secs + duration.nanos / 1e9;
-          }),
-          valueFormatter: value => `${value.toFixed(2)}s`,
-          yAxisFormatter: value => `${value.toFixed(1)}s`,
-          title: 'Proof Time Comparison',
-          description: 'Lower values indicate faster proof generation.'
-        };
-      case 'cost':
-        return {
-          data: prepareData(data, entry => 
-            calculateEC2Cost(entry.timing.total_duration, entry.system_info?.ec2_instance_type)
-          ),
-          valueFormatter: value => formatCost(value),
-          yAxisFormatter: value => `$${value.toFixed(3)}`,
-          title: 'Cost Analysis',
-          description: 'Estimated AWS cost to generate proofs.'
-        };
-      case 'memory':
-        return {
-          data: prepareData(data, entry => 
-            entry.resources.avg_memory_kb / 1024 / 1024
-          ),
-          valueFormatter: value => `${value.toFixed(2)} GB`,
-          yAxisFormatter: value => `${value.toFixed(1)} GB`,
-          title: 'Memory Usage',
-          description: 'Average memory consumption during proof generation.'
-        };
-      default:
-        return null;
-    }
-  };
-
-  const graphData = getData();
-  const colors = ['#60a5fa', '#34d399', '#f87171', '#a78bfa', '#fbbf24', '#ec4899'];
-
-  const CustomTooltip = ({ active, payload, label, valueFormatter }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-3 border border-gray-200 shadow-lg rounded">
-          <p className="font-medium text-gray-900">{label}</p>
-          {payload.map((entry, index) => (
-            <p key={index} style={{ color: entry.color }}>
-              {entry.name}: {valueFormatter(entry.value)}
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
+    return colors[subgroup] || '#60a5fa';
   };
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <AxisSelector 
-          xAxis={xAxis}
-          yAxis={yAxis}
-          onChange={handleAxisChange}
-        />
-        <MetricSelector 
-          selectedMetric={selectedMetric} 
-          onChange={setSelectedMetric} 
-        />
+      {/* Chart Type Selection */}
+      <div className="grid grid-cols-3 gap-4">
+        {chartTypes.map(type => (
+          <button
+            key={type.id}
+            onClick={() => {
+              setChartType(type.id);
+              setMetric(metrics[type.id][0].id);
+            }}
+            className={`p-4 rounded-lg border text-left transition-colors ${
+              chartType === type.id 
+                ? 'border-blue-500 bg-blue-50' 
+                : 'border-gray-200 hover:border-blue-300'
+            }`}
+          >
+            <h3 className="font-medium text-gray-900">{type.label}</h3>
+            <p className="text-sm text-gray-500 mt-1">{type.description}</p>
+          </button>
+        ))}
       </div>
-      
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="mb-4">
-          <h3 className="text-lg font-medium text-gray-900">{graphData.title}</h3>
-          <p className="text-sm text-gray-500 mt-1">{graphData.description}</p>
+
+      {/* Controls */}
+      <div className="grid grid-cols-4 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Primary Group</label>
+          <select
+            value={primaryGroupBy}
+            onChange={(e) => {
+              setPrimaryGroupBy(e.target.value);
+              if (e.target.value === secondaryGroupBy) {
+                setSecondaryGroupBy(null);
+              }
+            }}
+            className="w-full form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            {groupings.map(group => (
+              <option key={group.id} value={group.id}>{group.label}</option>
+            ))}
+          </select>
         </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Secondary Group</label>
+          <select
+            value={secondaryGroupBy || ''}
+            onChange={(e) => setSecondaryGroupBy(e.target.value || null)}
+            className="w-full form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option value="">None</option>
+            {groupings
+              .filter(group => group.id !== primaryGroupBy)
+              .map(group => (
+                <option key={group.id} value={group.id}>{group.label}</option>
+              ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Metric</label>
+          <select
+            value={metric}
+            onChange={(e) => setMetric(e.target.value)}
+            className="w-full form-select rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            {metrics[chartType].map(m => (
+              <option key={m.id} value={m.id}>{m.label}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Chart */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <div className="h-96">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={graphData.data.data}>
+            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 30, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis tickFormatter={graphData.yAxisFormatter} />
-              <Tooltip content={(props) => (
-                <CustomTooltip {...props} valueFormatter={graphData.valueFormatter} />
-              )} />
-              <Legend />
-              {graphData.data.series.map((key, index) => (
-                <Bar key={key} dataKey={key} fill={colors[index % colors.length]} />
-              ))}
+              <XAxis 
+                dataKey="name" 
+                angle={-45} 
+                textAnchor="end" 
+                height={80} 
+                interval={0}
+              />
+              <YAxis 
+                tickFormatter={(value) => currentMetric.format(value)}
+              />
+              <Tooltip 
+                formatter={(value, name) => {
+                  if (typeof value === 'object') {
+                    return [
+                      `Avg: ${currentMetric.format(value.avg)}
+Min: ${currentMetric.format(value.min)}
+Max: ${currentMetric.format(value.max)}`,
+                      name.split('_').pop() // Extract subgroup from metric name
+                    ];
+                  }
+                  return [currentMetric.format(value), name];
+                }}
+              />
+              {secondaryGroupBy ? (
+                // Render grouped bars
+                Array.from(new Set(chartData.map(d => d.subgroup))).map(subgroup => (
+                  <Bar 
+                    key={subgroup}
+                    dataKey={`${metric}_${subgroup}.avg`}
+                    name={subgroup}
+                    fill={getBarColor(subgroup)}
+                    isAnimationActive={false}
+                  >
+                    {chartData.map((entry, index) => (
+                      <Cell key={index} fillOpacity={0.8} />
+                    ))}
+                  </Bar>
+                ))
+              ) : (
+                // Render single bars
+                <Bar 
+                  dataKey={`${metric}.avg`}
+                  fill="#60a5fa"
+                  isAnimationActive={false}
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={index} fillOpacity={0.8} />
+                  ))}
+                </Bar>
+              )}
+              {!secondaryGroupBy && (
+                <ErrorBar
+                  dataKey={metric}
+                  width={4}
+                  strokeWidth={2}
+                  stroke="#94a3b8"
+                  direction="y"
+                  data={chartData.map(entry => ({
+                    x: entry.name,
+                    y: entry[metric]?.avg,
+                    error: [
+                      entry[metric]?.avg - entry[metric]?.min,
+                      entry[metric]?.max - entry[metric]?.avg
+                    ]
+                  }))}
+                />
+              )}
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -626,7 +689,57 @@ const TimingGantt = ({ timing, proofType }) => {
   );
 };
 
-// Move ComparisonModal outside of LeaderboardTable
+const getZkVMVersion = (entry) => {
+  const deps = entry.program.host_metadata?.dependencies;
+  if (!deps) return 'N/A';
+
+  // Look for SP1 or RISC0 package
+  const sp1Package = deps.find(([name]) => name === 'sp1-sdk');
+  const risc0Package = deps.find(([name]) => name === 'risc0-zkvm');
+
+  if (sp1Package) {
+    const [, version] = sp1Package;
+    // Extract tag from git dependency
+    const tagMatch = version.match(/tag:([^,\s}]+)/);
+    return tagMatch ? tagMatch[1] : version;
+  }
+  if (risc0Package) {
+    const [, version] = risc0Package;
+    // Extract tag from git dependency
+    const tagMatch = version.match(/tag:([^,\s}]+)/);
+    return tagMatch ? tagMatch[1] : version;
+  }
+
+  return 'N/A';
+};
+
+const SMART_FILTERS = {
+  SAME_PROGRAM: {
+    id: 'same_program',
+    label: 'Same Program Only',
+    description: 'Only show results from the same program',
+    filter: (data, entry) => data.filter(e => e.program.file_name === entry.program.file_name)
+  },
+  SAME_SYSTEM: {
+    id: 'same_system',
+    label: 'Same System Only',
+    description: 'Only show results from the same proving system',
+    filter: (data, entry) => data.filter(e => e.proving_system === entry.proving_system)
+  },
+  SAME_INSTANCE: {
+    id: 'same_instance',
+    label: 'Same Instance Type',
+    description: 'Only show results from the same instance type',
+    filter: (data, entry) => data.filter(e => e.system_info?.ec2_instance_type === entry.system_info?.ec2_instance_type)
+  },
+  SAME_VERSION: {
+    id: 'same_version',
+    label: 'Same Version',
+    description: 'Only show results from the same zkVM version',
+    filter: (data, entry) => data.filter(e => getZkVMVersion(e) === getZkVMVersion(entry))
+  }
+};
+
 const ComparisonModal = ({ entries, onClose, proofType, getZkVMVersion, calculateThroughput, getProofDuration }) => {
   const [swapped, setSwapped] = useState(false);
   if (entries.length !== 2) return null;
@@ -802,6 +915,8 @@ const LeaderboardTable = () => {
   const [gpuEnabled, setGpuEnabled] = useState(null); // null means "all"
   const [selectedForComparison, setSelectedForComparison] = useState([]);
   const [showComparison, setShowComparison] = useState(false);
+  const [smartFilters, setSmartFilters] = useState([]);
+  const [baselineEntry, setBaselineEntry] = useState(null);
 
   const columns = [
     { key: 'proving_system', label: 'System', defaultVisible: true },
@@ -840,7 +955,16 @@ const LeaderboardTable = () => {
   const uniquePrograms = [...new Set(data.map(entry => entry.program.file_name))].sort();
   const uniqueSystems = [...new Set(data.map(entry => entry.proving_system))].sort();
 
-  const filteredData = data.filter(entry => {
+  const getSmartFilteredData = (data) => {
+    if (!baselineEntry || smartFilters.length === 0) return data;
+    
+    return smartFilters.reduce((filteredData, filterId) => {
+      const filter = Object.values(SMART_FILTERS).find(f => f.id === filterId);
+      return filter ? filter.filter(filteredData, baselineEntry, getZkVMVersion) : filteredData;
+    }, data);
+  };
+
+  const filteredData = getSmartFilteredData(data.filter(entry => {
     const matchesCpuBrand = !cpuBrandFilter || entry.system_info.cpu_brand === cpuBrandFilter;
     const matchesCoreCount = !coreCountFilter || entry.system_info.cpu_count.toString() === coreCountFilter;
     const matchesInstanceType = !instanceTypeFilter || entry.system_info?.ec2_instance_type === instanceTypeFilter;
@@ -848,9 +972,13 @@ const LeaderboardTable = () => {
     const matchesSystem = selectedSystems.length === 0 || selectedSystems.includes(entry.proving_system);
     const matchesGpu = gpuEnabled === null || (gpuEnabled === true ? entry.gpu_enabled === true : !entry.gpu_enabled);
     return matchesCpuBrand && matchesCoreCount && matchesInstanceType && matchesProgram && matchesSystem && matchesGpu;
-  });
+  }));
 
-  const handleRowClick = (index) => {
+  const handleRowClick = (index, e) => {
+    // Don't expand if clicking on a checkbox or button
+    if (e.target.type === 'checkbox' || e.target.tagName === 'BUTTON') {
+      return;
+    }
     setExpandedRow(expandedRow === index ? null : index);
   };
 
@@ -1010,30 +1138,6 @@ const LeaderboardTable = () => {
     );
   };
 
-  const getZkVMVersion = (entry) => {
-    const deps = entry.program.host_metadata?.dependencies;
-    if (!deps) return 'N/A';
-
-    // Look for SP1 or RISC0 package
-    const sp1Package = deps.find(([name]) => name === 'sp1-sdk');
-    const risc0Package = deps.find(([name]) => name === 'risc0-zkvm');
-
-    if (sp1Package) {
-      const [, version] = sp1Package;
-      // Extract tag from git dependency
-      const tagMatch = version.match(/tag:([^,\s}]+)/);
-      return tagMatch ? tagMatch[1] : version;
-    }
-    if (risc0Package) {
-      const [, version] = risc0Package;
-      // Extract tag from git dependency
-      const tagMatch = version.match(/tag:([^,\s}]+)/);
-      return tagMatch ? tagMatch[1] : version;
-    }
-
-    return 'N/A';
-  };
-
   // Add comparison selection handler
   const handleComparisonSelect = (entry) => {
     setSelectedForComparison(prev => {
@@ -1045,6 +1149,61 @@ const LeaderboardTable = () => {
       }
       return [...prev, entry];
     });
+  };
+
+  const handleSetBaseline = (entry, e) => {
+    e.stopPropagation();
+    setBaselineEntry(entry);
+  };
+
+  // Move SmartFiltersControl inside LeaderboardTable
+  const SmartFiltersControl = () => {
+    if (!baselineEntry) return null;
+
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <div>
+            <h4 className="text-sm font-medium text-gray-700">Smart Filters</h4>
+            <p className="text-xs text-gray-500">Filter relative to baseline:</p>
+            <p className="text-xs font-medium text-gray-600">
+              {baselineEntry.program.file_name} ({baselineEntry.proving_system})
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              setBaselineEntry(null);
+              setSmartFilters([]);
+            }}
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            Clear Baseline
+          </button>
+        </div>
+        <div className="space-y-2">
+          {Object.values(SMART_FILTERS).map(filter => (
+            <label key={filter.id} className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={smartFilters.includes(filter.id)}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setSmartFilters([...smartFilters, filter.id]);
+                  } else {
+                    setSmartFilters(smartFilters.filter(id => id !== filter.id));
+                  }
+                }}
+                className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+              />
+              <div>
+                <span className="text-sm text-gray-700">{filter.label}</span>
+                <p className="text-xs text-gray-500">{filter.description}</p>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -1092,7 +1251,12 @@ const LeaderboardTable = () => {
             />
           )}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Existing filters in first 3 columns */}
+          <div className="md:col-span-1">
+            <SmartFiltersControl />
+          </div>
+
           {/* Proof System Selection */}
           <div className="space-y-1">
             <MultiSelect
@@ -1255,7 +1419,7 @@ const LeaderboardTable = () => {
                       className={`px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer ${
                         column.key === 'proving_system' ? 'sticky left-0 bg-gray-50' : ''
                       }`}
-                      onClick={() => handleSort(column.key)}
+                      onClick={(e) => handleSort(column.key)}
                     >
                       {column.key === 'timing.proof_generation' 
                         ? (proofType === 'core' ? 'Core Prove Time' : 'Compress Time')
@@ -1276,8 +1440,11 @@ const LeaderboardTable = () => {
                 
                 return (
                   <React.Fragment key={index}>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-3 py-4 whitespace-nowrap">
+                    <tr 
+                      className="hover:bg-gray-50 cursor-pointer"
+                      onClick={(e) => handleRowClick(index, e)}
+                    >
+                      <td className="px-3 py-4 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                         <input
                           type="checkbox"
                           checked={selectedForComparison.includes(entry)}
@@ -1355,16 +1522,27 @@ const LeaderboardTable = () => {
                           {formatProofSize(getProofSize(entry))}
                         </td>
                       )}
-                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <button 
-                          className="text-blue-500 hover:text-blue-700"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRowClick(index);
-                          }}
-                        >
-                          {expandedRow === index ? '▼' : '▶'}
-                        </button>
+                      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex space-x-2">
+                          <button 
+                            className="text-blue-500 hover:text-blue-700"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRowClick(index, e);
+                            }}
+                          >
+                            {expandedRow === index ? '▼' : '▶'}
+                          </button>
+                          {!baselineEntry && (
+                            <button
+                              onClick={(e) => handleSetBaseline(entry, e)}
+                              className="text-gray-500 hover:text-gray-700"
+                              title="Set as baseline for comparison"
+                            >
+                              📌
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                     {expandedRow === index && (
@@ -1495,8 +1673,6 @@ const LeaderboardTable = () => {
         <LeaderboardGraphs 
           data={filteredData}
           proofType={proofType}
-          selectedPrograms={selectedPrograms}
-          selectedSystems={selectedSystems}
         />
       )}
     </div>
