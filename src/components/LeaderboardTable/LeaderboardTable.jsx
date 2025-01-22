@@ -626,6 +626,161 @@ const TimingGantt = ({ timing, proofType }) => {
   );
 };
 
+// Move ComparisonModal outside of LeaderboardTable
+const ComparisonModal = ({ entries, onClose, proofType, getZkVMVersion, calculateThroughput, getProofDuration }) => {
+  const [swapped, setSwapped] = useState(false);
+  if (entries.length !== 2) return null;
+  
+  const [base, compare] = entries;
+  const currentBase = swapped ? compare : base;
+  const currentCompare = swapped ? base : compare;
+
+  const handleSwap = () => {
+    setSwapped(!swapped);
+  };
+
+  const calculateDiff = (value1, value2) => {
+    if (!value1 || !value2) return null;
+    return ((value2 - value1) / value1) * 100;
+  };
+
+  const formatPercentage = (percentage, improvedWhen) => {
+    if (percentage === null) return 'N/A';
+    const isPositive = percentage > 0;
+    
+    // Invert the color logic based on whether higher or lower is better
+    const isImproved = improvedWhen === 'lower' ? !isPositive : isPositive;
+    const color = isImproved ? 'text-green-600' : 'text-red-600';
+    
+    return (
+      <span className={color}>
+        {isPositive ? '+' : ''}{percentage.toFixed(2)}%
+      </span>
+    );
+  };
+
+  const metrics = [
+    {
+      label: 'Cycles',
+      base: currentBase.zk_metrics.cycles,
+      compare: currentCompare.zk_metrics.cycles,
+      format: (v) => v?.toLocaleString() || 'N/A',
+      improvedWhen: 'lower'
+    },
+    {
+      label: 'Throughput',
+      base: calculateThroughput(currentBase.zk_metrics.cycles, currentBase.timing, proofType),
+      compare: calculateThroughput(currentCompare.zk_metrics.cycles, currentCompare.timing, proofType),
+      format: formatFrequency,
+      improvedWhen: 'higher'
+    },
+    {
+      label: 'Proof Time',
+      base: getProofDuration(currentBase.timing, proofType),
+      compare: getProofDuration(currentCompare.timing, proofType),
+      format: formatDuration,
+      improvedWhen: 'lower',
+      getValue: (v) => v ? v.secs + v.nanos / 1e9 : null
+    },
+    {
+      label: 'Memory Usage',
+      base: currentBase.resources.avg_memory_kb,
+      compare: currentCompare.resources.avg_memory_kb,
+      format: formatMemory,
+      improvedWhen: 'lower'
+    },
+    {
+      label: 'CPU Usage',
+      base: currentBase.resources.avg_cpu_percent,
+      compare: currentCompare.resources.avg_cpu_percent,
+      format: formatCpuUsage,
+      improvedWhen: 'lower'
+    }
+  ];
+
+  return (
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+      <div className="relative top-20 mx-auto p-5 border w-4/5 shadow-lg rounded-md bg-white">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-medium text-gray-900">Benchmark Comparison</h3>
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={handleSwap}
+              className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-md flex items-center space-x-1"
+            >
+              <span>Swap</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              </svg>
+            </button>
+            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-4 gap-4 mb-6">
+          <div className="col-span-2">
+            <h4 className="text-sm font-medium text-gray-700 mb-2">Base</h4>
+            <div className="bg-gray-50 p-3 rounded">
+              <p className="text-sm">{currentBase.program.file_name} ({currentBase.proving_system})</p>
+              <p className="text-xs text-gray-500 mt-1">
+                {currentBase.system_info?.ec2_instance_type || 'Local'} • 
+                Version: {getZkVMVersion(currentBase)}
+              </p>
+            </div>
+          </div>
+          <div className="col-span-2">
+            <h4 className="text-sm font-medium text-gray-700 mb-2">Compare</h4>
+            <div className="bg-gray-50 p-3 rounded">
+              <p className="text-sm">{currentCompare.program.file_name} ({currentCompare.proving_system})</p>
+              <p className="text-xs text-gray-500 mt-1">
+                {currentCompare.system_info?.ec2_instance_type || 'Local'} • 
+                Version: {getZkVMVersion(currentCompare)}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Metric</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Base</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Compare</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Difference</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {metrics.map((metric) => {
+              const baseValue = metric.getValue ? metric.getValue(metric.base) : metric.base;
+              const compareValue = metric.getValue ? metric.getValue(metric.compare) : metric.compare;
+              const diff = calculateDiff(baseValue, compareValue);
+
+              return (
+                <tr key={metric.label}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {metric.label}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {metric.format(metric.base)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {metric.format(metric.compare)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    {formatPercentage(diff, metric.improvedWhen)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
 const LeaderboardTable = () => {
   const { data, loading, error } = useDataLoader();
   const [expandedRow, setExpandedRow] = useState(null);
@@ -645,6 +800,8 @@ const LeaderboardTable = () => {
   const [selectedPrograms, setSelectedPrograms] = useState([]);
   const [selectedSystems, setSelectedSystems] = useState([]);
   const [gpuEnabled, setGpuEnabled] = useState(null); // null means "all"
+  const [selectedForComparison, setSelectedForComparison] = useState([]);
+  const [showComparison, setShowComparison] = useState(false);
 
   const columns = [
     { key: 'proving_system', label: 'System', defaultVisible: true },
@@ -693,7 +850,7 @@ const LeaderboardTable = () => {
     return matchesCpuBrand && matchesCoreCount && matchesInstanceType && matchesProgram && matchesSystem && matchesGpu;
   });
 
-  const toggleRowExpansion = (index) => {
+  const handleRowClick = (index) => {
     setExpandedRow(expandedRow === index ? null : index);
   };
 
@@ -877,6 +1034,19 @@ const LeaderboardTable = () => {
     return 'N/A';
   };
 
+  // Add comparison selection handler
+  const handleComparisonSelect = (entry) => {
+    setSelectedForComparison(prev => {
+      if (prev.includes(entry)) {
+        return prev.filter(e => e !== entry);
+      }
+      if (prev.length >= 2) {
+        return [prev[1], entry];
+      }
+      return [...prev, entry];
+    });
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
@@ -1034,11 +1204,50 @@ const LeaderboardTable = () => {
         </div>
       </div>
 
+      {/* Comparison Controls */}
+      <div className="mb-4 flex justify-between items-center">
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-gray-600">
+            {selectedForComparison.length}/2 selected for comparison
+          </span>
+          {selectedForComparison.length === 2 && (
+            <button
+              onClick={() => setShowComparison(true)}
+              className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
+            >
+              Compare Selected
+            </button>
+          )}
+          {selectedForComparison.length > 0 && (
+            <button
+              onClick={() => setSelectedForComparison([])}
+              className="px-4 py-2 text-gray-600 text-sm font-medium hover:text-gray-800"
+            >
+              Clear Selection
+            </button>
+          )}
+        </div>
+      </div>
+
+      {showComparison && (
+        <ComparisonModal
+          entries={selectedForComparison}
+          onClose={() => setShowComparison(false)}
+          proofType={proofType}
+          getZkVMVersion={getZkVMVersion}
+          calculateThroughput={calculateThroughput}
+          getProofDuration={getProofDuration}
+        />
+      )}
+
       {activeTab === 'table' ? (
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
+                <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Compare
+                </th>
                 {columns.map(column => (
                   isColumnVisible(column.key) && (
                     <th
@@ -1067,7 +1276,15 @@ const LeaderboardTable = () => {
                 
                 return (
                   <React.Fragment key={index}>
-                    <tr className="hover:bg-gray-50 cursor-pointer" onClick={() => toggleRowExpansion(index)}>
+                    <tr className="hover:bg-gray-50">
+                      <td className="px-3 py-4 whitespace-nowrap">
+                        <input
+                          type="checkbox"
+                          checked={selectedForComparison.includes(entry)}
+                          onChange={() => handleComparisonSelect(entry)}
+                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        />
+                      </td>
                       {isColumnVisible('proving_system') && (
                         <td className="sticky left-0 bg-white px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                           {entry.proving_system}
@@ -1139,14 +1356,20 @@ const LeaderboardTable = () => {
                         </td>
                       )}
                       <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <button className="text-blue-500 hover:text-blue-700">
+                        <button 
+                          className="text-blue-500 hover:text-blue-700"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRowClick(index);
+                          }}
+                        >
                           {expandedRow === index ? '▼' : '▶'}
                         </button>
                       </td>
                     </tr>
                     {expandedRow === index && (
                       <tr>
-                        <td colSpan={visibleColumns.length + 1} className="px-6 py-4">
+                        <td colSpan={visibleColumns.length + 2} className="px-6 py-4">
                           <div className="space-y-6">
                             <div>
                               <h3 className="text-sm font-semibold text-gray-900 mb-4">Timing Breakdown</h3>
