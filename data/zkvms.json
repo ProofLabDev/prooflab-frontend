@@ -1,0 +1,122 @@
+{
+  "zkvms": [
+    {
+      "id": "risc0",
+      "name": "RISC Zero",
+      "description": "A zero-knowledge virtual machine based on RISC-V architecture that can prove the execution of arbitrary Rust programs",
+      "category": "general-purpose",
+      "runtimeLanguage": "rust",
+      "supportedLanguages": ["rust"],
+      "performance": "high",
+      "metrics": [
+        { "label": "Base Proving Time", "value": "2.3s" },
+        { "label": "Base Memory Usage", "value": "1.2GB" },
+        { "label": "Verification Time", "value": "0.1s" }
+      ],
+      "features": [
+        "RISC-V instruction set",
+        "Rust native integration",
+        "Parallel proving",
+        "Memory efficient",
+        "Developer tooling"
+      ],
+      "architecture": {
+        "type": "RISC-V",
+        "proofSystem": "STARK",
+        "memoryModel": "RAM"
+      },
+      "documentation": "https://dev.risczero.com/",
+      "github": "https://github.com/risc0/risc0",
+      "lastUpdated": "2024-01-20",
+      "status": "production"
+    },
+    {
+      "id": "sp1",
+      "name": "SP1",
+      "description": "A STARK-based virtual machine optimized for high-performance zero-knowledge proof generation",
+      "category": "general-purpose",
+      "runtimeLanguage": "rust",
+      "supportedLanguages": ["rust"],
+      "performance": "high",
+      "metrics": [
+        { "label": "Base Proving Time", "value": "1.5s" },
+        { "label": "Base Memory Usage", "value": "0.8GB" },
+        { "label": "Verification Time", "value": "0.05s" }
+      ],
+      "features": [
+        "Custom instruction set",
+        "STARK-based proofs",
+        "Optimized for performance",
+        "Efficient memory management",
+        "Advanced compiler optimizations"
+      ],
+      "architecture": {
+        "type": "Custom ISA",
+        "proofSystem": "STARK",
+        "memoryModel": "Optimized RAM"
+      },
+      "documentation": "https://succinctlabs.github.io/sp1/",
+      "github": "https://github.com/succinctlabs/sp1",
+      "lastUpdated": "2024-01-20",
+      "status": "production"
+    },
+    {
+      "id": "polygon-zkevm",
+      "name": "Polygon zkEVM",
+      "description": "A zero-knowledge Ethereum Virtual Machine that enables native Ethereum smart contract execution",
+      "category": "evm-compatible",
+      "runtimeLanguage": "rust",
+      "supportedLanguages": ["solidity", "vyper"],
+      "performance": "high",
+      "metrics": [
+        { "label": "Base Proving Time", "value": "1.8s" },
+        { "label": "Base Memory Usage", "value": "0.9GB" },
+        { "label": "Verification Time", "value": "0.08s" }
+      ],
+      "features": [
+        "EVM bytecode compatibility",
+        "Native asset bridging",
+        "Smart contract privacy",
+        "Ethereum tooling support"
+      ],
+      "architecture": {
+        "type": "EVM",
+        "proofSystem": "STARK",
+        "memoryModel": "EVM Storage"
+      },
+      "documentation": "https://wiki.polygon.technology/docs/zkevm/",
+      "github": "https://github.com/0xPolygonHermez",
+      "lastUpdated": "2024-01-18",
+      "status": "production"
+    },
+    {
+      "id": "miden",
+      "name": "Miden VM",
+      "description": "A STARK-based virtual machine with a custom assembly language for zero-knowledge computations",
+      "category": "general-purpose",
+      "runtimeLanguage": "rust",
+      "supportedLanguages": ["assembly", "rust"],
+      "performance": "high",
+      "metrics": [
+        { "label": "Base Proving Time", "value": "1.5s" },
+        { "label": "Base Memory Usage", "value": "0.8GB" },
+        { "label": "Verification Time", "value": "0.05s" }
+      ],
+      "features": [
+        "Custom assembly language",
+        "STARK-based proofs",
+        "Advanced memory management",
+        "Optimized for specific use cases"
+      ],
+      "architecture": {
+        "type": "Custom Assembly",
+        "proofSystem": "STARK",
+        "memoryModel": "Stack-based"
+      },
+      "documentation": "https://wiki.polygon.technology/docs/miden/",
+      "github": "https://github.com/0xPolygonMiden/miden-vm",
+      "lastUpdated": "2024-01-10",
+      "status": "beta"
+    }
+  ]
+} 

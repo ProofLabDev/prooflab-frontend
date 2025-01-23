@@ -1,0 +1,180 @@
+{
+  "programs": [
+    {
+      "id": "fibonacci",
+      "name": "Fibonacci Sequence",
+      "description": "Generates and proves the computation of Fibonacci numbers",
+      "category": "computation",
+      "implementations": [
+        {
+          "zkvm": "risc0",
+          "language": "rust",
+          "source": "https://github.com/risc0/risc0/tree/main/examples/fibonacci",
+          "lastUpdated": "2024-01-15"
+        },
+        {
+          "zkvm": "sp1",
+          "language": "rust",
+          "source": "https://github.com/succinctlabs/sp1/tree/main/examples/fibonacci",
+          "lastUpdated": "2024-01-18"
+        }
+      ],
+      "complexity": "low",
+      "tags": ["mathematics", "sequences", "basic"]
+    },
+    {
+      "id": "ecdsa",
+      "name": "ECDSA Signature Verification",
+      "description": "Verifies ECDSA digital signatures within a zero-knowledge context",
+      "category": "cryptography",
+      "implementations": [
+        {
+          "zkvm": "risc0",
+          "language": "rust",
+          "source": "https://github.com/risc0/risc0/tree/main/examples/ecdsa",
+          "lastUpdated": "2024-01-20"
+        },
+        {
+          "zkvm": "sp1",
+          "language": "rust",
+          "source": "https://github.com/succinctlabs/sp1/tree/main/examples/ecdsa",
+          "lastUpdated": "2024-01-19"
+        }
+      ],
+      "complexity": "high",
+      "tags": ["cryptography", "signatures", "verification"]
+    },
+    {
+      "id": "sha",
+      "name": "SHA-256 Hash",
+      "description": "Computes SHA-256 hashes with zero-knowledge proofs",
+      "category": "cryptography",
+      "implementations": [
+        {
+          "zkvm": "risc0",
+          "language": "rust",
+          "source": "https://github.com/risc0/risc0/tree/main/examples/sha",
+          "lastUpdated": "2024-01-17"
+        },
+        {
+          "zkvm": "sp1",
+          "language": "rust",
+          "source": "https://github.com/succinctlabs/sp1/tree/main/examples/sha",
+          "lastUpdated": "2024-01-16"
+        }
+      ],
+      "complexity": "medium",
+      "tags": ["cryptography", "hashing", "verification"]
+    },
+    {
+      "id": "json",
+      "name": "JSON Parser",
+      "description": "Parses and validates JSON data in zero-knowledge",
+      "category": "data-processing",
+      "implementations": [
+        {
+          "zkvm": "risc0",
+          "language": "rust",
+          "source": "https://github.com/risc0/risc0/tree/main/examples/json",
+          "lastUpdated": "2024-01-17"
+        },
+        {
+          "zkvm": "sp1",
+          "language": "rust",
+          "source": "https://github.com/succinctlabs/sp1/tree/main/examples/json",
+          "lastUpdated": "2024-01-16"
+        }
+      ],
+      "complexity": "medium",
+      "tags": ["parsing", "data-structures", "validation"]
+    },
+    {
+      "id": "regex",
+      "name": "Regular Expression Matcher",
+      "description": "Matches regular expressions against input strings in zero-knowledge",
+      "category": "text-processing",
+      "implementations": [
+        {
+          "zkvm": "risc0",
+          "language": "rust",
+          "source": "https://github.com/risc0/risc0/tree/main/examples/regex",
+          "lastUpdated": "2024-01-17"
+        },
+        {
+          "zkvm": "sp1",
+          "language": "rust",
+          "source": "https://github.com/succinctlabs/sp1/tree/main/examples/regex",
+          "lastUpdated": "2024-01-16"
+        }
+      ],
+      "complexity": "high",
+      "tags": ["text", "pattern-matching", "validation"]
+    },
+    {
+      "id": "rsa",
+      "name": "RSA Verification",
+      "description": "Verifies RSA signatures and performs RSA operations in zero-knowledge",
+      "category": "cryptography",
+      "implementations": [
+        {
+          "zkvm": "risc0",
+          "language": "rust",
+          "source": "https://github.com/risc0/risc0/tree/main/examples/rsa",
+          "lastUpdated": "2024-01-17"
+        },
+        {
+          "zkvm": "sp1",
+          "language": "rust",
+          "source": "https://github.com/succinctlabs/sp1/tree/main/examples/rsa",
+          "lastUpdated": "2024-01-16"
+        }
+      ],
+      "complexity": "high",
+      "tags": ["cryptography", "signatures", "verification"]
+    },
+    {
+      "id": "bubble-sort",
+      "name": "Bubble Sort",
+      "description": "Implements and proves the execution of the bubble sort algorithm",
+      "category": "algorithms",
+      "implementations": [
+        {
+          "zkvm": "risc0",
+          "language": "rust",
+          "source": "https://github.com/risc0/risc0/tree/main/examples/bubble-sort",
+          "lastUpdated": "2024-01-14"
+        },
+        {
+          "zkvm": "sp1",
+          "language": "rust",
+          "source": "https://github.com/succinctlabs/sp1/tree/main/examples/bubble-sort",
+          "lastUpdated": "2024-01-15"
+        }
+      ],
+      "complexity": "low",
+      "tags": ["sorting", "algorithms", "basic"]
+    },
+    {
+      "id": "is-even",
+      "name": "Is Even",
+      "description": "Simple example proving whether a number is even",
+      "category": "basic",
+      "implementations": [
+        {
+          "zkvm": "risc0",
+          "language": "rust",
+          "source": "https://github.com/risc0/risc0/tree/main/examples/is-even",
+          "lastUpdated": "2024-01-13"
+        },
+        {
+          "zkvm": "sp1",
+          "language": "rust",
+          "source": "https://github.com/succinctlabs/sp1/tree/main/examples/is-even",
+          "lastUpdated": "2024-01-15"
+        }
+      ],
+      "complexity": "low",
+      "tags": ["basic", "numbers", "verification"]
+    }
+  ]
+} 

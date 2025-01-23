@@ -1,0 +1,140 @@
+{
+  "spaces": [
+    {
+      "id": "private-voting",
+      "name": "Private Voting System",
+      "description": "A decentralized voting system with zero-knowledge proofs for privacy",
+      "longDescription": "This system enables anonymous voting while ensuring vote integrity and preventing double voting. Uses zero-knowledge proofs to verify vote eligibility without revealing voter identity.",
+      "tags": ["Voting", "Privacy", "Governance"],
+      "implementation": {
+        "zkvm": "risc0",
+        "programs": ["eddsa", "sha256"],
+        "customPrograms": [
+          {
+            "name": "vote-verification",
+            "description": "Custom program for verifying vote validity and preventing double voting",
+            "metrics": {
+              "proving_time": "1.8s",
+              "memory_usage": "950MB",
+              "verification_time": "0.06s"
+            }
+          }
+        ]
+      },
+      "creator": {
+        "name": "ZK Labs",
+        "avatar": "https://example.com/zklabs.png"
+      },
+      "metrics": {
+        "users": 1200,
+        "transactions": 5000,
+        "avgProofTime": "1.2s"
+      },
+      "demoUrl": "https://demo.example.com/private-voting",
+      "githubUrl": "https://github.com/example/private-voting",
+      "lastUpdated": "2024-01-15"
+    },
+    {
+      "id": "anonymous-credentials",
+      "name": "Anonymous Credentials",
+      "description": "Identity verification without revealing personal information",
+      "longDescription": "A system for proving identity attributes (age, nationality, etc.) without revealing the actual data. Perfect for KYC and age verification use cases.",
+      "tags": ["Identity", "Privacy", "Authentication"],
+      "implementation": {
+        "zkvm": "sp1",
+        "programs": ["eddsa", "sha256"],
+        "customPrograms": [
+          {
+            "name": "credential-verification",
+            "description": "Custom program for verifying credential attributes without revealing them",
+            "metrics": {
+              "proving_time": "1.5s",
+              "memory_usage": "850MB",
+              "verification_time": "0.05s"
+            }
+          }
+        ]
+      },
+      "creator": {
+        "name": "Privacy First",
+        "avatar": "https://example.com/privacy-first.png"
+      },
+      "metrics": {
+        "users": 3500,
+        "transactions": 15000,
+        "avgProofTime": "0.8s"
+      },
+      "demoUrl": "https://demo.example.com/anon-creds",
+      "githubUrl": "https://github.com/example/anon-creds",
+      "lastUpdated": "2024-01-18"
+    },
+    {
+      "id": "zk-chess",
+      "name": "ZK Chess",
+      "description": "Private chess games with verifiable moves",
+      "longDescription": "Play chess without revealing your strategy while ensuring all moves are valid. Uses ZK proofs to verify move validity without exposing the game state.",
+      "tags": ["Gaming", "Entertainment", "Strategy"],
+      "implementation": {
+        "zkvm": "risc0",
+        "programs": ["sha256"],
+        "customPrograms": [
+          {
+            "name": "chess-move-validator",
+            "description": "Custom program for validating chess moves and game state",
+            "metrics": {
+              "proving_time": "0.9s",
+              "memory_usage": "700MB",
+              "verification_time": "0.04s"
+            }
+          }
+        ]
+      },
+      "creator": {
+        "name": "GameZK",
+        "avatar": "https://example.com/gamezk.png"
+      },
+      "metrics": {
+        "users": 800,
+        "transactions": 12000,
+        "avgProofTime": "0.5s"
+      },
+      "demoUrl": "https://demo.example.com/zk-chess",
+      "githubUrl": "https://github.com/example/zk-chess",
+      "lastUpdated": "2024-01-10"
+    },
+    {
+      "id": "private-dex",
+      "name": "Private DEX",
+      "description": "Decentralized exchange with private transactions",
+      "longDescription": "A decentralized exchange that keeps trade amounts and participant identities private while ensuring fair price execution.",
+      "tags": ["DeFi", "Privacy", "Trading"],
+      "implementation": {
+        "zkvm": "sp1",
+        "programs": ["eddsa", "sha256"],
+        "customPrograms": [
+          {
+            "name": "order-matching",
+            "description": "Custom program for private order matching and execution",
+            "metrics": {
+              "proving_time": "2.1s",
+              "memory_usage": "1.1GB",
+              "verification_time": "0.07s"
+            }
+          }
+        ]
+      },
+      "creator": {
+        "name": "DeFi Privacy",
+        "avatar": "https://example.com/defi-privacy.png"
+      },
+      "metrics": {
+        "users": 2500,
+        "transactions": 25000,
+        "avgProofTime": "1.5s"
+      },
+      "demoUrl": "https://demo.example.com/private-dex",
+      "githubUrl": "https://github.com/example/private-dex",
+      "lastUpdated": "2024-01-20"
+    }
+  ]
+} 
