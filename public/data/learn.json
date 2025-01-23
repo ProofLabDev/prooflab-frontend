@@ -1,0 +1,189 @@
+{
+  "quickStart": {
+    "title": "Quick Start Guide",
+    "description": "Get started with Zero Knowledge development",
+    "sections": [
+      {
+        "title": "Understanding ZK Proofs",
+        "content": "Basic concepts and terminology",
+        "duration": "10 min"
+      },
+      {
+        "title": "Setting Up Your Environment",
+        "content": "Install required tools and dependencies",
+        "duration": "15 min"
+      },
+      {
+        "title": "Your First ZK Program",
+        "content": "Build and test a simple ZK application",
+        "duration": "30 min"
+      }
+    ]
+  },
+  "sections": [
+    {
+      "title": "Getting Started",
+      "resources": [
+        {
+          "id": "intro-zk",
+          "title": "Introduction to Zero Knowledge",
+          "description": "Learn the fundamentals of Zero Knowledge proofs and their applications",
+          "level": "Beginner",
+          "levelClass": "bg-green-100 text-green-800",
+          "iconBg": "bg-green-100",
+          "iconColor": "text-green-600",
+          "duration": "45 min",
+          "topics": [
+            "What are Zero Knowledge Proofs?",
+            "Types of ZK Proofs",
+            "Real-world Applications",
+            "Basic Cryptographic Concepts"
+          ],
+          "prerequisites": []
+        },
+        {
+          "id": "dev-setup",
+          "title": "ZK Development Setup",
+          "description": "Set up your development environment for ZK programming",
+          "level": "Beginner",
+          "levelClass": "bg-green-100 text-green-800",
+          "iconBg": "bg-green-100",
+          "iconColor": "text-green-600",
+          "duration": "30 min",
+          "topics": [
+            "Development Tools",
+            "Environment Configuration",
+            "Testing Framework Setup",
+            "IDE Integration"
+          ],
+          "prerequisites": ["intro-zk"]
+        }
+      ]
+    },
+    {
+      "title": "Core Concepts",
+      "resources": [
+        {
+          "id": "circuit-design",
+          "title": "ZK Circuit Design",
+          "description": "Understanding how to design efficient ZK circuits",
+          "level": "Intermediate",
+          "levelClass": "bg-blue-100 text-blue-800",
+          "iconBg": "bg-blue-100",
+          "iconColor": "text-blue-600",
+          "duration": "60 min",
+          "topics": [
+            "Circuit Components",
+            "Constraint Systems",
+            "Optimization Techniques",
+            "Common Patterns"
+          ],
+          "prerequisites": ["intro-zk", "dev-setup"]
+        },
+        {
+          "id": "performance-opt",
+          "title": "Performance Optimization",
+          "description": "Learn techniques to optimize your ZK proofs",
+          "level": "Advanced",
+          "levelClass": "bg-purple-100 text-purple-800",
+          "iconBg": "bg-purple-100",
+          "iconColor": "text-purple-600",
+          "duration": "90 min",
+          "topics": [
+            "Proof Generation Optimization",
+            "Memory Management",
+            "Parallel Processing",
+            "Benchmarking"
+          ],
+          "prerequisites": ["circuit-design"]
+        }
+      ]
+    },
+    {
+      "title": "Best Practices",
+      "resources": [
+        {
+          "id": "security",
+          "title": "Security Considerations",
+          "description": "Best practices for secure ZK implementation",
+          "level": "Intermediate",
+          "levelClass": "bg-blue-100 text-blue-800",
+          "iconBg": "bg-blue-100",
+          "iconColor": "text-blue-600",
+          "duration": "75 min",
+          "topics": [
+            "Common Vulnerabilities",
+            "Security Patterns",
+            "Audit Preparation",
+            "Threat Modeling"
+          ],
+          "prerequisites": ["circuit-design"]
+        },
+        {
+          "id": "testing",
+          "title": "Testing Strategies",
+          "description": "Comprehensive testing approaches for ZK applications",
+          "level": "Intermediate",
+          "levelClass": "bg-blue-100 text-blue-800",
+          "iconBg": "bg-blue-100",
+          "iconColor": "text-blue-600",
+          "duration": "60 min",
+          "topics": [
+            "Unit Testing",
+            "Integration Testing",
+            "Proof Verification",
+            "Performance Testing"
+          ],
+          "prerequisites": ["circuit-design"]
+        }
+      ]
+    }
+  ],
+  "documentation": {
+    "categories": [
+      {
+        "title": "API Reference",
+        "items": [
+          {
+            "title": "Core API",
+            "path": "/docs/api/core"
+          },
+          {
+            "title": "Circuit API",
+            "path": "/docs/api/circuit"
+          },
+          {
+            "title": "Prover API",
+            "path": "/docs/api/prover"
+          }
+        ]
+      },
+      {
+        "title": "Integration Guides",
+        "items": [
+          {
+            "title": "Web Integration",
+            "path": "/docs/integration/web"
+          },
+          {
+            "title": "Blockchain Integration",
+            "path": "/docs/integration/blockchain"
+          }
+        ]
+      },
+      {
+        "title": "Examples",
+        "items": [
+          {
+            "title": "Simple Proof Generation",
+            "path": "/docs/examples/simple-proof"
+          },
+          {
+            "title": "Complex Circuit Design",
+            "path": "/docs/examples/complex-circuit"
+          }
+        ]
+      }
+    ]
+  }
+} 

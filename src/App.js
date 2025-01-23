@@ -4,13 +4,20 @@ import LeaderboardTable from './components/LeaderboardTable/LeaderboardTable';
 import About from './components/About/About';
 import FAQ from './components/FAQ/FAQ';
 import Footer from './components/Footer/Footer';
-import ZKVMComparison from './components/ZKVMComparison/ZKVMComparison';
 import Sponsor from './components/Sponsor/Sponsor';
 import posthog from 'posthog-js';
+
+// Import components
+import Programs from './components/Programs/Programs';
+import ZKSpaces from './components/ZKSpaces/ZKSpaces';
+import Learn from './components/Learn/Learn';
+import ZKVMs from './components/ZKVMs/ZKVMs';
+import Home from './components/Home/Home';
 
 const Navigation = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthenticated] = useState(false); // TODO: Implement auth
 
   const getLinkClass = (path) => {
     const isActive = location.pathname === path;
@@ -42,26 +49,42 @@ const Navigation = () => {
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <Link to="/" className={getLinkClass('/')}>
-                Leaderboard
+              <Link to="/zkvms" className={getLinkClass('/zkvms')}>
+                ZKVMs
               </Link>
-              <Link to="/compare" className={getLinkClass('/compare')}>
-                Compare zkVMs
+              <Link to="/programs" className={getLinkClass('/programs')}>
+                Programs
               </Link>
-              <Link to="/faq" className={getLinkClass('/faq')}>
-                FAQ
+              <Link to="/spaces" className={getLinkClass('/spaces')}>
+                ZK Spaces
               </Link>
-              <Link to="/about" className={getLinkClass('/about')}>
-                About
+              <Link to="/benchmarks" className={getLinkClass('/benchmarks')}>
+                Benchmarks
+              </Link>
+              <Link to="/learn" className={getLinkClass('/learn')}>
+                Learn
               </Link>
             </div>
           </div>
           
+          {/* Auth Controls */}
+          <div className="hidden sm:flex sm:items-center">
+            {isAuthenticated ? (
+              <button className="ml-4 px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md">
+                Dashboard
+              </button>
+            ) : (
+              <button className="ml-4 px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700">
+                Sign In
+              </button>
+            )}
+          </div>
+
           {/* Mobile menu button */}
           <div className="sm:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
             >
               <span className="sr-only">Open main menu</span>
               {/* Hamburger icon */}
@@ -88,33 +111,49 @@ const Navigation = () => {
       <div className={`${isMenuOpen ? 'block' : 'hidden'} sm:hidden border-t border-gray-200`}>
         <div className="pt-2 pb-3 space-y-1">
           <Link
-            to="/"
-            className={getMobileLinkClass('/')}
+            to="/zkvms"
+            className={getMobileLinkClass('/zkvms')}
             onClick={() => setIsMenuOpen(false)}
           >
-            Leaderboard
+            ZKVMs
           </Link>
           <Link
-            to="/compare"
-            className={getMobileLinkClass('/compare')}
+            to="/programs"
+            className={getMobileLinkClass('/programs')}
             onClick={() => setIsMenuOpen(false)}
           >
-            Compare zkVMs
+            Programs
           </Link>
           <Link
-            to="/faq"
-            className={getMobileLinkClass('/faq')}
+            to="/spaces"
+            className={getMobileLinkClass('/spaces')}
             onClick={() => setIsMenuOpen(false)}
           >
-            FAQ
+            ZK Spaces
           </Link>
           <Link
-            to="/about"
-            className={getMobileLinkClass('/about')}
+            to="/benchmarks"
+            className={getMobileLinkClass('/benchmarks')}
             onClick={() => setIsMenuOpen(false)}
           >
-            About
+            Benchmarks
           </Link>
+          <Link
+            to="/learn"
+            className={getMobileLinkClass('/learn')}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Learn
+          </Link>
+          {!isAuthenticated && (
+            <Link
+              to="/signin"
+              className={getMobileLinkClass('/signin')}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Sign In
+            </Link>
+          )}
         </div>
       </div>
     </nav>
@@ -132,7 +171,10 @@ const PageViewTracker = () => {
   return null;
 };
 
-function App() {
+const AppContent = () => {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
   useEffect(() => {
     // Initialize PostHog
     posthog.init(
@@ -147,21 +189,31 @@ function App() {
   }, []);
 
   return (
+    <div className={`min-h-screen flex flex-col ${isHomePage ? 'bg-gray-900' : 'bg-gray-50'}`}>
+      <Navigation />
+      <PageViewTracker />
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/zkvms" element={<ZKVMs />} />
+          <Route path="/programs" element={<Programs />} />
+          <Route path="/spaces" element={<ZKSpaces />} />
+          <Route path="/benchmarks" element={<LeaderboardTable />} />
+          <Route path="/learn" element={<Learn />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/sponsor" element={<Sponsor />} />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+function App() {
+  return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-gray-50">
-        <Navigation />
-        <PageViewTracker />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<LeaderboardTable />} />
-            <Route path="/compare" element={<ZKVMComparison />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/sponsor" element={<Sponsor />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <AppContent />
     </Router>
   );
 }

@@ -1,3 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Colors */
+  --color-primary: #6366F1;
+  --color-primary-dark: #4F46E5;
+  --color-secondary: #3B82F6;
+  --color-background: #FAFAFA;
+  --color-surface: #FFFFFF;
+  
+  /* Text Colors */
+  --color-text-primary: #1F2937;
+  --color-text-secondary: #4B5563;
+  --color-text-muted: #9CA3AF;
+  
+  /* Accent Colors */
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  
+  /* Performance Indicators */
+  --color-performance-high: #15803D;
+  --color-performance-medium: #B45309;
+  --color-performance-low: #991B1B;
+  
+  /* Spacing */
+  --spacing-base: 8px;
+  --spacing-xs: calc(var(--spacing-base) * 0.5);
+  --spacing-sm: var(--spacing-base);
+  --spacing-md: calc(var(--spacing-base) * 2);
+  --spacing-lg: calc(var(--spacing-base) * 3);
+  --spacing-xl: calc(var(--spacing-base) * 4);
+}
+
+/* Base Styles */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code, pre {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Typography Scale */
+h1, .h1 {
+  font-size: 2.5rem;
+  line-height: 3rem;
+  font-weight: 700;
+}
+
+h2, .h2 {
+  font-size: 2rem;
+  line-height: 2.5rem;
+  font-weight: 700;
+}
+
+h3, .h3 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+}
+
+.body-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.body {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.body-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.code {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Transitions */
+.transition-quick {
+  transition-duration: 150ms;
+}
+
+.transition-normal {
+  transition-duration: 250ms;
+}
+
+.transition-complex {
+  transition-duration: 350ms;
+}
+
+/* Responsive Breakpoints */
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1440px;
+  }
+}
+
+/* Utility Classes */
+.aspect-w-16 {
+  position: relative;
+  padding-bottom: 56.25%;
+}
+
+.aspect-w-16 > * {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+/* Loading States */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-background) 0%,
+    var(--color-surface) 50%,
+    var(--color-background) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 .App {
   text-align: center;
 }
