@@ -20,6 +20,11 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthenticated] = useState(false); // TODO: Implement auth
 
+  // Close menu when location changes
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location]);
+
   const getLinkClass = (path) => {
     const isActive = location.pathname === path;
     const baseClasses = "inline-flex items-center px-1 pt-1 text-sm font-medium";
@@ -32,8 +37,17 @@ const Navigation = () => {
     return `${baseClasses} ${isActive ? 'text-indigo-700 bg-indigo-50' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'}`;
   };
 
+  const handleMobileMenuClick = (e) => {
+    e.preventDefault();
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLinkClick = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
-    <nav className="bg-white shadow-sm">
+    <nav className="bg-white shadow-sm relative z-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
           <div className="flex">
@@ -84,7 +98,7 @@ const Navigation = () => {
           {/* Mobile menu button */}
           <div className="sm:hidden flex items-center">
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={handleMobileMenuClick}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
             >
               <span className="sr-only">Open main menu</span>
@@ -109,40 +123,40 @@ const Navigation = () => {
       </div>
 
       {/* Mobile menu */}
-      <div className={`${isMenuOpen ? 'block' : 'hidden'} sm:hidden border-t border-gray-200`}>
+      <div className={`${isMenuOpen ? 'block' : 'hidden'} sm:hidden border-t border-gray-200 bg-white relative z-50`}>
         <div className="pt-2 pb-3 space-y-1">
           <Link
             to="/zkvms"
             className={getMobileLinkClass('/zkvms')}
-            onClick={() => setIsMenuOpen(false)}
+            onClick={handleLinkClick}
           >
             ZKVMs
           </Link>
           <Link
             to="/programs"
             className={getMobileLinkClass('/programs')}
-            onClick={() => setIsMenuOpen(false)}
+            onClick={handleLinkClick}
           >
             Programs
           </Link>
           <Link
             to="/spaces"
             className={getMobileLinkClass('/spaces')}
-            onClick={() => setIsMenuOpen(false)}
+            onClick={handleLinkClick}
           >
             ZK Spaces
           </Link>
           <Link
             to="/benchmarks"
             className={getMobileLinkClass('/benchmarks')}
-            onClick={() => setIsMenuOpen(false)}
+            onClick={handleLinkClick}
           >
             Benchmarks
           </Link>
           <Link
             to="/learn"
             className={getMobileLinkClass('/learn')}
-            onClick={() => setIsMenuOpen(false)}
+            onClick={handleLinkClick}
           >
             Learn
           </Link>
@@ -150,7 +164,7 @@ const Navigation = () => {
             <Link
               to="/signin"
               className={getMobileLinkClass('/signin')}
-              onClick={() => setIsMenuOpen(false)}
+              onClick={handleLinkClick}
             >
               Sign In
             </Link>

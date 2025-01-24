@@ -4,27 +4,16 @@ import { Link } from 'react-router-dom';
 const Sidebar = ({ activeSection, setActiveSection }) => {
   const sections = {
     'Getting Started': [
-      'Introduction to ZK Proofs',
-      'Setting Up Your Environment',
-      'Your First ZK Program'
+      'Introduction to Zero Knowledge',
+      'Getting Started with zkRust'
     ],
     'Core Concepts': [
-      'Understanding ZKVMs',
-      'Program Structure',
-      'Proving and Verification',
-      'Memory Management'
+      'Understanding zkVMs in Depth',
+      'zkRust Program Structure'
     ],
     'Advanced Topics': [
-      'Recursive Proofs',
       'Performance Optimization',
-      'Security Best Practices',
-      'Advanced Circuit Design'
-    ],
-    'Tutorials': [
-      'Building a Private Voting System',
-      'Zero-Knowledge Identity',
-      'Private NFT Ownership',
-      'Anonymous Credentials'
+      'Example Applications'
     ]
   };
 
@@ -61,46 +50,110 @@ const Sidebar = ({ activeSection, setActiveSection }) => {
 
 const ContentSection = ({ section }) => {
   const content = {
-    'Introduction to ZK Proofs': {
-      title: 'Introduction to Zero-Knowledge Proofs',
-      description: 'Learn the fundamentals of zero-knowledge proofs and their applications in modern cryptography.',
+    'Introduction to Zero Knowledge': {
+      title: 'Introduction to Zero Knowledge',
+      description: 'Learn the fundamentals of Zero Knowledge proofs and zkVMs',
       content: [
         {
           type: 'text',
-          content: 'Zero-knowledge proofs are cryptographic methods that allow one party (the prover) to prove to another party (the verifier) that a statement is true without revealing any information beyond the validity of the statement itself.'
-        },
-        {
-          type: 'code',
-          language: 'rust',
-          content: `// Example of a simple ZK proof program
-fn main() {
-    // Define a secret value
-    let secret: u64 = 42;
-    
-    // Prove that we know a number that, when squared, equals 1764
-    // without revealing the number itself
-    let squared = secret * secret;
-    assert_eq!(squared, 1764);
-}`
+          content: 'Zero-knowledge proofs (ZKPs) are cryptographic methods that allow one party (the prover) to prove to another party (the verifier) that a statement is true without revealing any information beyond the validity of the statement itself. This powerful concept enables privacy-preserving computation and verification.'
         },
         {
           type: 'info',
-          title: 'Key Properties',
+          title: 'Key Properties of Zero Knowledge Proofs',
           content: [
             'Completeness: If the statement is true, an honest verifier will be convinced by an honest prover',
             'Soundness: If the statement is false, no cheating prover can convince an honest verifier',
             'Zero-Knowledge: The verifier learns nothing other than the fact that the statement is true'
           ]
+        },
+        {
+          type: 'text',
+          content: 'There are several types of zero-knowledge proofs, but the most practical for general-purpose computation are SNARKs (Succinct Non-interactive ARguments of Knowledge) and STARKs (Scalable Transparent ARguments of Knowledge).'
+        },
+        {
+          type: 'info',
+          title: 'SNARKs vs STARKs',
+          content: [
+            'SNARKs: Smaller proof size, faster verification, but require trusted setup',
+            'STARKs: No trusted setup, post-quantum secure, but larger proof size',
+            'STARK→SNARK: Combines STARK security with SNARK efficiency',
+            'Both support general computation through arithmetic circuits'
+          ]
+        },
+        {
+          type: 'text',
+          content: 'A Zero Knowledge Virtual Machine (zkVM) is a specialized virtual machine that can execute programs while generating cryptographic proofs of correct execution. These proofs can be verified by others without revealing the program\'s inputs or intermediate states. zkVMs make it possible to write programs in familiar languages like Rust and automatically generate zero-knowledge proofs of their execution.'
+        },
+        {
+          type: 'info',
+          title: 'Why Use a zkVM?',
+          content: [
+            'Write programs in familiar languages (Rust, C++)',
+            'Automatic proof generation for program execution',
+            'No need to manually design circuits',
+            'Hardware acceleration support for better performance',
+            'Production-ready security through audited implementations'
+          ]
+        },
+        {
+          type: 'text',
+          content: 'zkVMs typically work by translating program execution into a series of arithmetic constraints that can be proven using SNARKs or STARKs. This allows developers to focus on writing their application logic rather than dealing with the complexities of zero-knowledge proof systems.'
+        },
+        {
+          type: 'info',
+          title: 'Common zkVM Applications',
+          content: [
+            'Private Smart Contract Execution',
+            'Verifiable Computation Outsourcing',
+            'Privacy-Preserving State Updates',
+            'Secure Multi-Party Computation',
+            'Identity and Credential Verification'
+          ]
+        },
+        {
+          type: 'text',
+          content: 'The zkVM ecosystem is primarily dominated by two major implementations: RISC0 and SP1. Each has its own unique architecture and trade-offs, but both enable developers to write and prove general-purpose programs.'
+        },
+        {
+          type: 'info',
+          title: 'Key zkVM Components',
+          content: [
+            'Execution Environment: Runs the program and records execution trace',
+            'Proving System: Generates proof of correct execution',
+            'Verification System: Validates proofs efficiently',
+            'Memory Management: Handles program state and storage',
+            'I/O Interface: Manages inputs and outputs securely'
+          ]
+        },
+        {
+          type: 'text',
+          content: 'When writing programs for zkVMs, developers need to consider certain constraints and best practices to ensure efficient proof generation:'
+        },
+        {
+          type: 'info',
+          title: 'zkVM Development Considerations',
+          content: [
+            'Deterministic Execution: Programs must be deterministic',
+            'Resource Constraints: Memory and computation affect proving time',
+            'Precompiles: Use optimized operations when available',
+            'I/O Handling: Carefully manage public and private inputs',
+            'Proof Size: Consider verification costs and storage requirements'
+          ]
+        },
+        {
+          type: 'text',
+          content: 'zkRust simplifies zkVM development by providing a unified interface for multiple zkVMs, allowing developers to write code once and deploy to different proving systems. This abstraction helps developers focus on their application logic while maintaining the flexibility to choose the most suitable zkVM for their specific needs.'
         }
       ]
     },
-    'Understanding ZKVMs': {
+    'Understanding zkVMs in Depth': {
       title: 'Understanding Zero-Knowledge Virtual Machines',
-      description: 'Learn about the leading Zero-Knowledge Virtual Machines (ZKVMs) and their key features.',
+      description: 'Deep dive into RISC0 and SP1 zkVMs',
       content: [
         {
           type: 'text',
-          content: 'Zero-Knowledge Virtual Machines (ZKVMs) are specialized runtime environments that enable the execution of programs while generating zero-knowledge proofs of their correct execution. Let\'s explore two leading ZKVMs in the ecosystem:'
+          content: 'Zero-Knowledge Virtual Machines (ZKVMs) are specialized runtime environments that enable the execution of programs while generating zero-knowledge proofs of their correct execution.'
         },
         {
           type: 'info',
@@ -130,10 +183,6 @@ fn main() {
 }`
         },
         {
-          type: 'text',
-          content: 'RISC0\'s architecture includes three main circuits: a RISC-V circuit for program execution, a recursion circuit for cryptographic operations, and a STARK-to-SNARK circuit for generating compact proofs (~200kB) suitable for EVM verification.'
-        },
-        {
           type: 'info',
           title: 'SP1',
           content: [
@@ -142,41 +191,143 @@ fn main() {
             'Includes optimized precompiles for hash functions and cryptographic operations',
             'Used in production by projects like Blobstream and Vector'
           ]
+        }
+      ]
+    },
+    'Getting Started with zkRust': {
+      title: 'Getting Started with zkRust',
+      description: 'Learn how to use zkRust for cross-zkVM development',
+      content: [
+        {
+          type: 'text',
+          content: 'zkRust is a CLI tool that simplifies developing zk applications in Rust using zkVMs such as SP1 or RISC0. It abstracts the complexity of using zkVMs and provides developers the choice of which zkVM they would like to develop with.'
+        },
+        {
+          type: 'info',
+          title: 'Prerequisites',
+          content: [
+            'Rust installed on your machine (rustc, cargo)',
+            'Basic understanding of Rust programming',
+            'Git for version control',
+            'Docker (optional, for containerized development)'
+          ]
+        },
+        {
+          type: 'text',
+          content: 'There are two ways to install zkRust: direct installation using the install script, or building from source for local development.'
+        },
+        {
+          type: 'code',
+          language: 'bash',
+          content: `# Direct installation
+curl -L https://raw.githubusercontent.com/yetanotherco/zkRust/main/install_zkrust.sh | bash
+
+# For local development
+git clone https://github.com/ProofLabDev/zkRust.git
+cd zkRust
+make install`
+        },
+        {
+          type: 'info',
+          title: 'Project Structure',
+          content: [
+            'main.rs: Contains the main program logic executed in the zkVM',
+            'input(): Optional function for preprocessing before VM execution',
+            'output(): Optional function for post-processing after VM execution',
+            'lib/: Optional directory for shared libraries'
+          ]
+        },
+        {
+          type: 'code',
+          language: 'text',
+          content: `# Basic project structure
+.
+├── Cargo.toml
+├── lib/          # Optional
+└── src
+    └── main.rs`
+        },
+        {
+          type: 'text',
+          content: 'To create your first zkRust program, you need to define a main() function that will be executed within the zkVM. You can also optionally define input() and output() functions for pre/post processing.'
         },
         {
           type: 'code',
           language: 'rust',
-          content: `// Example SP1 program
-use sp1_core::prelude::*;
+          content: `use zk_rust_io;
 
-fn main() {
-    let input = read_input();
+// Optional: Runs before zkVM execution
+pub fn input() {
+    let data = "Hello zkRust!".to_string();
+    // Write data to be used in the VM
+    zk_rust_io::write(&data);
+}
+
+// Main function executed in zkVM
+pub fn main() {
+    // Read input data in the VM
+    let message: String = zk_rust_io::read();
     
-    // Leverage optimized precompiles
-    let hash = sha256::hash(input);
+    // Perform computation
+    let result = process_data(message);
     
-    // Write public output
-    write_output(hash);
+    // Write result to VM output buffer
+    zk_rust_io::commit(&result);
+}
+
+// Optional: Runs after zkVM execution
+pub fn output() {
+    // Read result from VM output buffer
+    let result: String = zk_rust_io::out();
+    println!("Result: {}", result);
 }`
         },
         {
+          type: 'info',
+          title: 'Running Your Program',
+          content: [
+            'Generate proof with RISC0: cargo run --release -- prove-risc0',
+            'Generate proof with SP1: cargo run --release -- prove-sp1',
+            'Use --precompiles flag for hardware acceleration',
+            'Use --submit-to-aligned to submit proofs to Aligned Layer'
+          ]
+        },
+        {
           type: 'text',
-          content: 'SP1 uses STARKs with FRI over the Baby Bear field and includes a STARK→SNARK wrapping system for generating efficient proofs that can be verified on EVM chains with ~300k gas cost.'
+          content: 'zkRust provides a unified I/O interface through the zk_rust_io crate. Add it to your Cargo.toml:'
+        },
+        {
+          type: 'code',
+          language: 'toml',
+          content: `[dependencies]
+zk_rust_io = { git = "https://github.com/yetanotherco/zkRust.git" }`
         },
         {
           type: 'info',
-          title: 'Key Comparison Points',
+          title: 'Available Examples',
           content: [
-            'Both support unbounded computation through recursive proving',
-            'Both offer extensive hardware acceleration (CPU AVX, GPU CUDA)',
-            'RISC0 additionally supports Apple Metal for M-series chips',
-            'Both are MIT licensed (SP1 also offers Apache 2.0)',
-            'Both have completed multiple security audits'
+            'Fibonacci number computation',
+            'RSA key verification',
+            'ECDSA signature verification',
+            'Blockchain state diff verification',
+            'SHA256 hash computation',
+            'Interactive quiz system'
           ]
+        },
+        {
+          type: 'text',
+          content: 'For faster development and better performance when using Docker, you can mount the Rust cache directories:'
+        },
+        {
+          type: 'code',
+          language: 'bash',
+          content: `docker run -it \\
+  -v "$HOME/.cargo/registry:/root/.cargo/registry" \\
+  -v "$HOME/.cargo/git:/root/.cargo/git" \\
+  zkrust bash`
         }
       ]
     }
-    // Add more content sections here
   };
 
   const sectionContent = content[section];
@@ -250,7 +401,7 @@ fn main() {
 };
 
 const Learn = () => {
-  const [activeSection, setActiveSection] = useState('Introduction to ZK Proofs');
+  const [activeSection, setActiveSection] = useState('Introduction to Zero Knowledge');
 
   return (
     <div className="min-h-screen bg-white pt-16">

@@ -1,22 +1,22 @@
 {
   "quickStart": {
     "title": "Quick Start Guide",
-    "description": "Get started with Zero Knowledge development",
+    "description": "Get started with Zero Knowledge development using zkRust",
     "sections": [
       {
-        "title": "Understanding ZK Proofs",
-        "content": "Basic concepts and terminology",
-        "duration": "10 min"
-      },
-      {
-        "title": "Setting Up Your Environment",
-        "content": "Install required tools and dependencies",
+        "title": "Installation & Setup",
+        "content": "Install zkRust and required dependencies",
         "duration": "15 min"
       },
       {
-        "title": "Your First ZK Program",
-        "content": "Build and test a simple ZK application",
-        "duration": "30 min"
+        "title": "Writing Your First Program",
+        "content": "Create and run your first zkRust program",
+        "duration": "20 min"
+      },
+      {
+        "title": "Deploying to zkVMs",
+        "content": "Deploy your program to different zkVMs",
+        "duration": "25 min"
       }
     ]
   },
@@ -27,7 +27,7 @@
         {
           "id": "intro-zk",
           "title": "Introduction to Zero Knowledge",
-          "description": "Learn the fundamentals of Zero Knowledge proofs and their applications",
+          "description": "Learn the fundamentals of Zero Knowledge proofs and zkVMs",
           "level": "Beginner",
           "levelClass": "bg-green-100 text-green-800",
           "iconBg": "bg-green-100",
@@ -35,26 +35,26 @@
           "duration": "45 min",
           "topics": [
             "What are Zero Knowledge Proofs?",
-            "Types of ZK Proofs",
-            "Real-world Applications",
-            "Basic Cryptographic Concepts"
+            "Understanding zkVMs",
+            "Key Properties: Completeness, Soundness, Zero-Knowledge",
+            "Real-world Applications"
           ],
           "prerequisites": []
         },
         {
-          "id": "dev-setup",
-          "title": "ZK Development Setup",
-          "description": "Set up your development environment for ZK programming",
+          "id": "zkrust-intro",
+          "title": "Getting Started with zkRust",
+          "description": "Learn how to use zkRust for cross-zkVM development",
           "level": "Beginner",
           "levelClass": "bg-green-100 text-green-800",
           "iconBg": "bg-green-100",
           "iconColor": "text-green-600",
-          "duration": "30 min",
+          "duration": "60 min",
           "topics": [
-            "Development Tools",
-            "Environment Configuration",
-            "Testing Framework Setup",
-            "IDE Integration"
+            "Installing zkRust and Dependencies",
+            "Project Structure and Setup",
+            "Writing Your First zkRust Program",
+            "Understanding I/O Functions"
           ],
           "prerequisites": ["intro-zk"]
         }
@@ -64,77 +64,79 @@
       "title": "Core Concepts",
       "resources": [
         {
-          "id": "circuit-design",
-          "title": "ZK Circuit Design",
-          "description": "Understanding how to design efficient ZK circuits",
+          "id": "zkvm-deep-dive",
+          "title": "Understanding zkVMs in Depth",
+          "description": "Deep dive into RISC0 and SP1 zkVMs",
+          "level": "Intermediate",
+          "levelClass": "bg-blue-100 text-blue-800",
+          "iconBg": "bg-blue-100",
+          "iconColor": "text-blue-600",
+          "duration": "90 min",
+          "topics": [
+            "RISC0: STARK→SNARK Architecture",
+            "SP1: STARK + FRI Based System",
+            "Hardware Acceleration Options",
+            "Comparing zkVM Features"
+          ],
+          "prerequisites": ["zkrust-intro"]
+        },
+        {
+          "id": "program-structure",
+          "title": "zkRust Program Structure",
+          "description": "Learn how to structure zkRust programs effectively",
           "level": "Intermediate",
           "levelClass": "bg-blue-100 text-blue-800",
           "iconBg": "bg-blue-100",
           "iconColor": "text-blue-600",
           "duration": "60 min",
           "topics": [
-            "Circuit Components",
-            "Constraint Systems",
-            "Optimization Techniques",
-            "Common Patterns"
+            "Main Function Structure",
+            "Input/Output Functions",
+            "Guest vs Host Code",
+            "Working with Libraries"
           ],
-          "prerequisites": ["intro-zk", "dev-setup"]
-        },
-        {
-          "id": "performance-opt",
-          "title": "Performance Optimization",
-          "description": "Learn techniques to optimize your ZK proofs",
-          "level": "Advanced",
-          "levelClass": "bg-purple-100 text-purple-800",
-          "iconBg": "bg-purple-100",
-          "iconColor": "text-purple-600",
-          "duration": "90 min",
-          "topics": [
-            "Proof Generation Optimization",
-            "Memory Management",
-            "Parallel Processing",
-            "Benchmarking"
-          ],
-          "prerequisites": ["circuit-design"]
+          "prerequisites": ["zkrust-intro"]
         }
       ]
     },
     {
-      "title": "Best Practices",
+      "title": "Advanced Topics",
       "resources": [
         {
-          "id": "security",
-          "title": "Security Considerations",
-          "description": "Best practices for secure ZK implementation",
-          "level": "Intermediate",
-          "levelClass": "bg-blue-100 text-blue-800",
-          "iconBg": "bg-blue-100",
-          "iconColor": "text-blue-600",
-          "duration": "75 min",
+          "id": "performance-optimization",
+          "title": "Performance Optimization",
+          "description": "Optimize your zkRust programs for different zkVMs",
+          "level": "Advanced",
+          "levelClass": "bg-purple-100 text-purple-800",
+          "iconBg": "bg-purple-100",
+          "iconColor": "text-purple-600",
+          "duration": "120 min",
           "topics": [
-            "Common Vulnerabilities",
-            "Security Patterns",
-            "Audit Preparation",
-            "Threat Modeling"
+            "Using Precompiles",
+            "Hardware Acceleration",
+            "Memory Management",
+            "Optimizing Proof Generation"
           ],
-          "prerequisites": ["circuit-design"]
+          "prerequisites": ["zkvm-deep-dive", "program-structure"]
         },
         {
-          "id": "testing",
-          "title": "Testing Strategies",
-          "description": "Comprehensive testing approaches for ZK applications",
-          "level": "Intermediate",
-          "levelClass": "bg-blue-100 text-blue-800",
-          "iconBg": "bg-blue-100",
-          "iconColor": "text-blue-600",
-          "duration": "60 min",
+          "id": "example-applications",
+          "title": "Example Applications",
+          "description": "Learn from real-world zkRust applications",
+          "level": "Advanced",
+          "levelClass": "bg-purple-100 text-purple-800",
+          "iconBg": "bg-purple-100",
+          "iconColor": "text-purple-600",
+          "duration": "180 min",
           "topics": [
-            "Unit Testing",
-            "Integration Testing",
-            "Proof Verification",
-            "Performance Testing"
+            "Fibonacci Computation",
+            "RSA Key Verification",
+            "ECDSA Programs",
+            "Blockchain State Verification",
+            "SHA256 Implementation",
+            "Interactive Quiz Systems"
           ],
-          "prerequisites": ["circuit-design"]
+          "prerequisites": ["performance-optimization"]
         }
       ]
     }
@@ -145,29 +147,29 @@
         "title": "API Reference",
         "items": [
           {
-            "title": "Core API",
-            "path": "/docs/api/core"
+            "title": "zkRust Core API",
+            "path": "/docs/api/zkrust-core"
           },
           {
-            "title": "Circuit API",
-            "path": "/docs/api/circuit"
+            "title": "I/O Functions",
+            "path": "/docs/api/io-functions"
           },
           {
-            "title": "Prover API",
-            "path": "/docs/api/prover"
+            "title": "Precompiles",
+            "path": "/docs/api/precompiles"
           }
         ]
       },
       {
-        "title": "Integration Guides",
+        "title": "zkVM Integration",
         "items": [
           {
-            "title": "Web Integration",
-            "path": "/docs/integration/web"
+            "title": "RISC0 Integration",
+            "path": "/docs/zkvm/risc0"
           },
           {
-            "title": "Blockchain Integration",
-            "path": "/docs/integration/blockchain"
+            "title": "SP1 Integration",
+            "path": "/docs/zkvm/sp1"
           }
         ]
       },
@@ -175,12 +177,16 @@
         "title": "Examples",
         "items": [
           {
-            "title": "Simple Proof Generation",
-            "path": "/docs/examples/simple-proof"
+            "title": "Basic Examples",
+            "path": "/docs/examples/basic"
           },
           {
-            "title": "Complex Circuit Design",
-            "path": "/docs/examples/complex-circuit"
+            "title": "Advanced Examples",
+            "path": "/docs/examples/advanced"
+          },
+          {
+            "title": "Real-world Applications",
+            "path": "/docs/examples/applications"
           }
         ]
       }
