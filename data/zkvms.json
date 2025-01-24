@@ -13,6 +13,43 @@
         { "label": "Base Memory Usage", "value": "1.2GB" },
         { "label": "Verification Time", "value": "0.1s" }
       ],
+      "healthMetrics": {
+        "proofGeneration": {
+          "status": "optimal",
+          "title": "Proof generation",
+          "description": "Average proof generation time is within optimal range",
+          "value": "2.3s",
+          "threshold": "< 5s"
+        },
+        "memoryUsage": {
+          "status": "warning",
+          "title": "Memory usage",
+          "description": "System memory utilization is higher than recommended",
+          "value": "1.2GB",
+          "threshold": "< 1GB"
+        },
+        "verificationTime": {
+          "status": "optimal",
+          "title": "Verification",
+          "description": "Proof verification time is within optimal range",
+          "value": "0.1s",
+          "threshold": "< 0.5s"
+        },
+        "compilerStatus": {
+          "status": "optimal",
+          "title": "Compiler",
+          "description": "Compiler is functioning normally with all optimizations",
+          "value": "Stable",
+          "threshold": "Production ready"
+        },
+        "systemUptime": {
+          "status": "optimal",
+          "title": "System uptime",
+          "description": "System has been running without interruption",
+          "value": "99.9%",
+          "threshold": "> 99.9%"
+        }
+      },
       "features": [
         "RISC-V instruction set",
         "Rust native integration",
@@ -43,6 +80,43 @@
         { "label": "Base Memory Usage", "value": "0.8GB" },
         { "label": "Verification Time", "value": "0.05s" }
       ],
+      "healthMetrics": {
+        "proofGeneration": {
+          "status": "optimal",
+          "title": "Proof generation",
+          "description": "Average proof generation time is within optimal range",
+          "value": "1.5s",
+          "threshold": "< 5s"
+        },
+        "memoryUsage": {
+          "status": "optimal",
+          "title": "Memory usage",
+          "description": "System memory utilization is within optimal range",
+          "value": "0.8GB",
+          "threshold": "< 1GB"
+        },
+        "verificationTime": {
+          "status": "optimal",
+          "title": "Verification",
+          "description": "Proof verification time is within optimal range",
+          "value": "0.05s",
+          "threshold": "< 0.5s"
+        },
+        "compilerStatus": {
+          "status": "optimal",
+          "title": "Compiler",
+          "description": "Compiler is functioning normally with all optimizations",
+          "value": "Stable",
+          "threshold": "Production ready"
+        },
+        "systemUptime": {
+          "status": "optimal",
+          "title": "System uptime",
+          "description": "System has been running without interruption",
+          "value": "99.9%",
+          "threshold": "> 99.9%"
+        }
+      },
       "features": [
         "Custom instruction set",
         "STARK-based proofs",
@@ -59,64 +133,6 @@
       "github": "https://github.com/succinctlabs/sp1",
       "lastUpdated": "2024-01-20",
       "status": "production"
-    },
-    {
-      "id": "polygon-zkevm",
-      "name": "Polygon zkEVM",
-      "description": "A zero-knowledge Ethereum Virtual Machine that enables native Ethereum smart contract execution",
-      "category": "evm-compatible",
-      "runtimeLanguage": "rust",
-      "supportedLanguages": ["solidity", "vyper"],
-      "performance": "high",
-      "metrics": [
-        { "label": "Base Proving Time", "value": "1.8s" },
-        { "label": "Base Memory Usage", "value": "0.9GB" },
-        { "label": "Verification Time", "value": "0.08s" }
-      ],
-      "features": [
-        "EVM bytecode compatibility",
-        "Native asset bridging",
-        "Smart contract privacy",
-        "Ethereum tooling support"
-      ],
-      "architecture": {
-        "type": "EVM",
-        "proofSystem": "STARK",
-        "memoryModel": "EVM Storage"
-      },
-      "documentation": "https://wiki.polygon.technology/docs/zkevm/",
-      "github": "https://github.com/0xPolygonHermez",
-      "lastUpdated": "2024-01-18",
-      "status": "production"
-    },
-    {
-      "id": "miden",
-      "name": "Miden VM",
-      "description": "A STARK-based virtual machine with a custom assembly language for zero-knowledge computations",
-      "category": "general-purpose",
-      "runtimeLanguage": "rust",
-      "supportedLanguages": ["assembly", "rust"],
-      "performance": "high",
-      "metrics": [
-        { "label": "Base Proving Time", "value": "1.5s" },
-        { "label": "Base Memory Usage", "value": "0.8GB" },
-        { "label": "Verification Time", "value": "0.05s" }
-      ],
-      "features": [
-        "Custom assembly language",
-        "STARK-based proofs",
-        "Advanced memory management",
-        "Optimized for specific use cases"
-      ],
-      "architecture": {
-        "type": "Custom Assembly",
-        "proofSystem": "STARK",
-        "memoryModel": "Stack-based"
-      },
-      "documentation": "https://wiki.polygon.technology/docs/miden/",
-      "github": "https://github.com/0xPolygonMiden/miden-vm",
-      "lastUpdated": "2024-01-10",
-      "status": "beta"
     }
   ]
 } 
