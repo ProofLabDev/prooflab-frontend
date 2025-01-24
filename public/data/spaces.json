@@ -135,6 +135,176 @@
       "demoUrl": "https://demo.example.com/private-dex",
       "githubUrl": "https://github.com/example/private-dex",
       "lastUpdated": "2024-01-20"
+    },
+    {
+      "id": "zk-social-graph",
+      "name": "Private Social Graph",
+      "description": "Social networking with privacy-preserving friend connections",
+      "longDescription": "A social networking platform that allows users to prove they are connected to others without revealing their entire social graph. Perfect for private professional networking and connection verification.",
+      "tags": ["Social", "Privacy", "Networking"],
+      "implementation": {
+        "zkvm": "risc0",
+        "programs": ["merkle-tree", "sha256"],
+        "customPrograms": [
+          {
+            "name": "graph-proof",
+            "description": "Custom program for proving social connections without revealing the entire graph",
+            "metrics": {
+              "proving_time": "1.2s",
+              "memory_usage": "800MB",
+              "verification_time": "0.04s"
+            }
+          }
+        ]
+      },
+      "creator": {
+        "name": "Privacy Social",
+        "avatar": "https://example.com/privacy-social.png"
+      },
+      "metrics": {
+        "users": 1800,
+        "transactions": 8000,
+        "avgProofTime": "0.9s"
+      },
+      "demoUrl": "https://demo.example.com/zk-social",
+      "githubUrl": "https://github.com/example/zk-social",
+      "lastUpdated": "2024-01-22"
+    },
+    {
+      "id": "private-ml-inference",
+      "name": "Private ML Inference",
+      "description": "Zero-knowledge machine learning model inference",
+      "longDescription": "Run machine learning models on private data while proving the computation was done correctly. Enables privacy-preserving AI applications without revealing input data.",
+      "tags": ["AI", "Machine Learning", "Privacy"],
+      "implementation": {
+        "zkvm": "risc0",
+        "programs": ["sha256", "floating-point"],
+        "customPrograms": [
+          {
+            "name": "ml-inference",
+            "description": "Custom program for private ML model inference and proof generation",
+            "metrics": {
+              "proving_time": "3.5s",
+              "memory_usage": "1.5GB",
+              "verification_time": "0.08s"
+            }
+          }
+        ]
+      },
+      "creator": {
+        "name": "AI Privacy Labs",
+        "avatar": "https://example.com/ai-privacy.png"
+      },
+      "metrics": {
+        "users": 500,
+        "transactions": 10000,
+        "avgProofTime": "2.8s"
+      },
+      "demoUrl": "https://demo.example.com/private-ml",
+      "githubUrl": "https://github.com/example/private-ml",
+      "lastUpdated": "2024-01-25"
+    },
+    {
+      "id": "zk-reputation",
+      "name": "Anonymous Reputation System",
+      "description": "Build reputation without revealing identity",
+      "longDescription": "A system that allows users to accumulate and prove their reputation scores across different platforms without linking their identities, using zero-knowledge proofs.",
+      "tags": ["Identity", "Reputation", "Privacy"],
+      "implementation": {
+        "zkvm": "sp1",
+        "programs": ["eddsa", "merkle-tree"],
+        "customPrograms": [
+          {
+            "name": "reputation-proof",
+            "description": "Custom program for aggregating and proving reputation scores",
+            "metrics": {
+              "proving_time": "1.4s",
+              "memory_usage": "900MB",
+              "verification_time": "0.05s"
+            }
+          }
+        ]
+      },
+      "creator": {
+        "name": "Trust Systems",
+        "avatar": "https://example.com/trust-systems.png"
+      },
+      "metrics": {
+        "users": 2200,
+        "transactions": 18000,
+        "avgProofTime": "1.1s"
+      },
+      "demoUrl": "https://demo.example.com/zk-reputation",
+      "githubUrl": "https://github.com/example/zk-reputation",
+      "lastUpdated": "2024-01-23"
+    },
+    {
+      "id": "private-auctions",
+      "name": "Zero-Knowledge Auctions",
+      "description": "Private bidding system with verifiable outcomes",
+      "longDescription": "A sealed-bid auction system where bids remain private until the auction ends, with zero-knowledge proofs ensuring fair price discovery and winner selection.",
+      "tags": ["DeFi", "Auctions", "Privacy"],
+      "implementation": {
+        "zkvm": "sp1",
+        "programs": ["eddsa", "sha256"],
+        "customPrograms": [
+          {
+            "name": "auction-resolver",
+            "description": "Custom program for private bid processing and winner selection",
+            "metrics": {
+              "proving_time": "1.8s",
+              "memory_usage": "950MB",
+              "verification_time": "0.06s"
+            }
+          }
+        ]
+      },
+      "creator": {
+        "name": "Fair Auctions",
+        "avatar": "https://example.com/fair-auctions.png"
+      },
+      "metrics": {
+        "users": 1500,
+        "transactions": 7500,
+        "avgProofTime": "1.3s"
+      },
+      "demoUrl": "https://demo.example.com/private-auctions",
+      "githubUrl": "https://github.com/example/private-auctions",
+      "lastUpdated": "2024-01-24"
+    },
+    {
+      "id": "zk-messaging",
+      "name": "Private Messaging Protocol",
+      "description": "End-to-end encrypted messaging with proof of delivery",
+      "longDescription": "A messaging system that provides end-to-end encryption with zero-knowledge proofs for message delivery and reading receipts, without compromising metadata privacy.",
+      "tags": ["Communication", "Privacy", "Messaging"],
+      "implementation": {
+        "zkvm": "risc0",
+        "programs": ["eddsa", "sha256"],
+        "customPrograms": [
+          {
+            "name": "message-proof",
+            "description": "Custom program for proving message delivery and receipt",
+            "metrics": {
+              "proving_time": "0.8s",
+              "memory_usage": "600MB",
+              "verification_time": "0.03s"
+            }
+          }
+        ]
+      },
+      "creator": {
+        "name": "Private Comms",
+        "avatar": "https://example.com/private-comms.png"
+      },
+      "metrics": {
+        "users": 3000,
+        "transactions": 50000,
+        "avgProofTime": "0.6s"
+      },
+      "demoUrl": "https://demo.example.com/zk-messaging",
+      "githubUrl": "https://github.com/example/zk-messaging",
+      "lastUpdated": "2024-01-26"
     }
   ]
 } 
