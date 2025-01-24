@@ -1,87 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background with subtle gradient -->
-  <rect width="1200" height="630" fill="url(#gradient)"/>
-  
-  <!-- Background pattern - subtle dots instead of squares -->
-  <g fill="#4338CA08">
-    <circle cx="100" cy="100" r="4"/>
-    <circle cx="300" cy="150" r="4"/>
-    <circle cx="500" cy="200" r="4"/>
-    <circle cx="700" cy="250" r="4"/>
-    <circle cx="900" cy="300" r="4"/>
-    <circle cx="200" cy="400" r="4"/>
-    <circle cx="400" cy="350" r="4"/>
-    <circle cx="600" cy="100" r="4"/>
-    <circle cx="800" cy="200" r="4"/>
-    <circle cx="1000" cy="400" r="4"/>
-  </g>
-  
-  <!-- Main content container -->
-  <rect x="100" y="100" width="1000" height="430" rx="16" fill="white" class="glow"/>
-  
-  <!-- Content -->
-  <g transform="translate(150, 180)">
-    <!-- Title with emoji -->
-    <text font-family="system-ui" font-weight="800" font-size="72" fill="#111827" letter-spacing="-0.02em">
-      <tspan>⚡️ ProofLab</tspan>
-    </text>
-    
-    <!-- Tagline with gradient text -->
-    <text y="80" font-family="system-ui" font-weight="600" font-size="36">
-      <tspan fill="url(#textGradient)">zkVM Benchmarking Platform</tspan>
-    </text>
-    
-    <!-- Feature points with modern icons -->
-    <g transform="translate(0, 140)" font-family="system-ui" font-size="24" fill="#4B5563" font-weight="500">
-      <g>
-        <circle cx="12" cy="12" r="12" fill="#4F46E5" fill-opacity="0.1"/>
-        <text x="40" y="20">Compare zkVM implementations side-by-side</text>
-      </g>
-      <g transform="translate(0, 50)">
-        <circle cx="12" cy="12" r="12" fill="#4F46E5" fill-opacity="0.1"/>
-        <text x="40" y="20">Write once, prove anywhere with zkRust</text>
-      </g>
-      <g transform="translate(0, 100)">
-        <circle cx="12" cy="12" r="12" fill="#4F46E5" fill-opacity="0.1"/>
-        <text x="40" y="20">Real-world performance metrics</text>
-      </g>
-    </g>
-  </g>
-  
-  <!-- Decorative elements -->
-  <circle cx="950" cy="200" r="120" fill="url(#circleGradient)" fill-opacity="0.1"/>
-  <circle cx="1000" cy="250" r="80" fill="url(#circleGradient)" fill-opacity="0.05"/>
-  
-  <!-- Definitions -->
   <defs>
     <!-- Background gradient -->
-    <linearGradient id="gradient" x1="0" y1="0" x2="1200" y2="630">
-      <stop offset="0%" stop-color="#F9FAFB"/>
-      <stop offset="100%" stop-color="#F3F4F6"/>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="0" y2="630">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#0B1120"/>
     </linearGradient>
     
-    <!-- Text gradient -->
-    <linearGradient id="textGradient" x1="0" y1="0" x2="400" y2="0">
+    <!-- Button gradient -->
+    <linearGradient id="buttonGradient" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#4F46E5"/>
-      <stop offset="100%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#4338CA"/>
     </linearGradient>
-    
-    <!-- Circle gradient -->
-    <radialGradient id="circleGradient">
-      <stop offset="0%" stop-color="#4F46E5"/>
-      <stop offset="100%" stop-color="#7C3AED"/>
-    </radialGradient>
     
     <!-- Glow effect -->
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="4" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="20" />
+    </filter>
+    
+    <!-- Button glow -->
+    <filter id="buttonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" />
     </filter>
   </defs>
+
+  <!-- Main background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
   
-  <style>
-    .glow {
-      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
-    }
-  </style>
+  <!-- Decorative glows -->
+  <circle cx="1000" cy="200" r="300" fill="#312E81" filter="url(#glow)" opacity="0.15"/>
+  <circle cx="200" cy="430" r="250" fill="#312E81" filter="url(#glow)" opacity="0.15"/>
+  
+  <!-- Content container - centered at 600,285 (middle of viewport) -->
+  <g transform="translate(600, 285)">
+    <!-- Main title -->
+    <text font-family="system-ui" font-weight="800" font-size="64" fill="white" letter-spacing="-0.02em" text-anchor="middle">
+      <tspan x="0" y="-80">The Zero Knowledge Community</tspan>
+    </text>
+    
+    <!-- Subtitle -->
+    <text font-family="system-ui" font-weight="600" font-size="48" fill="#A5B4FC" text-anchor="middle">
+      <tspan x="0" y="0">building the future.</tspan>
+    </text>
+
+    <!-- Description -->
+    <text font-family="system-ui" font-weight="400" font-size="24" fill="#94A3B8" text-anchor="middle">
+      <tspan x="0" y="80">The platform where the zero-knowledge community collaborates</tspan>
+      <tspan x="0" y="110">on ZKVMs, programs, and benchmarks.</tspan>
+    </text>
+
+    <!-- Get Started Button -->
+    <g transform="translate(0, 180)">
+      <!-- Button shadow/glow -->
+      <rect x="-85" y="-25" width="170" height="50" rx="25" fill="#4338CA" filter="url(#buttonGlow)" opacity="0.3"/>
+      <!-- Button background -->
+      <rect x="-85" y="-25" width="170" height="50" rx="25" fill="url(#buttonGradient)"/>
+      <!-- Button text -->
+      <text font-family="system-ui" font-weight="600" font-size="20" fill="white" text-anchor="middle" dominant-baseline="middle">
+        Get Started
+      </text>
+    </g>
+  </g>
 </svg> 
