@@ -13,6 +13,7 @@ import ZKSpaces from './components/ZKSpaces/ZKSpaces';
 import Learn from './components/Learn/Learn';
 import ZKVMs from './components/ZKVMs/ZKVMs';
 import Home from './components/Home/Home';
+import ZKVMDetails from './components/ZKVMs/ZKVMDetails';
 
 const Navigation = () => {
   const location = useLocation();
@@ -196,6 +197,7 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/zkvms" element={<ZKVMs />} />
+          <Route path="/zkvms/:id" element={<ZKVMDetails />} />
           <Route path="/programs" element={<Programs />} />
           <Route path="/spaces" element={<ZKSpaces />} />
           <Route path="/benchmarks" element={<LeaderboardTable />} />

@@ -93,6 +93,88 @@ fn main() {
           ]
         }
       ]
+    },
+    'Understanding ZKVMs': {
+      title: 'Understanding Zero-Knowledge Virtual Machines',
+      description: 'Learn about the leading Zero-Knowledge Virtual Machines (ZKVMs) and their key features.',
+      content: [
+        {
+          type: 'text',
+          content: 'Zero-Knowledge Virtual Machines (ZKVMs) are specialized runtime environments that enable the execution of programs while generating zero-knowledge proofs of their correct execution. Let\'s explore two leading ZKVMs in the ecosystem:'
+        },
+        {
+          type: 'info',
+          title: 'RISC0',
+          content: [
+            'RISC-V based zkVM with STARK→SNARK architecture',
+            'Supports Rust (core/std), C, and C++ through LLVM',
+            'Features extensive cryptographic precompiles including SHA-256, RSA, and ECDSA',
+            'Production-ready with zkVM 1.0 release and multiple security audits'
+          ]
+        },
+        {
+          type: 'code',
+          language: 'rust',
+          content: `// Example RISC0 program
+use risc0_zkvm::guest::env;
+
+fn main() {
+    // Read private input
+    let secret: u64 = env::read();
+    
+    // Perform computation
+    let result = expensive_computation(secret);
+    
+    // Public output
+    env::commit(&result);
+}`
+        },
+        {
+          type: 'text',
+          content: 'RISC0\'s architecture includes three main circuits: a RISC-V circuit for program execution, a recursion circuit for cryptographic operations, and a STARK-to-SNARK circuit for generating compact proofs (~200kB) suitable for EVM verification.'
+        },
+        {
+          type: 'info',
+          title: 'SP1',
+          content: [
+            'STARK + FRI based zkVM with STARK→SNARK wrapping',
+            'Supports any LLVM-compiled language, with primary Rust support',
+            'Includes optimized precompiles for hash functions and cryptographic operations',
+            'Used in production by projects like Blobstream and Vector'
+          ]
+        },
+        {
+          type: 'code',
+          language: 'rust',
+          content: `// Example SP1 program
+use sp1_core::prelude::*;
+
+fn main() {
+    let input = read_input();
+    
+    // Leverage optimized precompiles
+    let hash = sha256::hash(input);
+    
+    // Write public output
+    write_output(hash);
+}`
+        },
+        {
+          type: 'text',
+          content: 'SP1 uses STARKs with FRI over the Baby Bear field and includes a STARK→SNARK wrapping system for generating efficient proofs that can be verified on EVM chains with ~300k gas cost.'
+        },
+        {
+          type: 'info',
+          title: 'Key Comparison Points',
+          content: [
+            'Both support unbounded computation through recursive proving',
+            'Both offer extensive hardware acceleration (CPU AVX, GPU CUDA)',
+            'RISC0 additionally supports Apple Metal for M-series chips',
+            'Both are MIT licensed (SP1 also offers Apache 2.0)',
+            'Both have completed multiple security audits'
+          ]
+        }
+      ]
     }
     // Add more content sections here
   };
