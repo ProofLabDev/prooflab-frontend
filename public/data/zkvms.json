@@ -13,6 +13,30 @@
         { "label": "Base Memory Usage", "value": "1.2GB" },
         { "label": "Verification Time", "value": "0.1s" }
       ],
+      "technicalSpecs": {
+        "proofGeneration": [
+          "STARK-based proof system for efficient proving",
+          "Parallel proving capabilities",
+          "Optimized memory management during proof generation",
+          "Support for recursive composition"
+        ],
+        "verification": [
+          "Fast verification through STARK protocol",
+          "Constant-size verification regardless of computation size",
+          "Support for on-chain verification",
+          "Efficient batch verification"
+        ]
+      },
+      "additionalResources": [
+        {
+          "title": "Technical Documentation",
+          "url": "https://dev.risczero.com/reference"
+        },
+        {
+          "title": "Proof System Deep Dive",
+          "url": "https://dev.risczero.com/proof-system"
+        }
+      ],
       "healthMetrics": {
         "proofGeneration": {
           "status": "optimal",
@@ -55,12 +79,16 @@
         "Rust native integration",
         "Parallel proving",
         "Memory efficient",
-        "Developer tooling"
+        "Developer tooling",
+        "Recursive STARK proofs",
+        "On-chain verification support",
+        "Batch proving capabilities"
       ],
       "architecture": {
         "type": "RISC-V",
         "proofSystem": "STARK",
-        "memoryModel": "RAM"
+        "memoryModel": "RAM",
+        "instructionSet": "RV32IM"
       },
       "documentation": "https://dev.risczero.com/",
       "github": "https://github.com/risc0/risc0",
@@ -79,6 +107,26 @@
         { "label": "Base Proving Time", "value": "1.5s" },
         { "label": "Base Memory Usage", "value": "0.8GB" },
         { "label": "Verification Time", "value": "0.05s" }
+      ],
+      "technicalSpecs": {
+        "proofGeneration": [
+          "Custom instruction set optimized for ZK proofs",
+          "Advanced memory management system",
+          "Parallel proof generation architecture",
+          "Optimized constraint generation"
+        ],
+        "verification": [
+          "Fast STARK-based verification",
+          "Optimized polynomial commitment scheme",
+          "Efficient proof composition",
+          "Low-latency verification"
+        ]
+      },
+      "additionalResources": [
+        {
+          "title": "Architecture Overview",
+          "url": "https://succinctlabs.github.io/sp1/architecture"
+        }
       ],
       "healthMetrics": {
         "proofGeneration": {
@@ -133,6 +181,95 @@
       "github": "https://github.com/succinctlabs/sp1",
       "lastUpdated": "2024-01-20",
       "status": "production"
+    },
+    {
+      "id": "jolt",
+      "name": "Jolt",
+      "description": "A zkVM framework built around the Lasso lookup argument, supporting any high-level language with a simple programming model for implementing VM instructions.",
+      "category": "general-purpose",
+      "runtimeLanguage": "rust",
+      "supportedLanguages": ["rust", "any-via-risc-v"],
+      "performance": "high",
+      "metrics": [
+        { "label": "Base Proving Time", "value": "TBD" },
+        { "label": "Base Memory Usage", "value": "TBD" },
+        { "label": "Verification Time", "value": "TBD" }
+      ],
+      "technicalSpecs": {
+        "proofGeneration": [
+          "Sumcheck-based SNARK with multivariate polynomials",
+          "Lasso lookup argument for efficient proving",
+          "Decomposable instruction support for flexible VM implementation",
+          "Support for any ISA through decomposable instructions"
+        ],
+        "verification": [
+          "WASM verification support for browser-based verification",
+          "Efficient polynomial commitment scheme",
+          "Optimized for uniform R1CS constraints",
+          "Built on Arkworks-rs prime field arithmetic"
+        ]
+      },
+      "additionalResources": [
+        {
+          "title": "Understanding Lasso and Jolt",
+          "url": "https://jolt.a16zcrypto.com/background/lasso.html"
+        }
+      ],
+      "healthMetrics": {
+        "proofGeneration": {
+          "status": "warning",
+          "title": "Proof generation",
+          "description": "Alpha release - performance metrics pending",
+          "value": "TBD",
+          "threshold": "< 5s"
+        },
+        "memoryUsage": {
+          "status": "warning",
+          "title": "Memory usage",
+          "description": "Alpha release - memory metrics pending",
+          "value": "TBD",
+          "threshold": "< 1GB"
+        },
+        "verificationTime": {
+          "status": "warning",
+          "title": "Verification",
+          "description": "Alpha release - verification metrics pending",
+          "value": "TBD",
+          "threshold": "< 0.5s"
+        },
+        "compilerStatus": {
+          "status": "warning",
+          "title": "Compiler",
+          "description": "Alpha release - WASM verification support available",
+          "value": "Alpha",
+          "threshold": "Production ready"
+        },
+        "systemUptime": {
+          "status": "warning",
+          "title": "System uptime",
+          "description": "Alpha release - stability metrics pending",
+          "value": "TBD",
+          "threshold": "> 99.9%"
+        }
+      },
+      "features": [
+        "RISC-V instruction set",
+        "Sumcheck-based SNARK",
+        "Multivariate polynomials",
+        "Simple VM instruction implementation (50-100 LOC)",
+        "WASM verification support",
+        "Extensible to any ISA",
+        "Decomposable instruction support"
+      ],
+      "architecture": {
+        "type": "RISC-V",
+        "proofSystem": "Sumcheck SNARK",
+        "memoryModel": "Decomposable Instructions"
+      },
+      "documentation": "https://jolt.a16zcrypto.com/intro.html",
+      "github": "https://github.com/a16z/jolt",
+      "lastUpdated": "2024-01-22",
+      "status": "alpha"
     }
   ]
 } 

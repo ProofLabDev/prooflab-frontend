@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Sidebar = ({ activeSection, setActiveSection }) => {
+const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
   const sections = {
     'Getting Started': [
       'Introduction to Zero Knowledge',
@@ -18,33 +18,80 @@ const Sidebar = ({ activeSection, setActiveSection }) => {
   };
 
   return (
-    <div className="w-64 h-screen overflow-y-auto fixed left-0 top-16 bg-white border-r border-gray-200 p-4">
-      <div className="space-y-8">
-        {Object.entries(sections).map(([category, items]) => (
-          <div key={category}>
-            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-3">
-              {category}
-            </h3>
-            <ul className="space-y-2">
-              {items.map((item) => (
-                <li key={item}>
-                  <button
-                    onClick={() => setActiveSection(item)}
-                    className={`w-full text-left px-2 py-1.5 text-sm rounded-md ${
-                      activeSection === item
-                        ? 'text-indigo-600 bg-indigo-50 font-medium'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                    }`}
-                  >
-                    {item}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+    <>
+      {/* Mobile menu button */}
+      <div className="lg:hidden fixed top-4 left-4 z-20">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="p-2 rounded-md text-gray-500 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+        >
+          <span className="sr-only">Open sidebar</span>
+          {/* Heroicon menu icon */}
+          <svg
+            className="h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+            />
+          </svg>
+        </button>
       </div>
-    </div>
+
+      {/* Sidebar backdrop for mobile */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-gray-600 bg-opacity-75 z-10 lg:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Sidebar content */}
+      <div className={`
+        fixed top-0 left-0 z-10
+        h-full w-64 bg-white border-r border-gray-200
+        transform transition-transform duration-200 ease-in-out
+        lg:translate-x-0 lg:static lg:h-screen
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
+        <div className="h-full overflow-y-auto px-4 py-16 lg:py-4">
+          <div className="space-y-8">
+            {Object.entries(sections).map(([category, items]) => (
+              <div key={category}>
+                <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-3">
+                  {category}
+                </h3>
+                <ul className="space-y-2">
+                  {items.map((item) => (
+                    <li key={item}>
+                      <button
+                        onClick={() => {
+                          setActiveSection(item);
+                          setIsOpen(false);
+                        }}
+                        className={`w-full text-left px-2 py-1.5 text-sm rounded-md ${
+                          activeSection === item
+                            ? 'text-indigo-600 bg-indigo-50 font-medium'
+                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                        }`}
+                      >
+                        {item}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -402,11 +449,17 @@ zk_rust_io = { git = "https://github.com/yetanotherco/zkRust.git" }`
 
 const Learn = () => {
   const [activeSection, setActiveSection] = useState('Introduction to Zero Knowledge');
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-white pt-16">
-      <Sidebar activeSection={activeSection} setActiveSection={setActiveSection} />
-      <div className="pl-64">
+      <Sidebar 
+        activeSection={activeSection} 
+        setActiveSection={setActiveSection}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
+      <div className="lg:pl-64">
         <ContentSection section={activeSection} />
       </div>
     </div>

@@ -44,18 +44,18 @@ const SpaceCard = ({ space }) => (
           </span>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4 text-sm text-gray-600">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-wrap gap-4 text-sm text-gray-600">
             <span>{space.metrics.users.toLocaleString()} users</span>
             <span>{space.metrics.transactions.toLocaleString()} txns</span>
             <span>{space.metrics.avgProofTime} avg proof</span>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex flex-wrap gap-2 sm:ml-auto">
             <a
               href={space.demoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-md hover:bg-indigo-100"
+              className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-md hover:bg-indigo-100 text-center"
             >
               View Demo
             </a>
@@ -63,7 +63,7 @@ const SpaceCard = ({ space }) => (
               href={space.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-md hover:bg-gray-100"
+              className="flex-1 sm:flex-none px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-md hover:bg-gray-100 text-center"
             >
               GitHub
             </a>
