@@ -54,13 +54,13 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
 
       {/* Sidebar content */}
       <div className={`
-        fixed top-0 left-0 z-10
-        h-full w-64 bg-white border-r border-gray-200
+        fixed top-0 left-0 z-10 w-64
+        h-full bg-white border-r border-gray-200
         transform transition-transform duration-200 ease-in-out
-        lg:translate-x-0 lg:static lg:h-screen
+        lg:translate-x-0 lg:static
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        <div className="h-full overflow-y-auto px-4 py-16 lg:py-4">
+        <div className="h-full overflow-y-auto px-4 py-4">
           <div className="space-y-8">
             {Object.entries(sections).map(([category, items]) => (
               <div key={category}>
@@ -452,16 +452,18 @@ const Learn = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-white pt-16">
+    <div className="min-h-screen bg-white flex">
       <Sidebar 
         activeSection={activeSection} 
         setActiveSection={setActiveSection}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
       />
-      <div className="lg:pl-64">
-        <ContentSection section={activeSection} />
-      </div>
+      <main className="flex-1">
+        <div className="px-4 py-6 sm:px-6 lg:px-8">
+          <ContentSection section={activeSection} />
+        </div>
+      </main>
     </div>
   );
 };
