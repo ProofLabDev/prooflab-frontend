@@ -358,11 +358,11 @@ const Home = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="pt-20 pb-16 text-center">
             <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
-              <span className="block">The Zero Knowledge Community</span>
-              <span className="block text-indigo-400 mt-2">building the future.</span>
+              <span className="block">Open Source ZK Toolkit</span>
+              <span className="block text-indigo-400 mt-2">Build zero-knowledge applications together</span>
             </h1>
             <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-300">
-              The platform where the zero-knowledge community collaborates on ZKVMs, programs, and benchmarks.
+              A community-driven toolkit for developing, testing, and comparing zero-knowledge proof implementations.
             </p>
             <div className="mt-8 flex justify-center space-x-4">
               <Link

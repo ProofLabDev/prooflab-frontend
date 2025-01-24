@@ -35,18 +35,18 @@
   <g transform="translate(600, 285)">
     <!-- Main title -->
     <text font-family="system-ui" font-weight="800" font-size="64" fill="white" letter-spacing="-0.02em" text-anchor="middle">
-      <tspan x="0" y="-80">The Zero Knowledge Community</tspan>
+      <tspan x="0" y="-80">Open Source ZK Toolkit</tspan>
     </text>
     
     <!-- Subtitle -->
     <text font-family="system-ui" font-weight="600" font-size="48" fill="#A5B4FC" text-anchor="middle">
-      <tspan x="0" y="0">building the future.</tspan>
+      <tspan x="0" y="0">Build zero-knowledge applications together</tspan>
     </text>
 
     <!-- Description -->
     <text font-family="system-ui" font-weight="400" font-size="24" fill="#94A3B8" text-anchor="middle">
-      <tspan x="0" y="80">The platform where the zero-knowledge community collaborates</tspan>
-      <tspan x="0" y="110">on ZKVMs, programs, and benchmarks.</tspan>
+      <tspan x="0" y="80">A community-driven toolkit for developing, testing,</tspan>
+      <tspan x="0" y="110">and comparing zero-knowledge proof implementations.</tspan>
     </text>
 
     <!-- Get Started Button -->
