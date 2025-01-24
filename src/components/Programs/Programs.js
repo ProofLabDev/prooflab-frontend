@@ -181,6 +181,7 @@ const Programs = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedComplexities, setSelectedComplexities] = useState([]);
   const [sortBy, setSortBy] = useState('name');
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const selectedZKVM = searchParams.get('zkvm');
 
   useEffect(() => {
@@ -223,6 +224,48 @@ const Programs = () => {
       return 0;
     });
 
+  const FilterPanel = () => (
+    <div className="space-y-6">
+      <div>
+        <label htmlFor="search" className="sr-only">Search programs</label>
+        <input
+          type="search"
+          id="search"
+          placeholder="Search programs..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="sort" className="block text-sm font-medium text-gray-700">Sort by</label>
+        <select
+          id="sort"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        >
+          <option value="name">Name</option>
+        </select>
+      </div>
+
+      <FilterSection
+        title="Categories"
+        options={categories}
+        selected={selectedCategories}
+        onChange={setSelectedCategories}
+      />
+
+      <FilterSection
+        title="Complexity"
+        options={complexities}
+        selected={selectedComplexities}
+        onChange={setSelectedComplexities}
+      />
+    </div>
+  );
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -263,56 +306,56 @@ const Programs = () => {
         </div>
       </div>
 
+      {/* Mobile Filter Toggle Button */}
+      <div className="lg:hidden sticky top-0 z-10 bg-white border-b border-gray-200 p-4">
+        <button
+          onClick={() => setIsFilterOpen(!isFilterOpen)}
+          className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          <span>{isFilterOpen ? 'Hide Filters' : 'Show Filters'}</span>
+          <svg
+            className={`ml-2 h-5 w-5 transform transition-transform ${isFilterOpen ? 'rotate-180' : ''}`}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+          </svg>
+        </button>
+      </div>
+
       {/* Main Content Area */}
       <div className="flex-1 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div className="flex h-full -mt-4">
-            {/* Fixed Sidebar */}
-            <div className="w-64 flex-shrink-0 pt-4">
-              <div className="sticky top-4 space-y-6">
-                <div>
-                  <label htmlFor="search" className="sr-only">Search programs</label>
-                  <input
-                    type="search"
-                    id="search"
-                    placeholder="Search programs..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                  />
+            {/* Sidebar - Desktop */}
+            <div className="hidden lg:block w-64 flex-shrink-0 pt-4">
+              <div className="sticky top-4">
+                <FilterPanel />
+              </div>
+            </div>
+
+            {/* Sidebar - Mobile */}
+            <div
+              className={`lg:hidden fixed inset-0 z-20 bg-gray-500 bg-opacity-75 transition-opacity ${
+                isFilterOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}
+              onClick={() => setIsFilterOpen(false)}
+            >
+              <div
+                className={`fixed inset-y-0 left-0 max-w-xs w-full bg-white shadow-xl transform transition-transform ${
+                  isFilterOpen ? 'translate-x-0' : '-translate-x-full'
+                }`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="h-full overflow-y-auto p-4">
+                  <FilterPanel />
                 </div>
-
-                <div>
-                  <label htmlFor="sort" className="block text-sm font-medium text-gray-700">Sort by</label>
-                  <select
-                    id="sort"
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                  >
-                    <option value="name">Name</option>
-                    {/* Add more sorting options if needed */}
-                  </select>
-                </div>
-
-                <FilterSection
-                  title="Categories"
-                  options={categories}
-                  selected={selectedCategories}
-                  onChange={setSelectedCategories}
-                />
-
-                <FilterSection
-                  title="Complexity"
-                  options={complexities}
-                  selected={selectedComplexities}
-                  onChange={setSelectedComplexities}
-                />
               </div>
             </div>
 
             {/* Scrollable Program List */}
-            <div className="flex-1 min-w-0 pl-8 overflow-y-auto pt-4">
+            <div className="flex-1 min-w-0 lg:pl-8 overflow-y-auto pt-4">
               <div className="grid grid-cols-1 gap-6 pb-8">
                 {filteredPrograms.map((program) => (
                   <ProgramCard 
