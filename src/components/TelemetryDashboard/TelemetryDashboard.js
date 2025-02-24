@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useTelemetryData, formatDuration, formatBytes, formatDate } from '../../utils/dataFetching';
 import TelemetryChart from './TelemetryChart';
+import { calculateEC2Cost, formatCost } from '../../utils/dataTransforms';
 
 const TelemetryDashboard = () => {
   const { telemetryData, loading, error } = useTelemetryData();
@@ -61,7 +62,8 @@ const TelemetryDashboard = () => {
     { id: 'proof_generation_duration', label: 'Proof Generation Duration' },
     { id: 'max_memory', label: 'Max Memory' },
     { id: 'avg_cpu', label: 'Avg CPU' },
-    { id: 'cycles', label: 'Cycles' }
+    { id: 'cycles', label: 'Cycles' },
+    { id: 'cost', label: 'Estimated Cost' }
   ];
 
   if (loading) {
@@ -227,6 +229,10 @@ const TelemetryDashboard = () => {
         case 'cycles':
           aValue = a.zk_metrics.cycles;
           bValue = b.zk_metrics.cycles;
+          break;
+        case 'cost':
+          aValue = calculateEC2Cost(a.timing.proof_generation_duration, a.instance) || 0;
+          bValue = calculateEC2Cost(b.timing.proof_generation_duration, b.instance) || 0;
           break;
         case 'sdkVersion':
           aValue = a.sdkVersion;
@@ -486,6 +492,9 @@ const TelemetryDashboard = () => {
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => handleSort('cycles')}>
                         Cycles {renderSortArrow('cycles')}
                       </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => handleSort('cost')}>
+                        Est. Cost {renderSortArrow('cost')}
+                      </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => handleSort('sdkVersion')}>
                         SDK Version {renderSortArrow('sdkVersion')}
                       </th>
@@ -517,6 +526,9 @@ const TelemetryDashboard = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {run.zk_metrics.cycles.toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {formatCost(calculateEC2Cost(run.timing.proof_generation_duration, run.instance))}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {run.sdkVersion ? `v${run.sdkVersion}` : 'N/A'}

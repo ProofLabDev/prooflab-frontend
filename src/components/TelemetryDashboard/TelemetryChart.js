@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { formatDuration, formatDate } from '../../utils/dataFetching';
+import { calculateEC2Cost, formatCost } from '../../utils/dataTransforms';
 
 const METRICS = {
   total_duration: {
@@ -32,6 +33,11 @@ const METRICS = {
     label: 'Cycles',
     getValue: (run) => run.zk_metrics.cycles,
     format: (value) => value.toLocaleString()
+  },
+  cost: {
+    label: 'Estimated Cost ($)',
+    getValue: (run) => calculateEC2Cost(run.timing.proof_generation_duration, run.instance) || 0,
+    format: (value) => formatCost(value)
   }
 };
 
