@@ -6,8 +6,32 @@ const calculateThroughput = (cycles, timing) => {
   return totalNanos > 0 ? (cycles / (totalNanos / 1000000000)) : 0;
 };
 
-const useTopBenchmarks = (zkvmId) => {
-  const [benchmarks, setBenchmarks] = useState([]);
+const extractSdkVersion = (data) => {
+  const dependencies = data.program?.host_metadata?.dependencies;
+  if (!dependencies) return 'unknown';
+
+  // For SP1
+  const sp1SdkDep = dependencies.find(dep => dep[0] === 'sp1-sdk');
+  if (sp1SdkDep) {
+    const gitUrl = sp1SdkDep[1];
+    const tagMatch = gitUrl.match(/tag:v([\d.]+)/);
+    if (tagMatch) return tagMatch[1];
+  }
+
+  // For RISC0
+  const risc0Dep = dependencies.find(dep => dep[0] === 'risc0-zkvm');
+  if (risc0Dep) {
+    const gitUrl = risc0Dep[1];
+    const tagMatch = gitUrl.match(/tag:v([\d.]+)/);
+    if (tagMatch) return tagMatch[1];
+  }
+
+  return 'unknown';
+};
+
+const useTopBenchmarks = (zkvmId, programId = null) => {
+  const [cpuBenchmarks, setCpuBenchmarks] = useState([]);
+  const [gpuBenchmarks, setGpuBenchmarks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -20,7 +44,6 @@ const useTopBenchmarks = (zkvmId) => {
 
       try {
         setLoading(true);
-        // Fetch the telemetry index
         const indexResponse = await fetch('/data/telemetry/index.json');
         if (!indexResponse.ok) {
           throw new Error('Failed to fetch telemetry index');
@@ -32,29 +55,29 @@ const useTopBenchmarks = (zkvmId) => {
           file.includes(zkvmId.toLowerCase()) && 
           file.includes('success')
         );
+        console.log('Telemetry files for', zkvmId, ':', telemetryFiles);
 
-        // Group by program (get latest for each)
-        const programGroups = {};
-        telemetryFiles.forEach(file => {
-          const programMatch = file.match(new RegExp(`${zkvmId.toLowerCase()}_telemetry_(.+?)_.*`));
-          if (programMatch) {
-            const program = programMatch[1];
-            if (!programGroups[program] || file > programGroups[program]) {
-              programGroups[program] = file;
-            }
-          }
-        });
-
-        // Fetch data for each program's latest run
-        const programData = await Promise.all(
-          Object.entries(programGroups).map(async ([program, file]) => {
+        // Fetch and process all telemetry files
+        const allBenchmarks = await Promise.all(
+          telemetryFiles.map(async file => {
             const response = await fetch(`/data/telemetry/${file}`);
             if (!response.ok) return null;
             const data = await response.json();
+
+            // Only process r7i.16xlarge and g6.16xlarge instances
+            if (!['r7i.16xlarge', 'g6.16xlarge'].includes(data.system_info?.ec2_instance_type)) {
+              return null;
+            }
+
+            const program = data.program.file_name;
             
-            // Calculate throughput using core prove time
+            // If programId is specified, skip other programs
+            if (programId && program !== programId) {
+              return null;
+            }
+
             const throughput = calculateThroughput(data.zk_metrics.cycles, data.timing);
-            const throughputMHz = throughput / 1_000_000; // Convert to MHz for sorting
+            const throughputMHz = throughput / 1_000_000;
 
             return {
               program,
@@ -63,33 +86,61 @@ const useTopBenchmarks = (zkvmId) => {
               cycles: data.zk_metrics.cycles,
               provingTime: (data.timing.core_prove_duration.secs + 
                            data.timing.core_prove_duration.nanos / 1e9),
-              maxMemory: data.resources.max_memory_kb / 1024, // Convert to MB
-              instanceType: data.system_info?.ec2_instance_type || 'Local',
-              gpuEnabled: data.gpu_enabled || false
+              maxMemory: data.resources.max_memory_kb / 1024,
+              instanceType: data.system_info.ec2_instance_type,
+              gpuEnabled: data.gpu_enabled,
+              version: extractSdkVersion(data)
             };
           })
         );
 
-        // Sort by MHz and take top 3
-        const topBenchmarks = programData
-          .filter(Boolean)
+        // Filter out nulls and group by instance type
+        const validBenchmarks = allBenchmarks.filter(Boolean);
+        const cpuResults = validBenchmarks.filter(b => b.instanceType === 'r7i.16xlarge');
+        const gpuResults = validBenchmarks.filter(b => b.instanceType === 'g6.16xlarge');
+
+        // Group by program and take the best performing run for each instance type
+        const groupBenchmarks = (benchmarks) => {
+          return Object.values(
+            benchmarks.reduce((groups, benchmark) => {
+              if (!groups[benchmark.program] || 
+                  benchmark.throughputMHz > groups[benchmark.program].throughputMHz) {
+                groups[benchmark.program] = benchmark;
+              }
+              return groups;
+            }, {})
+          );
+        };
+
+        // Get the top benchmarks for each instance type
+        const topCpuBenchmarks = groupBenchmarks(cpuResults)
           .sort((a, b) => b.throughputMHz - a.throughputMHz)
           .slice(0, 3);
 
-        setBenchmarks(topBenchmarks);
+        const topGpuBenchmarks = groupBenchmarks(gpuResults)
+          .sort((a, b) => b.throughputMHz - a.throughputMHz)
+          .slice(0, 3);
+
+        console.log('Top CPU benchmarks:', topCpuBenchmarks);
+        console.log('Top GPU benchmarks:', topGpuBenchmarks);
+
+        setCpuBenchmarks(topCpuBenchmarks);
+        setGpuBenchmarks(topGpuBenchmarks);
         setError(null);
       } catch (err) {
+        console.error('Error in useTopBenchmarks:', err);
         setError(err.message);
-        setBenchmarks([]);
+        setCpuBenchmarks([]);
+        setGpuBenchmarks([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchBenchmarks();
-  }, [zkvmId]);
+  }, [zkvmId, programId]);
 
-  return { benchmarks, loading, error };
+  return { cpuBenchmarks, gpuBenchmarks, loading, error };
 };
 
 export default useTopBenchmarks; 

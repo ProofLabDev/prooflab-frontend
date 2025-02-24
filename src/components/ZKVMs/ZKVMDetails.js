@@ -93,7 +93,13 @@ const ZKVMDetails = () => {
   const [zkvm, setZkvm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { benchmarks, loading: benchmarksLoading } = useTopBenchmarks(id);
+  const [accelerationType, setAccelerationType] = useState('cpu'); // 'cpu' or 'gpu'
+  const { benchmarks: allBenchmarks, loading: benchmarksLoading } = useTopBenchmarks(id);
+
+  // Filter benchmarks based on acceleration type
+  const benchmarks = allBenchmarks.filter(benchmark => 
+    accelerationType === 'gpu' ? benchmark.gpuEnabled : !benchmark.gpuEnabled
+  );
 
   useEffect(() => {
     fetch('/data/zkvms.json')
@@ -101,6 +107,7 @@ const ZKVMDetails = () => {
       .then(data => {
         const foundZkvm = data.zkvms.find(vm => vm.id === id);
         if (foundZkvm) {
+          delete foundZkvm.metrics;
           setZkvm(foundZkvm);
         } else {
           setError('ZKVM not found');
@@ -109,6 +116,30 @@ const ZKVMDetails = () => {
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
   }, [id]);
+
+  const getBestMetric = (metricFn) => {
+    if (!benchmarks || benchmarks.length === 0) return null;
+    return Math.min(...benchmarks.map(metricFn));
+  };
+
+  const formatDuration = (seconds) => {
+    if (seconds < 1) {
+      return `${(seconds * 1000).toFixed(0)}ms`;
+    }
+    return `${seconds.toFixed(1)}s`;
+  };
+
+  const formatMemory = (mb) => {
+    if (mb >= 1024) {
+      return `${(mb / 1024).toFixed(1)}GB`;
+    }
+    return `${mb.toFixed(0)}MB`;
+  };
+
+  const bestProvingTime = getBestMetric(b => b.provingTime);
+  const bestMemory = getBestMetric(b => b.maxMemory);
+  const bestCycles = getBestMetric(b => b.cycles);
+  const bestThroughput = getBestMetric(b => -b.throughput);
 
   if (loading) {
     return (
@@ -181,18 +212,65 @@ const ZKVMDetails = () => {
             </DetailSection>
 
             <DetailSection title="Performance Metrics">
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  {zkvm.metrics.map((metric, index) => (
-                    <MetricCard
-                      key={index}
-                      title={metric.label}
-                      value={metric.value}
-                      trend={metric.trend}
-                    />
-                  ))}
+              <div className="mb-4 flex justify-end">
+                <div className="inline-flex rounded-md shadow-sm" role="group">
+                  <button
+                    type="button"
+                    onClick={() => setAccelerationType('cpu')}
+                    className={`px-4 py-2 text-sm font-medium rounded-l-lg ${
+                      accelerationType === 'cpu'
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                    } border border-gray-200`}
+                  >
+                    CPU
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAccelerationType('gpu')}
+                    className={`px-4 py-2 text-sm font-medium rounded-r-lg ${
+                      accelerationType === 'gpu'
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                    } border border-l-0 border-gray-200`}
+                  >
+                    GPU
+                  </button>
                 </div>
               </div>
+              {benchmarksLoading ? (
+                <div className="flex justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                </div>
+              ) : benchmarks.length > 0 ? (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <MetricCard
+                      title="Best Proving Time"
+                      value={bestProvingTime ? formatDuration(bestProvingTime) : 'N/A'}
+                    />
+                    <MetricCard
+                      title="Best Throughput"
+                      value={bestThroughput ? `${(-bestThroughput / 1_000_000).toFixed(1)} MHz` : 'N/A'}
+                    />
+                    <MetricCard
+                      title="Min Memory Usage"
+                      value={bestMemory ? formatMemory(bestMemory) : 'N/A'}
+                    />
+                    <MetricCard
+                      title="Min Cycles"
+                      value={bestCycles ? bestCycles.toLocaleString() : 'N/A'}
+                    />
+                  </div>
+                  <p className="text-sm text-gray-500 mt-2">
+                    * Metrics shown are the best results across all {accelerationType.toUpperCase()} benchmark programs
+                  </p>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500 text-center py-4">
+                  No {accelerationType.toUpperCase()} benchmark data available
+                </p>
+              )}
             </DetailSection>
           </div>
 

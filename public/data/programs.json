@@ -3,6 +3,7 @@
     {
       "id": "fibonacci",
       "name": "Fibonacci Sequence",
+      "crateName": "fibonacci",
       "description": "Generates and proves the computation of Fibonacci numbers",
       "category": "computation",
       "implementations": [
@@ -25,6 +26,7 @@
     {
       "id": "ecdsa",
       "name": "ECDSA Signature Verification",
+      "crateName": "ecdsa",
       "description": "Verifies ECDSA digital signatures within a zero-knowledge context",
       "category": "cryptography",
       "implementations": [
@@ -47,6 +49,7 @@
     {
       "id": "sha",
       "name": "SHA-256 Hash",
+      "crateName": "sha256",
       "description": "Computes SHA-256 hashes with zero-knowledge proofs",
       "category": "cryptography",
       "implementations": [
@@ -69,6 +72,7 @@
     {
       "id": "json",
       "name": "JSON Parser",
+      "crateName": "json",
       "description": "Parses and validates JSON data in zero-knowledge",
       "category": "data-processing",
       "implementations": [
@@ -91,6 +95,7 @@
     {
       "id": "regex",
       "name": "Regular Expression Matcher",
+      "crateName": "regex",
       "description": "Matches regular expressions against input strings in zero-knowledge",
       "category": "text-processing",
       "implementations": [
@@ -113,6 +118,7 @@
     {
       "id": "rsa",
       "name": "RSA Verification",
+      "crateName": "rsa",
       "description": "Verifies RSA signatures and performs RSA operations in zero-knowledge",
       "category": "cryptography",
       "implementations": [
@@ -135,6 +141,7 @@
     {
       "id": "bubble-sort",
       "name": "Bubble Sort",
+      "crateName": "bubble_sort",
       "description": "Implements and proves the execution of the bubble sort algorithm",
       "category": "algorithms",
       "implementations": [
@@ -157,6 +164,7 @@
     {
       "id": "is-even",
       "name": "Is Even",
+      "crateName": "is_even",
       "description": "Simple example proving whether a number is even",
       "category": "basic",
       "implementations": [

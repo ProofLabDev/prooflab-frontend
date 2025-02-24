@@ -796,14 +796,28 @@ const ComparisonModal = ({ entries, onClose, proofType, getZkVMVersion, calculat
       getValue: (v) => v ? v.secs + v.nanos / 1e9 : null
     },
     {
-      label: 'Memory Usage',
+      label: 'Peak Memory',
+      base: currentBase.resources.max_memory_kb,
+      compare: currentCompare.resources.max_memory_kb,
+      format: formatMemory,
+      improvedWhen: 'lower'
+    },
+    {
+      label: 'Peak CPU',
+      base: currentBase.resources.max_cpu_percent,
+      compare: currentCompare.resources.max_cpu_percent,
+      format: formatCpuUsage,
+      improvedWhen: 'lower'
+    },
+    {
+      label: 'Average Memory',
       base: currentBase.resources.avg_memory_kb,
       compare: currentCompare.resources.avg_memory_kb,
       format: formatMemory,
       improvedWhen: 'lower'
     },
     {
-      label: 'CPU Usage',
+      label: 'Average CPU',
       base: currentBase.resources.avg_cpu_percent,
       compare: currentCompare.resources.avg_cpu_percent,
       format: formatCpuUsage,
