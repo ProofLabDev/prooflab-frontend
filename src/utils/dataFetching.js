@@ -97,18 +97,60 @@ export const useComparisonData = () => {
   useEffect(() => {
     const fetchComparisonData = async () => {
       try {
-        const [sp1Response, risc0Response] = await Promise.all([
-          fetch('/data/comparisons/sp1.json'),
-          fetch('/data/comparisons/risc0.json')
-        ]);
-
-        const sp1Data = await sp1Response.json();
-        const risc0Data = await risc0Response.json();
-
-        setComparisons({
-          sp1: sp1Data,
-          risc0: risc0Data
+        // First fetch available systems from the index
+        const indexResponse = await fetch('/data/comparisons/index.json').catch(() => {
+          // If index doesn't exist, fall back to known systems
+          return { json: () => Promise.resolve({ systems: ['sp1', 'risc0'] }) };
         });
+        
+        const indexData = await indexResponse.json();
+        const systems = indexData.systems || ['sp1', 'risc0'];
+        
+        // Fetch data for each system
+        const systemPromises = systems.map(system =>
+          fetch(`/data/comparisons/${system}.json`)
+            .then(res => res.json())
+            .catch(() => null) // Gracefully handle missing files
+        );
+
+        const results = await Promise.all(systemPromises);
+        
+        // Build comparison data object
+        const comparisonsData = results.reduce((acc, data, index) => {
+          if (data) {
+            const system = systems[index];
+            acc[system] = data;
+          }
+          return acc;
+        }, {});
+
+        // Check if we have performance metrics data
+        const metricsPromises = [
+          fetch('/data/metrics/performance.json').catch(() => null),
+          fetch('/data/metrics/security.json').catch(() => null),
+          fetch('/data/metrics/holistic.json').catch(() => null)
+        ];
+        
+        const [performanceData, securityData, holisticData] = await Promise.all(
+          metricsPromises.map(p => p.then(res => res?.json()).catch(() => null))
+        );
+        
+        // Incorporate metrics data if available
+        if (performanceData || securityData || holisticData) {
+          Object.keys(comparisonsData).forEach(system => {
+            if (performanceData && performanceData[system]) {
+              comparisonsData[system].performance = performanceData[system];
+            }
+            if (securityData && securityData[system]) {
+              comparisonsData[system].security = securityData[system];
+            }
+            if (holisticData && holisticData[system]) {
+              comparisonsData[system].holistic = holisticData[system];
+            }
+          });
+        }
+
+        setComparisons(comparisonsData);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -163,4 +205,39 @@ export const formatDate = (dateStr) => {
     console.error('Error formatting date:', error);
     return dateStr;
   }
-}; 
+};
+
+// Helper to format throughput values with appropriate units
+export const formatThroughput = (value) => {
+  if (value === undefined || value === null) return 'N/A';
+  
+  if (value === 0) return '0 Hz';
+  
+  if (value < 1000) {
+    return `${value.toFixed(2)} Hz`;
+  } else if (value < 1000000) {
+    return `${(value / 1000).toFixed(2)} kHz`;
+  } else {
+    return `${(value / 1000000).toFixed(2)} MHz`;
+  }
+};
+
+// Helper to format percentages
+export const formatPercentage = (value) => {
+  if (value === undefined || value === null) return 'N/A';
+  return `${value.toFixed(2)}%`;
+};
+
+// Helper to format hardware utilization
+export const formatUtilization = (data) => {
+  if (!data) return 'N/A';
+  
+  const { cpu, memory, disk } = data;
+  let result = [];
+  
+  if (cpu !== undefined) result.push(`CPU: ${formatPercentage(cpu)}`);
+  if (memory !== undefined) result.push(`Memory: ${formatBytes(memory)}`);
+  if (disk !== undefined) result.push(`Disk: ${formatBytes(disk)}/s`);
+  
+  return result.join(', ');
+};

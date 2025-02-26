@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import { formatDuration, formatDate } from '../../utils/dataFetching';
-import { calculateEC2Cost, formatCost } from '../../utils/dataTransforms';
+import { formatDuration, formatBytes } from '../../utils/dataFetching';
 
 const METRICS = {
   total_duration: {
@@ -14,15 +13,19 @@ const METRICS = {
     getValue: (run) => run.timing.compilation_duration.secs + run.timing.compilation_duration.nanos / 1e9,
     format: (value) => formatDuration({ secs: Math.floor(value), nanos: (value % 1) * 1e9 })
   },
-  proof_generation_duration: {
-    label: 'Proof Generation Duration',
-    getValue: (run) => run.timing.proof_generation_duration.secs + run.timing.proof_generation_duration.nanos / 1e9,
+  proving_duration: {
+    label: 'Proving Duration',
+    getValue: (run) => {
+      const coreProve = run.timing.core_prove_duration.secs + run.timing.core_prove_duration.nanos / 1e9;
+      const compressProve = run.timing.compress_prove_duration.secs + run.timing.compress_prove_duration.nanos / 1e9;
+      return coreProve + compressProve;
+    },
     format: (value) => formatDuration({ secs: Math.floor(value), nanos: (value % 1) * 1e9 })
   },
   max_memory: {
-    label: 'Max Memory (KB)',
-    getValue: (run) => run.resources.max_memory_kb,
-    format: (value) => value.toLocaleString()
+    label: 'Max Memory',
+    getValue: (run) => run.resources.max_memory_kb * 1024,
+    format: (value) => formatBytes(value)
   },
   avg_cpu: {
     label: 'Avg CPU (%)',
@@ -33,15 +36,10 @@ const METRICS = {
     label: 'Cycles',
     getValue: (run) => run.zk_metrics.cycles,
     format: (value) => value.toLocaleString()
-  },
-  cost: {
-    label: 'Estimated Cost ($)',
-    getValue: (run) => calculateEC2Cost(run.timing.proof_generation_duration, run.instance) || 0,
-    format: (value) => formatCost(value)
   }
 };
 
-const TelemetryChart = ({ data, selectedMetrics, comparisonType }) => {
+const TelemetryChart = ({ data, selectedMetrics, groupBy, getLabel }) => {
   const svgRef = useRef();
 
   useEffect(() => {
@@ -51,7 +49,7 @@ const TelemetryChart = ({ data, selectedMetrics, comparisonType }) => {
     d3.select(svgRef.current).selectAll('*').remove();
 
     // Set up dimensions
-    const margin = { top: 20, right: 60, bottom: 50, left: 80 };
+    const margin = { top: 20, right: 120, bottom: 70, left: 80 };
     const width = 1000 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
@@ -62,29 +60,36 @@ const TelemetryChart = ({ data, selectedMetrics, comparisonType }) => {
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    // Sort data by date and get x-axis labels based on comparison type
-    const sortedData = [...data].sort((a, b) => a.date.localeCompare(b.date));
-    const getLabel = (d) => {
-      if (comparisonType === 'version') {
-        return `v${d.sdkVersion}`;
-      } else {
-        return d.instance;
-      }
-    };
+    // Get the metric
+    const metric = selectedMetrics[0];
+    const metricInfo = METRICS[metric];
+    
+    if (!metricInfo) return;
 
-    // Get unique labels
-    const uniqueLabels = Array.from(new Set(sortedData.map(getLabel)));
+    // Group data by the specified grouping
+    const groupedData = d3.group(data, d => getLabel(d));
+    
+    // Calculate average values for each group
+    const aggregatedData = Array.from(groupedData, ([key, values]) => {
+      const avg = d3.mean(values, d => metricInfo.getValue(d));
+      return {
+        group: key,
+        value: avg,
+        count: values.length
+      };
+    });
+    
+    // Sort by value
+    aggregatedData.sort((a, b) => a.value - b.value);
 
     // Create scales
     const xScale = d3.scaleBand()
-      .domain(uniqueLabels)
+      .domain(aggregatedData.map(d => d.group))
       .range([0, width])
       .padding(0.2);
 
-    const metric = selectedMetrics[0];
-    const values = data.map(d => METRICS[metric].getValue(d));
     const yScale = d3.scaleLinear()
-      .domain([0, d3.max(values) * 1.1]) // Add 10% padding
+      .domain([0, d3.max(aggregatedData, d => d.value) * 1.1]) // Add 10% padding
       .range([height, 0]);
 
     // Add X axis
@@ -103,57 +108,103 @@ const TelemetryChart = ({ data, selectedMetrics, comparisonType }) => {
       .attr('y', height + margin.bottom - 5)
       .attr('text-anchor', 'middle')
       .style('font-size', '12px')
-      .text(comparisonType === 'version' ? 'SDK Version' : 'Instance Type');
+      .text(groupBy === 'system' ? 'System Type' : 
+            groupBy === 'instance' ? 'Hardware Type' : 
+            groupBy === 'version' ? 'SDK Version' : 'Date');
 
     // Add Y axis
     svg.append('g')
       .call(d3.axisLeft(yScale)
         .ticks(5)
-        .tickFormat(METRICS[metric].format))
+        .tickFormat(metricInfo.format))
       .append('text')
       .attr('transform', 'rotate(-90)')
       .attr('y', -60)
       .attr('x', -height / 2)
       .attr('text-anchor', 'middle')
       .style('fill', 'currentColor')
-      .text(METRICS[metric].label);
+      .text(metricInfo.label);
+
+    // Create color scale based on the group name
+    const colorScale = d3.scaleOrdinal()
+      .domain(aggregatedData.map(d => d.group))
+      .range(['#4f46e5', '#7e22ce', '#0e7490', '#6b7280', '#334155', '#9333ea', '#0891b2', '#0d9488', '#4338ca']);
 
     // Add bars
     svg.selectAll('rect')
-      .data(sortedData)
+      .data(aggregatedData)
       .enter()
       .append('rect')
-      .attr('x', d => xScale(getLabel(d)))
-      .attr('y', d => yScale(METRICS[metric].getValue(d)))
+      .attr('x', d => xScale(d.group))
+      .attr('y', d => yScale(d.value))
       .attr('width', xScale.bandwidth())
-      .attr('height', d => height - yScale(METRICS[metric].getValue(d)))
-      .attr('fill', '#60a5fa')
+      .attr('height', d => height - yScale(d.value))
+      .attr('fill', d => colorScale(d.group))
       .on('mouseover', (event, d) => {
+        // Add hover state
+        d3.select(event.currentTarget)
+          .transition()
+          .duration(100)
+          .attr('opacity', 0.8);
+        
+        // Show tooltip
         const tooltip = d3.select('#tooltip');
         tooltip.style('display', 'block')
           .style('left', (event.pageX + 10) + 'px')
           .style('top', (event.pageY - 10) + 'px')
           .html(`
             <div class="bg-white p-2 shadow rounded">
-              <div class="font-bold">${formatDate(d.date)}</div>
-              <div>${METRICS[metric].label}: ${METRICS[metric].format(METRICS[metric].getValue(d))}</div>
-              <div>Instance: ${d.instance}</div>
-              <div>SDK Version: ${d.sdkVersion ? `v${d.sdkVersion}` : 'N/A'}</div>
+              <div class="font-bold">${d.group}</div>
+              <div>${metricInfo.label}: ${metricInfo.format(d.value)}</div>
+              <div>Sample size: ${d.count} runs</div>
             </div>
           `);
       })
-      .on('mouseout', () => {
+      .on('mouseout', (event) => {
+        // Remove hover state
+        d3.select(event.currentTarget)
+          .transition()
+          .duration(100)
+          .attr('opacity', 1);
+        
+        // Hide tooltip
         d3.select('#tooltip').style('display', 'none');
       });
 
-  }, [data, selectedMetrics, comparisonType]);
+    // Add value labels on top of bars
+    svg.selectAll('text.bar-label')
+      .data(aggregatedData)
+      .enter()
+      .append('text')
+      .attr('class', 'bar-label')
+      .attr('x', d => xScale(d.group) + xScale.bandwidth() / 2)
+      .attr('y', d => yScale(d.value) - 5)
+      .attr('text-anchor', 'middle')
+      .style('font-size', '10px')
+      .style('fill', '#6b7280')
+      .text(d => metricInfo.format(d.value));
+
+    // Add count labels at the bottom of bars
+    svg.selectAll('text.count-label')
+      .data(aggregatedData)
+      .enter()
+      .append('text')
+      .attr('class', 'count-label')
+      .attr('x', d => xScale(d.group) + xScale.bandwidth() / 2)
+      .attr('y', height + 5)
+      .attr('text-anchor', 'middle')
+      .style('font-size', '9px')
+      .style('fill', '#6b7280')
+      .text(d => `n=${d.count}`);
+    
+  }, [data, selectedMetrics, groupBy, getLabel]);
 
   return (
     <div className="relative">
       <svg ref={svgRef}></svg>
       <div
         id="tooltip"
-        className="absolute hidden"
+        className="absolute hidden z-10"
         style={{
           pointerEvents: 'none',
           backgroundColor: 'white',
@@ -167,4 +218,4 @@ const TelemetryChart = ({ data, selectedMetrics, comparisonType }) => {
   );
 };
 
-export default TelemetryChart; 
+export default TelemetryChart;

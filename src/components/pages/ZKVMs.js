@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import useZKVMThroughput from '../../hooks/useZKVMThroughput';
 
 const ZKVMCard = ({ zkvm }) => {
-  const { throughput, loading } = useZKVMThroughput(zkvm.id);
+  const { throughput, loading, isIntegrating } = useZKVMThroughput(zkvm.id);
 
   return (
     <Link
@@ -13,13 +13,20 @@ const ZKVMCard = ({ zkvm }) => {
       <div className="p-6">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium text-gray-900">{zkvm.name}</h3>
-          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-            zkvm.performance === 'high' ? 'bg-green-100 text-green-800' :
-            zkvm.performance === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-            'bg-red-100 text-red-800'
-          }`}>
-            {zkvm.performance} performance
-          </span>
+          <div className="flex space-x-2">
+            {isIntegrating && (
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                Coming Soon
+              </span>
+            )}
+            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+              zkvm.performance === 'high' ? 'bg-green-100 text-green-800' :
+              zkvm.performance === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+              'bg-red-100 text-red-800'
+            }`}>
+              {zkvm.performance} performance
+            </span>
+          </div>
         </div>
         <p className="mt-2 text-sm text-gray-500">{zkvm.description}</p>
         
@@ -39,34 +46,50 @@ const ZKVMCard = ({ zkvm }) => {
 
         {/* Throughput Metrics */}
         <div className="mt-4 border-t border-gray-200 pt-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="text-sm">
-              <p className="text-gray-500">CPU Throughput</p>
+          {isIntegrating ? (
+            <div className="py-2">
               <div className="flex items-center">
-                {loading ? (
-                  <div className="h-5 w-16 bg-gray-200 animate-pulse rounded"></div>
-                ) : (
-                  <p className="font-medium text-gray-900">{throughput.cpu.formatted}</p>
-                )}
-                <span className="ml-1 text-xs text-gray-500">(r7i.16xl)</span>
+                <svg className="h-5 w-5 text-blue-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-sm font-medium text-blue-800">Benchmarks in progress</p>
               </div>
+              <p className="mt-1 text-xs text-gray-500 pl-7">
+                We're currently integrating this system into our benchmarking reports
+              </p>
             </div>
-            <div className="text-sm">
-              <p className="text-gray-500">GPU Throughput</p>
-              <div className="flex items-center">
-                {loading ? (
-                  <div className="h-5 w-16 bg-gray-200 animate-pulse rounded"></div>
-                ) : (
-                  <p className="font-medium text-gray-900">{throughput.gpu.formatted}</p>
-                )}
-                <span className="ml-1 text-xs text-gray-500">(g6.16xl)</span>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-sm">
+                  <p className="text-gray-500">CPU Throughput</p>
+                  <div className="flex items-center">
+                    {loading ? (
+                      <div className="h-5 w-16 bg-gray-200 animate-pulse rounded"></div>
+                    ) : (
+                      <p className="font-medium text-gray-900">{throughput.cpu.formatted}</p>
+                    )}
+                    <span className="ml-1 text-xs text-gray-500">(r7i.16xl)</span>
+                  </div>
+                </div>
+                <div className="text-sm">
+                  <p className="text-gray-500">GPU Throughput</p>
+                  <div className="flex items-center">
+                    {loading ? (
+                      <div className="h-5 w-16 bg-gray-200 animate-pulse rounded"></div>
+                    ) : (
+                      <p className="font-medium text-gray-900">{throughput.gpu.formatted}</p>
+                    )}
+                    <span className="ml-1 text-xs text-gray-500">(g6.16xl)</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          {throughput.version && (
-            <div className="mt-2 text-xs text-gray-500">
-              Latest version: v{throughput.version}
-            </div>
+              {throughput.version && (
+                <div className="mt-2 text-xs text-gray-500">
+                  Latest version: v{throughput.version}
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -125,9 +148,9 @@ const ZKVMs = () => {
     <div className="py-8">
       {/* Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900">Zero-Knowledge Virtual Machines</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Report Library</h1>
         <p className="mt-2 text-sm text-gray-700">
-          Compare and explore different zkVM implementations and their capabilities.
+          Compare and explore comprehensive reports on different ZK systems and their capabilities.
         </p>
       </div>
 
@@ -145,7 +168,7 @@ const ZKVMs = () => {
                 name="search"
                 id="search"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                placeholder="Search zkVMs..."
+                placeholder="Search Reports..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />

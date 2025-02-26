@@ -9,10 +9,10 @@ const MainLayout = ({ children }) => {
   const isHomePage = location.pathname === '/';
 
   return (
-    <div className={`min-h-screen flex flex-col ${isHomePage ? 'bg-gray-900' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen flex flex-col ${isHomePage ? 'bg-white' : 'bg-gray-50'}`}>
       <Navigation />
       {!isHomePage && <BreadcrumbTrail />}
-      <main className="flex-grow container mx-auto px-4 py-8">
+      <main className={`flex-grow ${isHomePage ? 'w-full p-0' : 'container mx-auto px-4 py-8'}`}>
         {children}
       </main>
       <Footer />

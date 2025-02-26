@@ -179,7 +179,7 @@ const Navigation = () => {
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link to="/zkvms" className={getLinkClass('/zkvms')}>
-                zkVMs
+                Reports
               </Link>
               <Link to="/programs" className={getLinkClass('/programs')}>
                 Programs
@@ -240,7 +240,7 @@ const Navigation = () => {
             className={getMobileLinkClass('/zkvms')}
             onClick={() => setIsMenuOpen(false)}
           >
-            zkVMs
+            Reports
           </Link>
           <Link
             to="/programs"

@@ -410,9 +410,9 @@ const Home = () => {
               {/* Trending ZKVMs */}
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-white">Trending ZKVMs</h2>
+                  <h2 className="text-xl font-semibold text-white">Trending Reports</h2>
                   <Link to="/zkvms" className="text-indigo-400 hover:text-indigo-300 text-sm">
-                    Browse all ZKVMs →
+                    Browse all Reports →
                   </Link>
                 </div>
                 <div className="space-y-4">
