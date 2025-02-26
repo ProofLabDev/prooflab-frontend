@@ -5,6 +5,8 @@ import ProgramMetrics from '../ProgramMetrics/ProgramMetrics';
 
 const ProgramCard = ({ program, selectedZKVM }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showComplexityTooltip, setShowComplexityTooltip] = useState(false);
+  
   const implementation = selectedZKVM ? 
     program.implementations.find(impl => impl.zkvm === selectedZKVM) : null;
   
@@ -19,13 +21,34 @@ const ProgramCard = ({ program, selectedZKVM }) => {
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
           <h3 className="text-xl font-semibold text-gray-900">{program.name}</h3>
           <div className="flex flex-wrap gap-2">
-            <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
-              program.complexity === 'low' ? 'bg-green-100 text-green-800' :
-              program.complexity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-              'bg-red-100 text-red-800'
-            }`}>
-              {program.complexity} complexity
-            </span>
+            <div className="relative inline-block">
+              <span 
+                className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full cursor-help ${
+                  program.complexity === 'low' ? 'bg-green-100 text-green-800' :
+                  program.complexity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                  'bg-red-100 text-red-800'
+                }`}
+                onMouseEnter={() => setShowComplexityTooltip(true)}
+                onMouseLeave={() => setShowComplexityTooltip(false)}
+              >
+                {program.complexity} complexity
+              </span>
+              
+              {/* Tooltip */}
+              {showComplexityTooltip && (
+                <div className="absolute z-50 w-64 p-3 bg-white rounded-lg shadow-lg border border-gray-200 mt-2 left-0 text-left">
+                  <p className="text-sm text-gray-600">
+                    <span className="font-medium block mb-1">Program Complexity</span>
+                    {program.complexity === 'low' && 
+                      'Low complexity programs are simpler calculations with fewer operations, typically requiring fewer resources to prove.'}
+                    {program.complexity === 'medium' && 
+                      'Medium complexity programs have moderate resource requirements and represent typical real-world ZK applications.'}
+                    {program.complexity === 'high' && 
+                      'High complexity programs involve intensive computations and may require significant resources to generate proofs.'}
+                  </p>
+                </div>
+              )}
+            </div>
             {implementation && (
               <span className="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
                 {implementation.language}

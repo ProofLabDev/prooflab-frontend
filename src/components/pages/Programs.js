@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import useProgramBenchmarkCounts from '../../hooks/useProgramBenchmarkCounts';
 
 const Programs = () => {
   const [programs, setPrograms] = useState([]);
@@ -7,6 +8,10 @@ const Programs = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('name');
+  const [tooltipProgram, setTooltipProgram] = useState(null);
+  
+  // Get benchmark counts for all programs
+  const { benchmarkCounts, loading: benchmarksLoading } = useProgramBenchmarkCounts();
 
   useEffect(() => {
     fetch('/data/programs.json')
@@ -139,13 +144,34 @@ const Programs = () => {
               <div className="p-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-medium text-gray-900">{program.name}</h3>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    program.complexity === 'low' ? 'bg-green-100 text-green-800' :
-                    program.complexity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
-                    {program.complexity}
-                  </span>
+                  <div className="relative inline-block"
+                    onMouseEnter={() => setTooltipProgram(program.id)}
+                    onMouseLeave={() => setTooltipProgram(null)}
+                  >
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium cursor-help ${
+                      program.complexity === 'low' ? 'bg-green-100 text-green-800' :
+                      program.complexity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-red-100 text-red-800'
+                    }`}>
+                      {program.complexity}
+                    </span>
+                    
+                    {tooltipProgram === program.id && (
+                      <div className="absolute z-50 w-64 p-3 bg-white rounded-lg shadow-lg border border-gray-200 mt-2 right-0 text-left"
+                        onClick={(e) => e.preventDefault()}
+                      >
+                        <p className="text-sm text-gray-600">
+                          <span className="font-medium block mb-1">Program Complexity</span>
+                          {program.complexity === 'low' && 
+                            'Low complexity programs are simpler calculations with fewer operations, typically requiring fewer resources to prove.'}
+                          {program.complexity === 'medium' && 
+                            'Medium complexity programs have moderate resource requirements and represent typical real-world ZK applications.'}
+                          {program.complexity === 'high' && 
+                            'High complexity programs involve intensive computations and may require significant resources to generate proofs.'}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <p className="mt-2 text-sm text-gray-500">{program.description}</p>
                 <div className="mt-4">
@@ -162,7 +188,11 @@ const Programs = () => {
                 </div>
                 <div className="mt-4 border-t border-gray-200 pt-4">
                   <div className="flex items-center justify-between text-sm text-gray-500">
-                    <span>Implementations: {program.implementations.length}</span>
+                    <span>
+                      Benchmark Runs: {benchmarksLoading 
+                        ? "Loading..." 
+                        : (benchmarkCounts[program.id] || 0)}
+                    </span>
                     <span>Category: {program.category}</span>
                   </div>
                 </div>
