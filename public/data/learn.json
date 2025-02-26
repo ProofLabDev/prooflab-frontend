@@ -1,16 +1,16 @@
 {
   "quickStart": {
     "title": "Quick Start Guide",
-    "description": "Get started with Zero Knowledge development using zkRust",
+    "description": "Get started with Zero Knowledge development using prooflab-rs",
     "sections": [
       {
         "title": "Installation & Setup",
-        "content": "Install zkRust and required dependencies",
+        "content": "Install prooflab-rs and required dependencies",
         "duration": "15 min"
       },
       {
         "title": "Writing Your First Program",
-        "content": "Create and run your first zkRust program",
+        "content": "Create and run your first prooflab-rs program",
         "duration": "20 min"
       },
       {
@@ -42,18 +42,18 @@
           "prerequisites": []
         },
         {
-          "id": "zkrust-intro",
-          "title": "Getting Started with zkRust",
-          "description": "Learn how to use zkRust for cross-zkVM development",
+          "id": "prooflab-intro",
+          "title": "Getting Started with prooflab-rs",
+          "description": "Learn how to use prooflab-rs for cross-zkVM development",
           "level": "Beginner",
           "levelClass": "bg-green-100 text-green-800",
           "iconBg": "bg-green-100",
           "iconColor": "text-green-600",
           "duration": "60 min",
           "topics": [
-            "Installing zkRust and Dependencies",
+            "Installing prooflab-rs and Dependencies",
             "Project Structure and Setup",
-            "Writing Your First zkRust Program",
+            "Writing Your First prooflab-rs Program",
             "Understanding I/O Functions"
           ],
           "prerequisites": ["intro-zk"]
@@ -78,12 +78,12 @@
             "Hardware Acceleration Options",
             "Comparing zkVM Features"
           ],
-          "prerequisites": ["zkrust-intro"]
+          "prerequisites": ["prooflab-intro"]
         },
         {
           "id": "program-structure",
-          "title": "zkRust Program Structure",
-          "description": "Learn how to structure zkRust programs effectively",
+          "title": "prooflab-rs Program Structure",
+          "description": "Learn how to structure prooflab-rs programs effectively",
           "level": "Intermediate",
           "levelClass": "bg-blue-100 text-blue-800",
           "iconBg": "bg-blue-100",
@@ -95,7 +95,7 @@
             "Guest vs Host Code",
             "Working with Libraries"
           ],
-          "prerequisites": ["zkrust-intro"]
+          "prerequisites": ["prooflab-intro"]
         }
       ]
     },
@@ -105,7 +105,7 @@
         {
           "id": "performance-optimization",
           "title": "Performance Optimization",
-          "description": "Optimize your zkRust programs for different zkVMs",
+          "description": "Optimize your prooflab-rs programs for different zkVMs",
           "level": "Advanced",
           "levelClass": "bg-purple-100 text-purple-800",
           "iconBg": "bg-purple-100",
@@ -122,7 +122,7 @@
         {
           "id": "example-applications",
           "title": "Example Applications",
-          "description": "Learn from real-world zkRust applications",
+          "description": "Learn from real-world prooflab-rs applications",
           "level": "Advanced",
           "levelClass": "bg-purple-100 text-purple-800",
           "iconBg": "bg-purple-100",
@@ -147,8 +147,8 @@
         "title": "API Reference",
         "items": [
           {
-            "title": "zkRust Core API",
-            "path": "/docs/api/zkrust-core"
+            "title": "prooflab-rs Core API",
+            "path": "/docs/api/prooflab-core"
           },
           {
             "title": "I/O Functions",

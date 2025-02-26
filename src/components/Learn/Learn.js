@@ -1,32 +1,23 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
-  const sections = {
-    'Getting Started': [
-      'Introduction to Zero Knowledge',
-      'Getting Started with zkRust'
-    ],
-    'Core Concepts': [
-      'Understanding zkVMs in Depth',
-      'zkRust Program Structure'
-    ],
-    'Advanced Topics': [
-      'Performance Optimization',
-      'Example Applications'
-    ]
-  };
+// Documentation sections and content
+import docContent from '../../data/docs';
+
+const Sidebar = ({ activePath }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-4 left-4 z-20">
+      {/* Mobile menu button - always visible on mobile */}
+      <div className="md:hidden fixed top-20 left-4 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-2 rounded-md text-gray-500 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+          className="p-2 rounded-md text-gray-500 bg-white shadow-md hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
         >
-          <span className="sr-only">Open sidebar</span>
-          {/* Heroicon menu icon */}
+          <span className="sr-only">{isOpen ? 'Close sidebar' : 'Open sidebar'}</span>
           <svg
             className="h-6 w-6"
             xmlns="http://www.w3.org/2000/svg"
@@ -47,47 +38,105 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
       {/* Sidebar backdrop for mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-gray-600 bg-opacity-75 z-10 lg:hidden"
+          className="fixed inset-0 bg-gray-600 bg-opacity-75 z-30 md:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* Sidebar content */}
       <div className={`
-        fixed top-0 left-0 z-10 w-64
+        fixed md:relative top-0 left-0 z-30 w-64
         h-full bg-white border-r border-gray-200
-        transform transition-transform duration-200 ease-in-out
-        lg:translate-x-0 lg:static
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        md:h-[calc(100vh-4rem)] md:top-0
+        overflow-y-auto transform transition-transform duration-200 ease-in-out
+        md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        flex-shrink-0 md:w-64
       `}>
-        <div className="h-full overflow-y-auto px-4 py-4">
-          <div className="space-y-8">
-            {Object.entries(sections).map(([category, items]) => (
-              <div key={category}>
-                <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-3">
-                  {category}
+        <div className="h-full overflow-y-auto px-3 py-4">
+          <div className="mb-6">
+            <h2 className="text-lg font-bold text-gray-900 mb-2">prooflab-rs Documentation</h2>
+            <p className="text-sm text-gray-600">Powerful zero-knowledge SDK for cross-zkVM development</p>
+          </div>
+          
+          <div className="space-y-6">
+            {Object.entries(docContent.sections).map(([sectionKey, section]) => (
+              <div key={sectionKey}>
+                <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-2">
+                  {section.title}
                 </h3>
                 <ul className="space-y-2">
-                  {items.map((item) => (
-                    <li key={item}>
-                      <button
-                        onClick={() => {
-                          setActiveSection(item);
-                          setIsOpen(false);
-                        }}
-                        className={`w-full text-left px-2 py-1.5 text-sm rounded-md ${
-                          activeSection === item
-                            ? 'text-indigo-600 bg-indigo-50 font-medium'
-                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                        }`}
-                      >
-                        {item}
-                      </button>
-                    </li>
-                  ))}
+                  {section.pages.map((page) => {
+                    const pagePath = `/learn/${sectionKey}/${page.slug}`;
+                    const isActive = activePath === pagePath;
+                    
+                    return (
+                      <li key={page.slug}>
+                        <Link
+                          to={pagePath}
+                          className={`block px-3 py-2 text-sm rounded-md ${
+                            isActive
+                              ? 'text-indigo-600 bg-indigo-50 font-medium'
+                              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                          }`}
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {page.title}
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             ))}
+          </div>
+          
+          <div className="border-t border-gray-200 pt-4 mt-6">
+            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-2">
+              Resources
+            </h3>
+            <ul className="space-y-2">
+              <li>
+                <a 
+                  href="https://github.com/ProofLabDev/prooflab-rs"
+                  target="_blank"
+                  rel="noopener noreferrer" 
+                  className="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md"
+                >
+                  <svg className="h-5 w-5 mr-2 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                    <path fillRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z" clipRule="evenodd" />
+                  </svg>
+                  GitHub Repository
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://github.com/ProofLabDev/prooflab-rs/tree/main/examples" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md"
+                >
+                  <svg className="h-5 w-5 mr-2 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9.293 1.55l.707.708-7.147 7.146a.5.5 0 0 0 0 .708l7.147 7.146-.707.708-7.147-7.147a1.5 1.5 0 0 1 0-2.122L9.293 1.55z"/>
+                    <path d="M22.707 1.55l-7.147 7.147a1.5 1.5 0 0 0 0 2.122l7.147 7.147.707-.708-7.147-7.146a.5.5 0 0 1 0-.708l7.147-7.146-.707-.708z"/>
+                  </svg>
+                  Example Projects
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://github.com/ProofLabDev/prooflab-rs/issues"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md"
+                >
+                  <svg className="h-5 w-5 mr-2 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 7a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0112 7zm0 10a1 1 0 100-2 1 1 0 000 2z" />
+                    <path fillRule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15a1 1 0 112 0 1 1 0 01-2 0zm1-10.75a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0112 6.25z" clipRule="evenodd" />
+                  </svg>
+                  Report an Issue
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -95,377 +144,310 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
   );
 };
 
-const ContentSection = ({ section }) => {
-  const content = {
-    'Introduction to Zero Knowledge': {
-      title: 'Introduction to Zero Knowledge',
-      description: 'Learn the fundamentals of Zero Knowledge proofs and zkVMs',
-      content: [
-        {
-          type: 'text',
-          content: 'Zero-knowledge proofs (ZKPs) are cryptographic methods that allow one party (the prover) to prove to another party (the verifier) that a statement is true without revealing any information beyond the validity of the statement itself. This powerful concept enables privacy-preserving computation and verification.'
-        },
-        {
-          type: 'info',
-          title: 'Key Properties of Zero Knowledge Proofs',
-          content: [
-            'Completeness: If the statement is true, an honest verifier will be convinced by an honest prover',
-            'Soundness: If the statement is false, no cheating prover can convince an honest verifier',
-            'Zero-Knowledge: The verifier learns nothing other than the fact that the statement is true'
-          ]
-        },
-        {
-          type: 'text',
-          content: 'There are several types of zero-knowledge proofs, but the most practical for general-purpose computation are SNARKs (Succinct Non-interactive ARguments of Knowledge) and STARKs (Scalable Transparent ARguments of Knowledge).'
-        },
-        {
-          type: 'info',
-          title: 'SNARKs vs STARKs',
-          content: [
-            'SNARKs: Smaller proof size, faster verification, but require trusted setup',
-            'STARKs: No trusted setup, post-quantum secure, but larger proof size',
-            'STARK→SNARK: Combines STARK security with SNARK efficiency',
-            'Both support general computation through arithmetic circuits'
-          ]
-        },
-        {
-          type: 'text',
-          content: 'A Zero Knowledge Virtual Machine (zkVM) is a specialized virtual machine that can execute programs while generating cryptographic proofs of correct execution. These proofs can be verified by others without revealing the program\'s inputs or intermediate states. zkVMs make it possible to write programs in familiar languages like Rust and automatically generate zero-knowledge proofs of their execution.'
-        },
-        {
-          type: 'info',
-          title: 'Why Use a zkVM?',
-          content: [
-            'Write programs in familiar languages (Rust, C++)',
-            'Automatic proof generation for program execution',
-            'No need to manually design circuits',
-            'Hardware acceleration support for better performance',
-            'Production-ready security through audited implementations'
-          ]
-        },
-        {
-          type: 'text',
-          content: 'zkVMs typically work by translating program execution into a series of arithmetic constraints that can be proven using SNARKs or STARKs. This allows developers to focus on writing their application logic rather than dealing with the complexities of zero-knowledge proof systems.'
-        },
-        {
-          type: 'info',
-          title: 'Common zkVM Applications',
-          content: [
-            'Private Smart Contract Execution',
-            'Verifiable Computation Outsourcing',
-            'Privacy-Preserving State Updates',
-            'Secure Multi-Party Computation',
-            'Identity and Credential Verification'
-          ]
-        },
-        {
-          type: 'text',
-          content: 'The zkVM ecosystem is primarily dominated by two major implementations: RISC0 and SP1. Each has its own unique architecture and trade-offs, but both enable developers to write and prove general-purpose programs.'
-        },
-        {
-          type: 'info',
-          title: 'Key zkVM Components',
-          content: [
-            'Execution Environment: Runs the program and records execution trace',
-            'Proving System: Generates proof of correct execution',
-            'Verification System: Validates proofs efficiently',
-            'Memory Management: Handles program state and storage',
-            'I/O Interface: Manages inputs and outputs securely'
-          ]
-        },
-        {
-          type: 'text',
-          content: 'When writing programs for zkVMs, developers need to consider certain constraints and best practices to ensure efficient proof generation:'
-        },
-        {
-          type: 'info',
-          title: 'zkVM Development Considerations',
-          content: [
-            'Deterministic Execution: Programs must be deterministic',
-            'Resource Constraints: Memory and computation affect proving time',
-            'Precompiles: Use optimized operations when available',
-            'I/O Handling: Carefully manage public and private inputs',
-            'Proof Size: Consider verification costs and storage requirements'
-          ]
-        },
-        {
-          type: 'text',
-          content: 'zkRust simplifies zkVM development by providing a unified interface for multiple zkVMs, allowing developers to write code once and deploy to different proving systems. This abstraction helps developers focus on their application logic while maintaining the flexibility to choose the most suitable zkVM for their specific needs.'
-        }
-      ]
-    },
-    'Understanding zkVMs in Depth': {
-      title: 'Understanding Zero-Knowledge Virtual Machines',
-      description: 'Deep dive into RISC0 and SP1 zkVMs',
-      content: [
-        {
-          type: 'text',
-          content: 'Zero-Knowledge Virtual Machines (ZKVMs) are specialized runtime environments that enable the execution of programs while generating zero-knowledge proofs of their correct execution.'
-        },
-        {
-          type: 'info',
-          title: 'RISC0',
-          content: [
-            'RISC-V based zkVM with STARK→SNARK architecture',
-            'Supports Rust (core/std), C, and C++ through LLVM',
-            'Features extensive cryptographic precompiles including SHA-256, RSA, and ECDSA',
-            'Production-ready with zkVM 1.0 release and multiple security audits'
-          ]
-        },
-        {
-          type: 'code',
-          language: 'rust',
-          content: `// Example RISC0 program
-use risc0_zkvm::guest::env;
-
-fn main() {
-    // Read private input
-    let secret: u64 = env::read();
+const DocContentBlock = ({ block }) => {
+  switch (block.type) {
+    case 'text':
+      return <p className="text-gray-600 leading-relaxed mb-6">{block.content}</p>;
     
-    // Perform computation
-    let result = expensive_computation(secret);
-    
-    // Public output
-    env::commit(&result);
-}`
-        },
-        {
-          type: 'info',
-          title: 'SP1',
-          content: [
-            'STARK + FRI based zkVM with STARK→SNARK wrapping',
-            'Supports any LLVM-compiled language, with primary Rust support',
-            'Includes optimized precompiles for hash functions and cryptographic operations',
-            'Used in production by projects like Blobstream and Vector'
-          ]
-        }
-      ]
-    },
-    'Getting Started with zkRust': {
-      title: 'Getting Started with zkRust',
-      description: 'Learn how to use zkRust for cross-zkVM development',
-      content: [
-        {
-          type: 'text',
-          content: 'zkRust is a CLI tool that simplifies developing zk applications in Rust using zkVMs such as SP1 or RISC0. It abstracts the complexity of using zkVMs and provides developers the choice of which zkVM they would like to develop with.'
-        },
-        {
-          type: 'info',
-          title: 'Prerequisites',
-          content: [
-            'Rust installed on your machine (rustc, cargo)',
-            'Basic understanding of Rust programming',
-            'Git for version control',
-            'Docker (optional, for containerized development)'
-          ]
-        },
-        {
-          type: 'text',
-          content: 'There are two ways to install zkRust: direct installation using the install script, or building from source for local development.'
-        },
-        {
-          type: 'code',
-          language: 'bash',
-          content: `# Direct installation
-curl -L https://raw.githubusercontent.com/yetanotherco/zkRust/main/install_zkrust.sh | bash
-
-# For local development
-git clone https://github.com/ProofLabDev/zkRust.git
-cd zkRust
-make install`
-        },
-        {
-          type: 'info',
-          title: 'Project Structure',
-          content: [
-            'main.rs: Contains the main program logic executed in the zkVM',
-            'input(): Optional function for preprocessing before VM execution',
-            'output(): Optional function for post-processing after VM execution',
-            'lib/: Optional directory for shared libraries'
-          ]
-        },
-        {
-          type: 'code',
-          language: 'text',
-          content: `# Basic project structure
-.
-├── Cargo.toml
-├── lib/          # Optional
-└── src
-    └── main.rs`
-        },
-        {
-          type: 'text',
-          content: 'To create your first zkRust program, you need to define a main() function that will be executed within the zkVM. You can also optionally define input() and output() functions for pre/post processing.'
-        },
-        {
-          type: 'code',
-          language: 'rust',
-          content: `use zk_rust_io;
-
-// Optional: Runs before zkVM execution
-pub fn input() {
-    let data = "Hello zkRust!".to_string();
-    // Write data to be used in the VM
-    zk_rust_io::write(&data);
-}
-
-// Main function executed in zkVM
-pub fn main() {
-    // Read input data in the VM
-    let message: String = zk_rust_io::read();
-    
-    // Perform computation
-    let result = process_data(message);
-    
-    // Write result to VM output buffer
-    zk_rust_io::commit(&result);
-}
-
-// Optional: Runs after zkVM execution
-pub fn output() {
-    // Read result from VM output buffer
-    let result: String = zk_rust_io::out();
-    println!("Result: {}", result);
-}`
-        },
-        {
-          type: 'info',
-          title: 'Running Your Program',
-          content: [
-            'Generate proof with RISC0: cargo run --release -- prove-risc0',
-            'Generate proof with SP1: cargo run --release -- prove-sp1',
-            'Use --precompiles flag for hardware acceleration',
-            'Use --submit-to-aligned to submit proofs to Aligned Layer'
-          ]
-        },
-        {
-          type: 'text',
-          content: 'zkRust provides a unified I/O interface through the zk_rust_io crate. Add it to your Cargo.toml:'
-        },
-        {
-          type: 'code',
-          language: 'toml',
-          content: `[dependencies]
-zk_rust_io = { git = "https://github.com/yetanotherco/zkRust.git" }`
-        },
-        {
-          type: 'info',
-          title: 'Available Examples',
-          content: [
-            'Fibonacci number computation',
-            'RSA key verification',
-            'ECDSA signature verification',
-            'Blockchain state diff verification',
-            'SHA256 hash computation',
-            'Interactive quiz system'
-          ]
-        },
-        {
-          type: 'text',
-          content: 'For faster development and better performance when using Docker, you can mount the Rust cache directories:'
-        },
-        {
-          type: 'code',
-          language: 'bash',
-          content: `docker run -it \\
-  -v "$HOME/.cargo/registry:/root/.cargo/registry" \\
-  -v "$HOME/.cargo/git:/root/.cargo/git" \\
-  zkrust bash`
-        }
-      ]
-    }
-  };
-
-  const sectionContent = content[section];
-  if (!sectionContent) {
-    return (
-      <div className="p-8">
-        <div className="text-center text-gray-500">
-          Content for "{section}" is coming soon...
+    case 'mermaid':
+      return (
+        <div className="mb-6 border border-gray-200 rounded-lg p-4 bg-gray-50">
+          <div className="mermaid">
+            {block.content}
+          </div>
         </div>
+      );
+    
+    case 'code':
+      return (
+        <div className="mb-6">
+          {block.filename && (
+            <div className="text-xs font-mono bg-gray-800 text-gray-400 px-4 py-2 rounded-t-lg border-b border-gray-700">
+              {block.filename}
+            </div>
+          )}
+          <SyntaxHighlighter
+            language={block.language || 'javascript'}
+            style={vscDarkPlus}
+            className={`${block.filename ? 'rounded-t-none' : ''} rounded-lg !mt-0`}
+            customStyle={{ margin: 0 }}
+          >
+            {block.content}
+          </SyntaxHighlighter>
+        </div>
+      );
+    
+    case 'info':
+      return (
+        <div className={`mb-6 p-5 rounded-lg ${
+          block.variant === 'warning' 
+            ? 'bg-amber-50 border border-amber-200' 
+            : block.variant === 'error'
+              ? 'bg-red-50 border border-red-200'
+              : 'bg-blue-50 border border-blue-200'
+        }`}>
+          <h4 className={`text-base font-semibold mb-2 ${
+            block.variant === 'warning' 
+              ? 'text-amber-800' 
+              : block.variant === 'error'
+                ? 'text-red-800'
+                : 'text-blue-800'
+          }`}>
+            {block.title}
+          </h4>
+          {typeof block.content === 'string' ? (
+            <p className={`${
+              block.variant === 'warning' 
+                ? 'text-amber-700' 
+                : block.variant === 'error'
+                  ? 'text-red-700'
+                  : 'text-blue-700'
+            }`}>
+              {block.content}
+            </p>
+          ) : (
+            <ul className="list-disc list-inside space-y-1">
+              {block.content.map((item, i) => (
+                <li key={i} className={`${
+                  block.variant === 'warning' 
+                    ? 'text-amber-700' 
+                    : block.variant === 'error'
+                      ? 'text-red-700'
+                      : 'text-blue-700'
+                }`}>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      );
+    
+    case 'heading':
+      const HeadingTag = `h${block.level}`;
+      return (
+        <HeadingTag 
+          id={block.id} 
+          className={`
+            font-bold text-gray-900 mb-4 mt-8 
+            ${block.level === 2 ? 'text-2xl border-b border-gray-200 pb-2' : ''}
+            ${block.level === 3 ? 'text-xl' : ''}
+            ${block.level === 4 ? 'text-lg' : ''}
+          `}
+        >
+          {block.content}
+        </HeadingTag>
+      );
+    
+    case 'list':
+      return (
+        <ul className={`mb-6 pl-6 ${block.style === 'ordered' ? 'list-decimal' : 'list-disc'}`}>
+          {block.items.map((item, index) => (
+            <li key={index} className="text-gray-600 mb-2">
+              {item}
+            </li>
+          ))}
+        </ul>
+      );
+    
+    case 'table':
+      return (
+        <div className="mb-6 overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-300 border border-gray-200 rounded-lg">
+            <thead className="bg-gray-50">
+              <tr>
+                {block.headers.map((header, index) => (
+                  <th 
+                    key={index}
+                    scope="col" 
+                    className="px-4 py-3 text-left text-sm font-semibold text-gray-900"
+                  >
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 bg-white">
+              {block.rows.map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  {row.map((cell, cellIndex) => (
+                    <td key={cellIndex} className="px-4 py-3 text-sm text-gray-500">
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    
+    default:
+      return null;
+  }
+};
+
+const DocPage = ({ page }) => {
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [page]);
+
+  if (!page) {
+    return (
+      <div className="text-center py-20">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Page Not Found</h2>
+        <p className="text-gray-600 mb-6">The documentation page you're looking for doesn't exist.</p>
+        <Link 
+          to="/learn/getting-started/introduction"
+          className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
+        >
+          Go to Introduction
+        </Link>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-4">{sectionContent.title}</h1>
-      <p className="text-lg text-gray-600 mb-8">{sectionContent.description}</p>
-      
-      <div className="space-y-6">
-        {sectionContent.content.map((block, index) => {
-          switch (block.type) {
-            case 'text':
-              return (
-                <p key={index} className="text-gray-600 leading-relaxed">
-                  {block.content}
-                </p>
-              );
-            case 'code':
-              return (
-                <div key={index} className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-                  <pre className="text-gray-100">
-                    <code>{block.content}</code>
-                  </pre>
-                </div>
-              );
-            case 'info':
-              return (
-                <div key={index} className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h3 className="text-blue-800 font-semibold mb-2">{block.title}</h3>
-                  <ul className="list-disc list-inside space-y-1">
-                    {block.content.map((item, i) => (
-                      <li key={i} className="text-blue-700">{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            default:
-              return null;
-          }
-        })}
+    <div className="pb-12">
+      {/* Page header */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">{page.title}</h1>
+        {page.description && (
+          <p className="text-xl text-gray-600">{page.description}</p>
+        )}
+        {page.updated && (
+          <p className="text-sm text-gray-500 mt-3">
+            Last updated: {page.updated}
+          </p>
+        )}
       </div>
 
-      <div className="mt-12 border-t border-gray-200 pt-8">
-        <div className="flex justify-between items-center">
-          <Link
-            to="#"
-            className="text-indigo-600 hover:text-indigo-700 font-medium flex items-center"
-          >
-            ← Previous
-          </Link>
-          <Link
-            to="#"
-            className="text-indigo-600 hover:text-indigo-700 font-medium flex items-center"
-          >
-            Next →
-          </Link>
-        </div>
+      {/* Content blocks */}
+      <div className="prose prose-indigo max-w-none">
+        {page.content.map((block, index) => (
+          <DocContentBlock key={index} block={block} />
+        ))}
       </div>
+      
+      {/* Next/Prev navigation */}
+      {(page.prevPage || page.nextPage) && (
+        <div className="mt-10 border-t border-gray-200 pt-6 flex justify-between">
+          {page.prevPage ? (
+            <Link
+              to={page.prevPage.path}
+              className="inline-flex items-center text-indigo-600 hover:text-indigo-500"
+            >
+              <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              {page.prevPage.title}
+            </Link>
+          ) : <div></div>}
+          
+          {page.nextPage && (
+            <Link
+              to={page.nextPage.path}
+              className="inline-flex items-center text-indigo-600 hover:text-indigo-500"
+            >
+              {page.nextPage.title}
+              <svg className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          )}
+        </div>
+      )}
     </div>
+  );
+};
+
+const DocRoutes = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  // Redirect to first page if at root path
+  useEffect(() => {
+    if (location.pathname === '/learn' || location.pathname === '/learn/') {
+      navigate('/learn/getting-started/introduction', { replace: true });
+    }
+  }, [location.pathname, navigate]);
+
+  // Process doc content to build routes and navigation links
+  const pages = {};
+  Object.entries(docContent.sections).forEach(([sectionKey, section]) => {
+    section.pages.forEach((page, pageIndex) => {
+      const path = `/learn/${sectionKey}/${page.slug}`;
+      
+      // Add navigation info
+      const prevPage = pageIndex > 0 
+        ? { 
+            title: section.pages[pageIndex - 1].title, 
+            path: `/learn/${sectionKey}/${section.pages[pageIndex - 1].slug}` 
+          }
+        : null;
+        
+      const nextPage = pageIndex < section.pages.length - 1 
+        ? { 
+            title: section.pages[pageIndex + 1].title, 
+            path: `/learn/${sectionKey}/${section.pages[pageIndex + 1].slug}` 
+          }
+        : null;
+      
+      // Store processed page data
+      pages[path] = {
+        ...page,
+        prevPage,
+        nextPage
+      };
+    });
+  });
+
+  return (
+    <Routes>
+      {Object.entries(pages).map(([path, page]) => (
+        <Route 
+          key={path} 
+          path={path.replace('/learn', '')} 
+          element={<DocPage page={page} />} 
+        />
+      ))}
+      <Route path="*" element={<DocPage page={null} />} />
+    </Routes>
   );
 };
 
 const Learn = () => {
-  const [activeSection, setActiveSection] = useState('Introduction to Zero Knowledge');
-  const [isOpen, setIsOpen] = useState(false);
-
+  const location = useLocation();
+  
+  useEffect(() => {
+    // Initialize Mermaid when the component mounts
+    if (typeof window !== 'undefined') {
+      import('mermaid').then(mermaid => {
+        mermaid.default.initialize({
+          startOnLoad: true,
+          theme: 'neutral',
+          securityLevel: 'loose',
+          fontSize: 16
+        });
+        mermaid.default.contentLoaded();
+      });
+    }
+  }, [location.pathname]);
+  
   return (
-    <div className="min-h-screen bg-white flex">
-      <Sidebar 
-        activeSection={activeSection} 
-        setActiveSection={setActiveSection}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-      />
-      <main className="flex-1">
-        <div className="px-4 py-6 sm:px-6 lg:px-8">
-          <ContentSection section={activeSection} />
+    <div className="min-h-screen flex">
+      {/* Sidebar - always included, but visibility controlled by CSS and state */}
+      <Sidebar activePath={location.pathname} />
+      
+      {/* Main content area */}
+      <div className="flex-1">
+        <div className="py-6 px-4 sm:px-6 lg:px-8">
+          <DocRoutes />
         </div>
-      </main>
+      </div>
     </div>
   );
 };
 
-export default Learn; 
+export default Learn;

@@ -129,9 +129,9 @@ const About = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900">zkRust SDK</h3>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">prooflab-rs SDK</h3>
               <p className="text-gray-600 leading-relaxed mb-4">
-                Our extended fork of zkRust allows developers to write code once and run it on any supported zkVM. No vendor lock-in, no rewriting code.
+                Our prooflab-rs SDK allows developers to write code once and run it on any supported zkVM. No vendor lock-in, no rewriting code.
               </p>
               <ul className="space-y-2 text-gray-600">
                 <li className="flex items-start">
@@ -330,7 +330,7 @@ const About = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 <div className="text-center">
                   <h4 className="font-medium text-gray-900">YetAnotherCo</h4>
-                  <p className="text-gray-600 text-sm">zkRust creators</p>
+                  <p className="text-gray-600 text-sm">Original zkRust creators</p>
                 </div>
                 <div className="text-center">
                   <h4 className="font-medium text-gray-900">SP1 Team</h4>

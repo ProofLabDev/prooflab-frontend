@@ -16,6 +16,7 @@ import FAQ from './components/pages/FAQ';
 import About from './components/About/About';
 import TelemetryDashboard from './components/TelemetryDashboard/TelemetryDashboard';
 import ComparisonTable from './components/ComparisonTable/ComparisonTable';
+import Learn from './components/Learn/Learn';
 
 function App() {
   useEffect(() => {
@@ -44,6 +45,7 @@ function App() {
         <Route path="/about" element={<MainLayout><About /></MainLayout>} />
         <Route path="/benchmarks" element={<MainLayout><TelemetryDashboard /></MainLayout>} />
         <Route path="/compare" element={<MainLayout><ComparisonTable /></MainLayout>} />
+        <Route path="/learn/*" element={<MainLayout><Learn /></MainLayout>} />
       </Routes>
     </Router>
   );

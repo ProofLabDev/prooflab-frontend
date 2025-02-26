@@ -136,11 +136,11 @@ const FAQ = () => {
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">What makes ProofLab's benchmarks unique?</h2>
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 space-y-6">
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-3">Our zkRust-Based Approach</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-3">Our prooflab-rs Based Approach</h3>
               <p className="text-gray-700 leading-relaxed mb-4">
-                ProofLab leverages an extended fork of <a href="https://github.com/yetanotherco/zkRust" className="text-blue-600 hover:text-blue-800 underline">zkRust</a>, 
-                a powerful abstraction layer that allows developers to write Rust code once and run it across multiple zkVMs. 
-                You can find our extended fork <a href="https://github.com/ProofLabDev/zkRust" className="text-blue-600 hover:text-blue-800 underline">here</a>. 
+                ProofLab's SDK, <a href="https://github.com/ProofLabDev/prooflab-rs" className="text-blue-600 hover:text-blue-800 underline">prooflab-rs</a>, 
+                is a powerful abstraction layer that allows developers to write Rust code once and run it across multiple zkVMs. 
+                This is a fork of <a href="https://github.com/yetanotherco/zkRust" className="text-blue-600 hover:text-blue-800 underline">zkRust</a> with significant new functionality added.
                 This approach ensures our benchmarks are:
               </p>
               <ul className="space-y-3 text-gray-700">
@@ -157,7 +157,7 @@ const FAQ = () => {
                 <li className="flex items-start">
                   <span className="text-blue-500 mr-2">•</span>
                   <span><strong>Easily extensible:</strong> Adding support for new zkVMs or benchmark programs 
-                  is straightforward thanks to zkRust's abstraction layer.</span>
+                  is straightforward thanks to prooflab-rs's abstraction layer.</span>
                 </li>
               </ul>
             </div>
@@ -165,7 +165,7 @@ const FAQ = () => {
             <div>
               <h3 className="text-lg font-medium text-gray-900 mb-3">How It Works</h3>
               <p className="text-gray-700 leading-relaxed mb-4">
-                zkRust provides a unified interface for zkVM development:
+                The prooflab-rs SDK provides a unified interface for zkVM development:
               </p>
               <ul className="space-y-3 text-gray-700">
                 <li className="flex items-start">
@@ -233,10 +233,11 @@ const FAQ = () => {
               <li className="flex items-start">
                 <span className="text-blue-500 mr-2">•</span>
                 <div>
-                  <a href="https://github.com/yetanotherco/zkRust" className="text-blue-600 hover:text-blue-800 underline font-medium">zkRust</a>
+                  <a href="https://github.com/ProofLabDev/prooflab-rs" className="text-blue-600 hover:text-blue-800 underline font-medium">prooflab-rs</a>
                   <p className="mt-1">
-                    The foundational project that enables our cross-zkVM benchmarking approach, providing 
-                    the abstraction layer that makes our comparable benchmarks possible.
+                    Our SDK that enables cross-zkVM benchmarking, providing the abstraction layer
+                    that makes our comparable benchmarks possible. It was forked from zkRust but has 
+                    since added significant new functionality.
                   </p>
                 </div>
               </li>

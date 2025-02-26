@@ -37,7 +37,7 @@
 
   /* Focus styles */
   *:focus-visible {
-    @apply outline-none ring-1 ring-indigo-300 ring-offset-1;
+    @apply outline-none ring-2 ring-indigo-500 ring-offset-2;
   }
 
   /* Custom scrollbar */
@@ -61,11 +61,11 @@
 /* Component styles */
 @layer components {
   .btn-primary {
-    @apply px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-1 focus:ring-indigo-300 focus:ring-offset-1 transition-all;
+    @apply px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none transition-all;
   }
 
   .btn-secondary {
-    @apply px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-1 focus:ring-indigo-300 focus:ring-offset-1 transition-all;
+    @apply px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none transition-all;
   }
 
   .input-field {
@@ -99,14 +99,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Remove default browser outline */
+/* Remove default browser outline for mouse users but keep it for keyboard users */
 a, button, input, select, textarea {
-  outline: none !important;
+  outline: none;
 }
 
-/* Use our custom focus styles instead */
-a:focus, button:focus, input:focus, select:focus, textarea:focus {
-  @apply outline-none ring-1 ring-indigo-300 ring-offset-1;
+/* Hide focus outline when using mouse, but show for keyboard navigation */
+:focus:not(:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Use our custom focus styles for keyboard navigation */
+:focus-visible {
+  @apply outline-none ring-2 ring-indigo-500 ring-offset-2;
 }
 
 code {

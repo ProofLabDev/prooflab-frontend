@@ -547,7 +547,7 @@ const ComparisonTable = () => {
             <p className="text-sm text-gray-600 mb-4">
               Our benchmarks are collected using standardized workloads running on controlled environments
               to ensure fair and consistent comparisons. All zkVMs are tested using the same programs compiled
-              from zkRust, ensuring an apples-to-apples comparison across systems.
+              from prooflab-rs, ensuring an apples-to-apples comparison across systems.
             </p>
             
             <h3 className="text-base font-semibold text-gray-900 mt-4 mb-2">Testing Environment</h3>

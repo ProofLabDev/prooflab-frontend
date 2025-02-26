@@ -153,13 +153,13 @@ const Navigation = () => {
 
   const getLinkClass = (path) => {
     const isActive = location.pathname === path;
-    const baseClasses = "inline-flex items-center px-1 pt-1 text-sm font-medium relative z-10";
+    const baseClasses = "inline-flex items-center px-1 pt-1 text-sm font-medium relative z-10 focus:outline-none";
     return `${baseClasses} ${isActive ? 'text-gray-900 border-b-2 border-indigo-500' : 'text-gray-500 hover:text-gray-900'}`;
   };
 
   const getMobileLinkClass = (path) => {
     const isActive = location.pathname === path;
-    const baseClasses = "block pl-3 pr-4 py-2 text-base font-medium";
+    const baseClasses = "block pl-3 pr-4 py-2 text-base font-medium focus:outline-none";
     return `${baseClasses} ${isActive ? 'text-indigo-700 bg-indigo-50' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'}`;
   };
 
@@ -178,22 +178,25 @@ const Navigation = () => {
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <Link to="/zkvms" className={getLinkClass('/zkvms')}>
+              <Link to="/zkvms" className={getLinkClass('/zkvms')} tabIndex="0">
                 Reports
               </Link>
-              <Link to="/programs" className={getLinkClass('/programs')}>
+              <Link to="/programs" className={getLinkClass('/programs')} tabIndex="0">
                 Programs
               </Link>
-              <Link to="/benchmarks" className={getLinkClass('/benchmarks')}>
+              <Link to="/benchmarks" className={getLinkClass('/benchmarks')} tabIndex="0">
                 Benchmarks
               </Link>
-              <Link to="/compare" className={getLinkClass('/compare')}>
+              <Link to="/compare" className={getLinkClass('/compare')} tabIndex="0">
                 Compare
               </Link>
-              <Link to="/faq" className={getLinkClass('/faq')}>
+              <Link to="/learn" className={getLinkClass('/learn')} tabIndex="0">
+                Learn
+              </Link>
+              <Link to="/faq" className={getLinkClass('/faq')} tabIndex="0">
                 FAQ
               </Link>
-              <Link to="/about" className={getLinkClass('/about')}>
+              <Link to="/about" className={getLinkClass('/about')} tabIndex="0">
                 About
               </Link>
             </div>
@@ -202,7 +205,7 @@ const Navigation = () => {
           <div className="hidden sm:flex sm:items-center sm:space-x-4">
             <button
               onClick={() => setIsUpdatesModalOpen(true)}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
             >
               Get Updates
             </button>
@@ -211,7 +214,7 @@ const Navigation = () => {
           <div className="sm:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
             >
               <span className="sr-only">Open main menu</span>
               <svg
@@ -239,6 +242,7 @@ const Navigation = () => {
             to="/zkvms"
             className={getMobileLinkClass('/zkvms')}
             onClick={() => setIsMenuOpen(false)}
+            tabIndex="0"
           >
             Reports
           </Link>
@@ -246,6 +250,7 @@ const Navigation = () => {
             to="/programs"
             className={getMobileLinkClass('/programs')}
             onClick={() => setIsMenuOpen(false)}
+            tabIndex="0"
           >
             Programs
           </Link>
@@ -253,6 +258,7 @@ const Navigation = () => {
             to="/benchmarks"
             className={getMobileLinkClass('/benchmarks')}
             onClick={() => setIsMenuOpen(false)}
+            tabIndex="0"
           >
             Benchmarks
           </Link>
@@ -260,13 +266,23 @@ const Navigation = () => {
             to="/compare"
             className={getMobileLinkClass('/compare')}
             onClick={() => setIsMenuOpen(false)}
+            tabIndex="0"
           >
             Compare
+          </Link>
+          <Link
+            to="/learn"
+            className={getMobileLinkClass('/learn')}
+            onClick={() => setIsMenuOpen(false)}
+            tabIndex="0"
+          >
+            Learn
           </Link>
           <Link
             to="/faq"
             className={getMobileLinkClass('/faq')}
             onClick={() => setIsMenuOpen(false)}
+            tabIndex="0"
           >
             FAQ
           </Link>
@@ -274,6 +290,7 @@ const Navigation = () => {
             to="/about"
             className={getMobileLinkClass('/about')}
             onClick={() => setIsMenuOpen(false)}
+            tabIndex="0"
           >
             About
           </Link>
@@ -282,7 +299,7 @@ const Navigation = () => {
               setIsMenuOpen(false);
               setIsUpdatesModalOpen(true);
             }}
-            className="w-full text-left pl-3 pr-4 py-2 text-base font-medium text-indigo-700 hover:bg-gray-50"
+            className="w-full text-left pl-3 pr-4 py-2 text-base font-medium text-indigo-700 hover:bg-gray-50 focus:outline-none"
           >
             Get Updates
           </button>

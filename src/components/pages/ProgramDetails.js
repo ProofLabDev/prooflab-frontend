@@ -596,7 +596,7 @@ const ProgramDetails = () => {
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Resources</h2>
           
-          {/* zkRust Implementation Box */}
+          {/* prooflab-rs Implementation Box */}
           <div className="bg-indigo-50 rounded-lg p-5 border border-indigo-100">
             <div className="sm:flex sm:items-start">
               <div className="flex-shrink-0 sm:mr-6">
@@ -607,13 +607,13 @@ const ProgramDetails = () => {
                 </div>
               </div>
               <div className="mt-3 sm:mt-0">
-                <h3 className="text-md font-medium text-indigo-900">Cross-ZKVM Implementation with zkRust</h3>
+                <h3 className="text-md font-medium text-indigo-900">Cross-ZKVM Implementation with prooflab-rs</h3>
                 <p className="mt-2 text-sm text-indigo-800">
-                  This program is implemented using the zkRust framework, which provides a single, unified codebase that works across multiple zero-knowledge virtual machines without any ZKVM-specific implementations.
+                  This program is implemented using the prooflab-rs framework, which provides a single, unified codebase that works across multiple zero-knowledge virtual machines without any ZKVM-specific implementations.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-3">
                   <a 
-                    href={`https://github.com/ProofLabDev/zkRust/tree/main/examples/${program.crateName}`}
+                    href={`https://github.com/ProofLabDev/prooflab-rs/tree/main/examples/${program.crateName}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center px-3 py-1.5 border border-indigo-600 shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -624,15 +624,15 @@ const ProgramDetails = () => {
                     View Source Code
                   </a>
                   <a 
-                    href="https://github.com/ProofLabDev/zkRust"
+                    href="https://github.com/ProofLabDev/prooflab-rs"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center px-3 py-1.5 border border-indigo-200 text-sm font-medium rounded-md text-indigo-700 bg-indigo-50 hover:bg-indigo-100"
                   >
-                    zkRust Repository
+                    prooflab-rs Repository
                   </a>
                   <a 
-                    href="https://github.com/ProofLabDev/zkRust/tree/main/examples"
+                    href="https://github.com/ProofLabDev/prooflab-rs/tree/main/examples"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center px-3 py-1.5 border border-indigo-200 text-sm font-medium rounded-md text-indigo-700 bg-indigo-50 hover:bg-indigo-100"

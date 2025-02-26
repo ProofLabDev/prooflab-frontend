@@ -28,7 +28,7 @@ const FAQ = () => {
             the tradeoffs between different systems and choose the right one for their specific needs.
             
             Beyond benchmarking, we're building a complete ecosystem of tools and resources to support the 
-            growing ZK community, including our zkRust SDK, educational materials, and developer tools.`,
+            growing ZK community, including our prooflab-rs SDK, educational materials, and developer tools.`,
           links: [
             {
               title: "Learn more about our vision",
@@ -194,7 +194,7 @@ const FAQ = () => {
           details: [
             {
               title: "Our Approach",
-              description: `We use the same zkRust program implementations across all zkVMs, ensuring an 
+              description: `We use the same ProofLab program implementations across all zkVMs, ensuring an 
                 apples-to-apples comparison. Each benchmark is run multiple times in controlled environments to 
                 ensure consistency and reliability.`
             },
@@ -231,7 +231,7 @@ const FAQ = () => {
               ]
             },
             {
-              description: "Each program is implemented in zkRust, allowing it to run consistently across all supported zkVMs without modification. This ensures that performance differences are due to the zkVMs themselves, not implementation variations."
+              description: "Each program is implemented using the prooflab-rs SDK, allowing it to run consistently across all supported zkVMs without modification. This ensures that performance differences are due to the zkVMs themselves, not implementation variations."
             }
           ],
           links: [
@@ -333,12 +333,13 @@ const FAQ = () => {
       content: [
         {
           question: "What makes ProofLab's benchmarks unique?",
-          answer: "ProofLab uses zkRust to ensure truly comparable benchmarks across different zkVMs.",
+          answer: "ProofLab uses the prooflab-rs SDK to ensure truly comparable benchmarks across different zkVMs.",
           details: [
             {
-              title: "Our zkRust-Based Approach",
-              description: `ProofLab leverages an extended fork of zkRust, a powerful abstraction layer that allows 
-                developers to write Rust code once and run it across multiple zkVMs.`,
+              title: "Our prooflab-rs Approach",
+              description: `ProofLab's SDK, prooflab-rs, is a powerful abstraction layer that allows developers to 
+                write Rust code once and run it across multiple zkVMs. This is a fork of zkRust with significant 
+                new functionality added.`,
               features: [
                 "Truly comparable: The exact same code is executed across different zkVMs",
                 "Real-world representative: Our benchmarks use actual zkVM code",
@@ -365,12 +366,12 @@ const FAQ = () => {
           ],
           links: [
             {
-              title: "zkRust Repository",
+              title: "Original zkRust Repository",
               url: "https://github.com/yetanotherco/zkRust"
             },
             {
-              title: "ProofLab's Extended Fork",
-              url: "https://github.com/ProofLabDev/zkRust"
+              title: "prooflab-rs Repository",
+              url: "https://github.com/ProofLabDev/prooflab-rs"
             }
           ]
         },
@@ -381,7 +382,7 @@ const FAQ = () => {
             {
               title: "Our Approach to Fair Comparisons",
               items: [
-                "Identical Code Base: The same zkRust implementations run on all zkVMs, eliminating implementation bias",
+                "Identical Code Base: The same prooflab-rs implementations run on all zkVMs, eliminating implementation bias",
                 "Standardized Environments: All benchmarks run in identical hardware environments",
                 "Open Methodology: Our benchmark processes and analysis methods are public and open to scrutiny",
                 "Multiple Metrics: We measure many aspects of performance to provide a complete picture",
@@ -414,7 +415,7 @@ const FAQ = () => {
               title: "Contribute Benchmarks",
               description: "Add new benchmark programs or improve existing ones:",
               items: [
-                "Implement new benchmark programs in zkRust",
+                "Implement new benchmark programs in prooflab-rs",
                 "Run benchmarks on additional zkVMs or hardware configurations",
                 "Validate and verify existing benchmark results",
                 "Suggest new metrics or analysis methods"
@@ -427,7 +428,7 @@ const FAQ = () => {
                 "Add support for new zkVMs in our benchmarking framework",
                 "Improve visualization and data presentation",
                 "Develop new analysis tools for ZK performance",
-                "Enhance the zkRust library and SDK"
+                "Enhance the prooflab-rs SDK"
               ]
             },
             {
@@ -459,7 +460,7 @@ const FAQ = () => {
             {
               title: "Contribution Guidelines",
               items: [
-                "Benchmark Programs: Should be representative of real-world use cases, well-documented, and implemented in zkRust following best practices",
+                "Benchmark Programs: Should be representative of real-world use cases, well-documented, and implemented in prooflab-rs following best practices",
                 "Methodology: All benchmark results should include detailed information about the testing environment, methodology, and configurations",
                 "Neutrality: Contributions should maintain objectivity and avoid favoring specific zkVMs or approaches",
                 "Documentation: All contributions should include clear documentation and explanation",
@@ -495,10 +496,11 @@ const FAQ = () => {
               url: "https://zkbench.dev"
             },
             {
-              title: "zkRust",
-              description: `The foundational project that enables our cross-zkVM benchmarking approach, providing 
-                the abstraction layer that makes our comparable benchmarks possible.`,
-              url: "https://github.com/yetanotherco/zkRust"
+              title: "prooflab-rs",
+              description: `Our SDK that enables cross-zkVM benchmarking, providing the abstraction layer that makes 
+                our comparable benchmarks possible. It was forked from zkRust but has since added significant new
+                functionality.`,
+              url: "https://github.com/ProofLabDev/prooflab-rs"
             },
             {
               title: "L2Beat",
