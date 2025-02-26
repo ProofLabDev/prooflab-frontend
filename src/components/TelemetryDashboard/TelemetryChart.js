@@ -47,10 +47,13 @@ const TelemetryChart = ({ data, selectedMetrics, groupBy, getLabel }) => {
 
     // Clear previous chart
     d3.select(svgRef.current).selectAll('*').remove();
-
-    // Set up dimensions
+    
+    // Get the container width for responsive sizing
+    const containerWidth = svgRef.current.parentElement.clientWidth;
+    
+    // Set up dimensions - use container width for responsive sizing
     const margin = { top: 20, right: 120, bottom: 70, left: 80 };
-    const width = 1000 - margin.left - margin.right;
+    const width = Math.min(1000, containerWidth) - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
     // Create SVG
@@ -200,8 +203,8 @@ const TelemetryChart = ({ data, selectedMetrics, groupBy, getLabel }) => {
   }, [data, selectedMetrics, groupBy, getLabel]);
 
   return (
-    <div className="relative">
-      <svg ref={svgRef}></svg>
+    <div className="relative w-full overflow-x-auto">
+      <svg ref={svgRef} className="min-w-[600px]"></svg>
       <div
         id="tooltip"
         className="absolute hidden z-10"

@@ -15,7 +15,7 @@ const formatFrequency = (cyclesPerSecond) => {
 
 const StatCard = ({ title, value, change, changeDirection, subtitle }) => (
   <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
-    <div className="flex justify-between items-start">
+    <div className="flex justify-between items-start flex-wrap">
       <h3 className="text-sm font-medium text-gray-500">{title}</h3>
       {change !== undefined && (
         <span className={`text-xs font-medium px-2 py-1 rounded-full ${
@@ -27,14 +27,14 @@ const StatCard = ({ title, value, change, changeDirection, subtitle }) => (
         </span>
       )}
     </div>
-    <p className="mt-2 text-2xl font-bold text-gray-900">{value}</p>
+    <p className="mt-2 text-xl sm:text-2xl font-bold text-gray-900 break-words">{value}</p>
     {subtitle && <p className="mt-1 text-xs text-gray-500">{subtitle}</p>}
   </div>
 );
 
 const BenchmarkTable = ({ benchmarks, loading, title, instanceType }) => (
   <div className="mt-6">
-    <div className="flex justify-between items-center mb-4">
+    <div className="flex flex-wrap justify-between items-center mb-4 gap-2">
       <h3 className="text-lg font-medium text-gray-900">{title}</h3>
       <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
         {instanceType}
@@ -45,8 +45,10 @@ const BenchmarkTable = ({ benchmarks, loading, title, instanceType }) => (
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
       </div>
     ) : benchmarks.length > 0 ? (
-      <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-        <table className="min-w-full divide-y divide-gray-300">
+      <div className="overflow-x-auto -mx-4 sm:mx-0">
+        <div className="inline-block min-w-full align-middle">
+          <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+            <table className="min-w-full divide-y divide-gray-300">
           <thead className="bg-gray-50">
             <tr>
               <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Program</th>
@@ -87,8 +89,10 @@ const BenchmarkTable = ({ benchmarks, loading, title, instanceType }) => (
             ))}
           </tbody>
         </table>
-      </div>
-    ) : (
+            </div>
+          </div>
+        </div>
+      ) : (
       <div className="py-10 bg-gray-50 rounded-lg border border-gray-200 text-center">
         <div className="mx-auto flex items-center justify-center w-12 h-12 rounded-full bg-indigo-100">
           <svg className="w-6 h-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -257,11 +261,11 @@ const ZKVMDetails = () => {
       <div ref={reportRef} className="bg-gray-50 pb-8">
         {/* Header with Export Button */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center border-b border-gray-200 pb-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-200 pb-6 gap-4">
             <div>
-              <div className="flex items-center">
-                <h1 className="text-3xl font-bold text-gray-900">{zkvm.name}</h1>
-                <span className={`ml-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{zkvm.name}</h1>
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                   zkvm.status === 'production' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                 }`}>
                   {zkvm.status}
@@ -269,14 +273,14 @@ const ZKVMDetails = () => {
               </div>
               <p className="mt-2 text-sm text-gray-600 max-w-3xl">{zkvm.description}</p>
               
-              <div className="mt-4 flex items-center text-xs text-gray-500">
-                <span>Last updated: {lastUpdated ? lastUpdated.toLocaleDateString('en-US', {
+              <div className="mt-4 flex flex-col sm:flex-row sm:items-center text-xs text-gray-500 gap-2 sm:gap-0">
+                <span className="whitespace-nowrap">Last updated: {lastUpdated ? lastUpdated.toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric'
                 }) : 'Unknown'}</span>
                 
-                <div className="flex ml-4 space-x-4">
+                <div className="flex flex-wrap gap-4 sm:ml-4">
                   {zkvm.documentation && (
                     <a
                       href={zkvm.documentation}
@@ -309,7 +313,7 @@ const ZKVMDetails = () => {
             <button
               onClick={exportAsPDF}
               disabled={exportLoading}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
             >
               {exportLoading ? (
                 <>
@@ -336,13 +340,13 @@ const ZKVMDetails = () => {
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Key Performance Metrics</h2>
           {!hasBenchmarkData && (
             <div className="mb-4 p-3 bg-blue-50 border border-blue-100 rounded-md">
-              <div className="flex items-center">
+              <div className="flex flex-wrap items-center gap-2">
                 <div className="flex-shrink-0">
                   <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <div className="ml-3">
+                <div>
                   <p className="text-sm text-blue-700">
                     This system is currently being integrated into our benchmarking reports. Performance metrics will be available soon.
                   </p>
@@ -350,7 +354,7 @@ const ZKVMDetails = () => {
               </div>
             </div>
           )}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-4">
             <StatCard 
               title="CPU Throughput" 
               value={hasBenchmarkData ? formatFrequency(bestCpuThroughput) : "Coming Soon"} 
@@ -404,7 +408,7 @@ const ZKVMDetails = () => {
         {/* Technical Specifications */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Technical Specifications</h2>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
             <TechnologyCard
               title="Proof Generation"
               icon={

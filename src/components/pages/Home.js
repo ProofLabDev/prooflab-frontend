@@ -383,33 +383,33 @@ const Home = () => {
   return (
     <div className="bg-gradient-to-b from-white to-indigo-50 w-full">
       {/* Hero Section with Animated Background */}
-      <div className="relative overflow-hidden bg-white w-full min-w-full">
-        <div className="absolute inset-0 w-full min-w-full min-h-full">
-          <div className="absolute inset-0 w-full min-w-full bg-indigo-100 mix-blend-multiply opacity-30" />
-          <div className="absolute top-0 left-0 right-0 w-full min-w-full h-40 bg-gradient-to-b from-white" />
-          <div className="absolute bottom-0 left-0 right-0 w-full min-w-full h-40 bg-gradient-to-t from-white" />
-          <div className="absolute inset-0 w-full min-w-full opacity-30 pattern-grid-lg text-indigo-200" />
+      <div className="relative overflow-hidden bg-white w-full">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-indigo-100 mix-blend-multiply opacity-30" />
+          <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-white" />
+          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white" />
+          <div className="absolute inset-0 opacity-30 pattern-grid-lg text-indigo-200" />
         </div>
         
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 md:py-32">
           <div className="max-w-3xl">
-            <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
+            <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl md:text-5xl lg:text-6xl">
               <span className="block">The Observatory for</span>
               <span className="block text-indigo-600 mt-1">ZK Technology</span>
             </h1>
-            <p className="mt-6 text-xl text-gray-500 max-w-3xl">
+            <p className="mt-4 sm:mt-6 text-base sm:text-lg md:text-xl text-gray-500 max-w-3xl">
               ProofLab provides comprehensive, always up-to-date reports and benchmarks for zero-knowledge virtual machines, helping you choose the right technology for your needs.
             </p>
-            <div className="mt-8 flex space-x-4">
+            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:space-x-4">
               <Link
                 to="/zkvms"
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-1 focus:ring-indigo-300 focus:ring-offset-1"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-1 focus:ring-indigo-300 focus:ring-offset-1"
               >
                 Explore Reports
               </Link>
               <Link
                 to="/benchmarks"
-                className="inline-flex items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-1 focus:ring-indigo-300 focus:ring-offset-1"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-1 focus:ring-indigo-300 focus:ring-offset-1"
               >
                 View Benchmarks
               </Link>
@@ -419,9 +419,9 @@ const Home = () => {
       </div>
 
       {/* Key Stats Section */}
-      <div className="bg-white py-12 border-t border-gray-100">
+      <div className="bg-white py-8 sm:py-12 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
             <StatCard 
               value={stats.cycleCount} 
               label="Benchmarked cycles" 
@@ -532,14 +532,14 @@ const Home = () => {
       </div>
 
       {/* System Comparison */}
-      <div className="py-20 bg-indigo-50">
+      <div className="py-12 sm:py-20 bg-indigo-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:text-center mb-12">
+          <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">System Comparison</h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            <p className="mt-2 text-2xl sm:text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
               Performance Benchmarks
             </p>
-            <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+            <p className="mt-4 max-w-2xl text-base sm:text-xl text-gray-500 mx-auto">
               Real-world performance metrics from our latest benchmarks
             </p>
           </div>
@@ -557,7 +557,9 @@ const Home = () => {
           {risc0RsaTelemetry && sp1RsaTelemetry && !risc0Throughput.loading && !sp1Throughput.loading && (
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
+                <div className="inline-block min-w-full align-middle">
+                  <div className="overflow-hidden">
+                    <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -617,6 +619,8 @@ const Home = () => {
                     />
                   </tbody>
                 </table>
+                  </div>
+                </div>
               </div>
             </div>
           )}

@@ -542,7 +542,7 @@ const TelemetryDashboard = () => {
           {/* Two-column layout for results */}
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Sidebar with filters */}
-            <div className="lg:w-1/4">
+            <div className="w-full lg:w-1/4 mb-4 lg:mb-0">
               <BenchmarkFilterPanel
                 initialFilters={filters}
                 allSystems={allSystems}
@@ -554,7 +554,7 @@ const TelemetryDashboard = () => {
             </div>
             
             {/* Main content with visualizations and table */}
-            <div className="lg:w-3/4 space-y-8">
+            <div className="w-full lg:w-3/4 space-y-8">
               {/* Chart */}
               {filters.metric && (
                 <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
@@ -622,8 +622,10 @@ const TelemetryDashboard = () => {
                 <div className="px-6 py-4 border-b border-gray-200">
                   <h3 className="text-lg font-medium text-gray-900">Benchmark Results</h3>
                 </div>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
+                <div className="overflow-x-auto -mx-4 sm:mx-0">
+                  <div className="inline-block min-w-full align-middle">
+                    <div className="overflow-hidden">
+                      <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
                         <th onClick={() => setFilters({...filters, sortKey: 'date', sortDirection: filters.sortKey === 'date' && filters.sortDirection === 'asc' ? 'desc' : 'asc'})} scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
@@ -717,6 +719,8 @@ const TelemetryDashboard = () => {
                       )}
                     </tbody>
                   </table>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
