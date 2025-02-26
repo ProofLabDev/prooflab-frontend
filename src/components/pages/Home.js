@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import useZKVMThroughput from '../../hooks/useZKVMThroughput';
+import useTelemetry from '../../hooks/useTelemetry';
 
 // SVG Icons for use in the UI
 const Icons = {
@@ -246,39 +248,115 @@ const Home = () => {
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
-  // Sample featured reports
-  const featuredReports = [
-    {
-      name: "RISC Zero",
-      description: "High-performance RISC-V based zero-knowledge virtual machine with strong security properties",
-      metrics: {
-        labels: ["High Performance", "Production Ready"],
-        colors: ["bg-green-100 text-green-800", "bg-blue-100 text-blue-800"],
-        data: [
-          { name: "CPU Throughput", value: "2.5 MHz", unit: "r7i.16xl" },
-          { name: "GPU Throughput", value: "12.8 MHz", unit: "g6.16xl" },
-          { name: "Memory Usage", value: "4.2 GB", unit: "peak" },
-          { name: "Verification Time", value: "45 ms", unit: "avg" }
-        ]
-      },
-      tags: ["RISC-V", "STARKs", "Rust"]
-    },
-    {
-      name: "SP1",
-      description: "STARK-based virtual machine designed for developer simplicity and rapid iteration",
-      metrics: {
-        labels: ["Fast Verification", "Developer Friendly"],
-        colors: ["bg-purple-100 text-purple-800", "bg-green-100 text-green-800"],
-        data: [
-          { name: "CPU Throughput", value: "1.8 MHz", unit: "r7i.16xl" },
-          { name: "GPU Throughput", value: "9.2 MHz", unit: "g6.16xl" },
-          { name: "Memory Usage", value: "3.8 GB", unit: "peak" },
-          { name: "Verification Time", value: "30 ms", unit: "avg" }
-        ]
-      },
-      tags: ["STARKs", "Rust", "Succinct"]
+  // Dynamic data loading for featured zkVMs
+  const [dynamicReports, setDynamicReports] = useState([]);
+  
+  // Get RISC0 performance data - focusing on RSA for higher cycle counts
+  const risc0Throughput = useZKVMThroughput('risc0');
+  const { telemetryData: risc0RsaTelemetry } = useTelemetry('rsa', 'risc0');
+  
+  // Get SP1 performance data - focusing on RSA for higher cycle counts
+  const sp1Throughput = useZKVMThroughput('sp1');
+  const { telemetryData: sp1RsaTelemetry } = useTelemetry('rsa', 'sp1');
+
+  // Create a stable effect to process and set the report data
+  useEffect(() => {
+    // Skip processing if data is not fully loaded
+    if (!risc0RsaTelemetry || !sp1RsaTelemetry || 
+        !risc0Throughput || !sp1Throughput ||
+        risc0Throughput.loading || sp1Throughput.loading) {
+      return;
     }
-  ];
+    
+    const reports = [];
+    
+    // RISC0 Report with RSA data and GPU metrics
+    try {
+      if (risc0RsaTelemetry && risc0RsaTelemetry.timing && risc0Throughput) {
+        const totalProving = risc0RsaTelemetry.timing.proving.toFixed(2) + 's';
+        const maxMemory = (risc0RsaTelemetry.resources.maxMemory / 1024).toFixed(1) + ' GB'; 
+        const verificationTime = (risc0RsaTelemetry.timing.verification * 1000).toFixed(2) + ' ms';
+        
+        // Use GPU throughput, with a fallback
+        const executionSpeed = risc0Throughput.throughput?.gpu?.formatted || '0 Hz';
+        const instanceType = risc0RsaTelemetry.system?.instanceType || 'g6.16xlarge';
+        
+        reports.push({
+          name: "RISC Zero",
+          description: "High-performance RISC-V based zero-knowledge virtual machine with strong security properties",
+          metrics: {
+            labels: ["Fast Verification", "Production Ready"],
+            colors: ["bg-green-100 text-green-800", "bg-blue-100 text-blue-800"],
+            data: [
+              { name: "GPU Performance", value: executionSpeed, unit: "RSA" },
+              { name: "Proving Time", value: totalProving, unit: instanceType },
+              { name: "Memory Usage", value: maxMemory, unit: "peak" },
+              { name: "Verification Time", value: verificationTime, unit: "total" }
+            ]
+          },
+          tags: ["RISC-V", "STARKs", "GPU-Accelerated"]
+        });
+      }
+    } catch (error) {
+      console.error("Error processing RISC0 data:", error);
+    }
+    
+    // SP1 Report with RSA data and GPU metrics
+    try {
+      if (sp1RsaTelemetry && sp1RsaTelemetry.timing && sp1Throughput) {
+        const totalProving = sp1RsaTelemetry.timing.proving.toFixed(2) + 's';
+        const maxMemory = (sp1RsaTelemetry.resources.maxMemory / 1024).toFixed(1) + ' GB';
+        const verificationTime = (sp1RsaTelemetry.timing.verification * 1000).toFixed(2) + ' ms';
+        
+        // Use GPU throughput, with a fallback
+        const executionSpeed = sp1Throughput.throughput?.gpu?.formatted || '0 Hz';
+        const instanceType = sp1RsaTelemetry.system?.instanceType || 'g6.16xlarge';
+        
+        reports.push({
+          name: "SP1",
+          description: "STARK-based virtual machine designed for developer simplicity and rapid iteration",
+          metrics: {
+            labels: ["GPU-Accelerated", "Developer Friendly"],
+            colors: ["bg-purple-100 text-purple-800", "bg-green-100 text-green-800"],
+            data: [
+              { name: "GPU Performance", value: executionSpeed, unit: "RSA" },
+              { name: "Proving Time", value: totalProving, unit: instanceType },
+              { name: "Memory Usage", value: maxMemory, unit: "peak" },
+              { name: "Verification Time", value: verificationTime, unit: "total" }
+            ]
+          },
+          tags: ["STARKs", "Rust", "GPU-Accelerated"]
+        });
+      }
+    } catch (error) {
+      console.error("Error processing SP1 data:", error);
+    }
+    
+    // Only update state if we have reports
+    if (reports.length > 0) {
+      setDynamicReports(reports);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    // Primitive values that can be tracked safely:
+    risc0RsaTelemetry?.timing?.proving,
+    risc0RsaTelemetry?.resources?.maxMemory,
+    risc0RsaTelemetry?.timing?.verification,
+    risc0Throughput?.throughput?.gpu?.formatted,
+    risc0Throughput?.loading,
+    
+    sp1RsaTelemetry?.timing?.proving,
+    sp1RsaTelemetry?.resources?.maxMemory,
+    sp1RsaTelemetry?.timing?.verification,
+    sp1Throughput?.throughput?.gpu?.formatted,
+    sp1Throughput?.loading
+  ]);
+  
+  // Use the dynamically generated reports or fallback to empty array if loading
+  // Use memoized reports to prevent unnecessary re-renders
+  const featuredReports = useMemo(() => {
+    return dynamicReports.length > 0 ? dynamicReports : [];
+  }, [dynamicReports]);
 
   // Sample featured programs
   const featuredPrograms = [
@@ -419,11 +497,25 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {featuredReports.map((report, index) => (
-              <ReportCard key={index} {...report} />
-            ))}
-          </div>
+          {/* Loading state */}
+          {(featuredReports.length === 0 && (
+            risc0Throughput.loading || sp1Throughput.loading || !risc0RsaTelemetry || !sp1RsaTelemetry
+          )) && (
+            <div className="flex justify-center p-10">
+              <div className="animate-pulse text-center">
+                <p className="text-gray-500">Loading report data...</p>
+              </div>
+            </div>
+          )}
+          
+          {/* Display reports once loaded */}
+          {featuredReports.length > 0 && (
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+              {featuredReports.map((report, index) => (
+                <ReportCard key={index} {...report} />
+              ))}
+            </div>
+          )}
 
           <div className="mt-12 text-center">
             <Link
@@ -445,40 +537,89 @@ const Home = () => {
           <div className="lg:text-center mb-12">
             <h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">System Comparison</h2>
             <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-              Feature Comparison
+              Performance Benchmarks
             </p>
             <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-              See how leading ZK systems stack up against each other
+              Real-world performance metrics from our latest benchmarks
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Feature
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      SP1
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      RISC Zero
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  <ComparisonRow feature="CPU Proving" sp1="1.8 MHz" risc0="2.5 MHz" />
-                  <ComparisonRow feature="GPU Acceleration" sp1 risc0 />
-                  <ComparisonRow feature="Recursive Proofs" sp1={false} risc0 />
-                  <ComparisonRow feature="STARK-based" sp1 risc0 />
-                  <ComparisonRow feature="Rust SDK" sp1 risc0 />
-                  <ComparisonRow feature="Production Ready" sp1={false} risc0 />
-                </tbody>
-              </table>
+          {/* Loading state */}
+          {(!risc0RsaTelemetry || !sp1RsaTelemetry || risc0Throughput.loading || sp1Throughput.loading) && (
+            <div className="flex justify-center p-10">
+              <div className="animate-pulse text-center">
+                <p className="text-gray-500">Loading benchmark data...</p>
+              </div>
             </div>
-          </div>
+          )}
+          
+          {/* Comparison table - only shown when data is loaded */}
+          {risc0RsaTelemetry && sp1RsaTelemetry && !risc0Throughput.loading && !sp1Throughput.loading && (
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Metric
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        SP1
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        RISC Zero
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {/* GPU Benchmarks - RSA */}
+                    <tr className="bg-gradient-to-r from-indigo-50 to-purple-50">
+                      <td colSpan={3} className="px-6 py-2 text-sm font-medium text-gray-800">GPU Performance Metrics (RSA Program)</td>
+                    </tr>
+                    <ComparisonRow 
+                      feature="GPU Throughput" 
+                      sp1={sp1Throughput?.throughput?.gpu?.formatted || "Loading..."} 
+                      risc0={risc0Throughput?.throughput?.gpu?.formatted || "Loading..."} 
+                    />
+                    <ComparisonRow 
+                      feature="Total Proving Time" 
+                      sp1={sp1RsaTelemetry?.timing?.proving ? sp1RsaTelemetry.timing.proving.toFixed(2) + 's' : "Loading..."} 
+                      risc0={risc0RsaTelemetry?.timing?.proving ? risc0RsaTelemetry.timing.proving.toFixed(2) + 's' : "Loading..."} 
+                    />
+                    <ComparisonRow 
+                      feature="Program Cycles" 
+                      sp1={sp1RsaTelemetry?.metrics?.cycles ? sp1RsaTelemetry.metrics.cycles.toLocaleString() : "Loading..."} 
+                      risc0={risc0RsaTelemetry?.metrics?.cycles ? risc0RsaTelemetry.metrics.cycles.toLocaleString() : "Loading..."} 
+                    />
+                    <ComparisonRow 
+                      feature="Memory Usage" 
+                      sp1={sp1RsaTelemetry?.resources?.maxMemory ? (sp1RsaTelemetry.resources.maxMemory / 1024).toFixed(1) + ' GB' : "Loading..."} 
+                      risc0={risc0RsaTelemetry?.resources?.maxMemory ? (risc0RsaTelemetry.resources.maxMemory / 1024).toFixed(1) + ' GB' : "Loading..."} 
+                    />
+                    
+                    {/* General Metrics */}
+                    <tr className="bg-gradient-to-r from-gray-50 to-gray-100">
+                      <td colSpan={3} className="px-6 py-2 text-sm font-medium text-gray-800">Verification & Other Metrics</td>
+                    </tr>
+                    <ComparisonRow 
+                      feature="Verification Time" 
+                      sp1={sp1RsaTelemetry?.timing?.verification ? (sp1RsaTelemetry.timing.verification * 1000).toFixed(2) + ' ms' : "Loading..."} 
+                      risc0={risc0RsaTelemetry?.timing?.verification ? (risc0RsaTelemetry.timing.verification * 1000).toFixed(2) + ' ms' : "Loading..."} 
+                    />
+                    <ComparisonRow 
+                      feature="Proof Size" 
+                      sp1={sp1RsaTelemetry?.metrics?.coreProofSize && sp1RsaTelemetry?.metrics?.recursiveProofSize ?
+                        ((sp1RsaTelemetry.metrics.coreProofSize + sp1RsaTelemetry.metrics.recursiveProofSize) / (1024 * 1024)).toFixed(2) + ' MB' : 
+                        "Loading..."} 
+                      risc0={risc0RsaTelemetry?.metrics?.coreProofSize && risc0RsaTelemetry?.metrics?.recursiveProofSize ?
+                        ((risc0RsaTelemetry.metrics.coreProofSize + risc0RsaTelemetry.metrics.recursiveProofSize) / (1024 * 1024)).toFixed(2) + ' MB' :
+                        "Loading..."} 
+                    />
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
 
           <div className="mt-12 text-center">
             <Link

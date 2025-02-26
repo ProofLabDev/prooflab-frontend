@@ -200,7 +200,7 @@ const systemColors = {
 
 const ComparisonTable = () => {
   const { comparisons, loading, error } = useComparisonData();
-  const [activeCategory, setActiveCategory] = useState('features');
+  const [activeCategory, setActiveCategory] = useState('performance');
   const [selectedSystems, setSelectedSystems] = useState([]);
   const [showRadar, setShowRadar] = useState(true);
 

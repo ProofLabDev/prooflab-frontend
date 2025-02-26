@@ -153,7 +153,7 @@ const Navigation = () => {
 
   const getLinkClass = (path) => {
     const isActive = location.pathname === path;
-    const baseClasses = "inline-flex items-center px-1 pt-1 text-sm font-medium";
+    const baseClasses = "inline-flex items-center px-1 pt-1 text-sm font-medium relative z-10";
     return `${baseClasses} ${isActive ? 'text-gray-900 border-b-2 border-indigo-500' : 'text-gray-500 hover:text-gray-900'}`;
   };
 
@@ -169,7 +169,7 @@ const Navigation = () => {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="flex items-center">
+              <Link to="/" className="flex items-center z-10 relative">
                 <img
                   src="/prooflab-logo.png"
                   alt="ProofLab"
