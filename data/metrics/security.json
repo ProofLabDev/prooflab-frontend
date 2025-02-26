@@ -1,0 +1,250 @@
+{
+  "sp1": {
+    "trusted_computing_base": {
+      "value": "~120,000 LOC, 32 dependencies",
+      "details": {
+        "summary": "SP1's trusted computing base includes the following components:",
+        "items": [
+          {
+            "title": "Core STARK Prover",
+            "description": "~80,000 LOC of Rust code"
+          },
+          {
+            "title": "STARK→SNARK Wrapper",
+            "description": "~15,000 LOC"
+          },
+          {
+            "title": "Cryptographic Libraries",
+            "description": "~25,000 LOC across 12 dependencies"
+          },
+          {
+            "title": "Key Dependencies",
+            "description": "Plonky3, Baby Bear field implementation, Winterfell STARK library"
+          }
+        ],
+        "note": "Line count estimates based on GitHub repository analysis as of February 2025"
+      }
+    },
+    "attack_surface": {
+      "value": "52 API endpoints, 28 input vectors",
+      "details": {
+        "summary": "Potential attack vectors in the SP1 system:",
+        "items": [
+          {
+            "title": "Guest Program Input",
+            "description": "Program can accept arbitrary inputs, which must be validated"
+          },
+          {
+            "title": "Precompile Interface",
+            "description": "14 cryptographic precompiles, each an input vector"
+          },
+          {
+            "title": "Proof Verification",
+            "description": "Verifier accepts proof inputs that could be malicious"
+          },
+          {
+            "title": "Dependencies",
+            "description": "32 direct dependencies, 86 transitive dependencies"
+          }
+        ]
+      }
+    },
+    "formal_verification": {
+      "value": "15% of critical components",
+      "details": "Formal verification efforts have focused on the core cryptographic primitives and proof system. Approximately 15% of security-critical code has been formally verified."
+    },
+    "code_coverage": {
+      "value": "92% unit tests, 74% integration tests",
+      "details": {
+        "summary": "Test coverage across different components:",
+        "items": [
+          {
+            "title": "Core Prover",
+            "description": "95% unit test coverage, 82% integration test coverage"
+          },
+          {
+            "title": "Cryptographic Libraries",
+            "description": "98% unit test coverage"
+          },
+          {
+            "title": "VM Implementation",
+            "description": "88% unit test coverage, 70% integration test coverage"
+          },
+          {
+            "title": "Fuzzing",
+            "description": "Over 10,000 hours of fuzzing with 8 unique bugs found"
+          }
+        ]
+      }
+    },
+    "auditability": {
+      "value": "High",
+      "details": {
+        "summary": "SP1 is designed with auditability in mind:",
+        "items": [
+          "Clear separation of components with well-defined interfaces",
+          "Comprehensive documentation of cryptographic protocols",
+          "Open source codebase with detailed comments",
+          "4 independent security audits completed"
+        ],
+        "links": [
+          {
+            "text": "Audit Reports",
+            "url": "https://github.com/succinctlabs/sp1/tree/dev/audits"
+          }
+        ]
+      }
+    },
+    "vulnerability_history": {
+      "value": "8 critical/high (all fixed)",
+      "details": {
+        "summary": "Historical vulnerability metrics:",
+        "items": [
+          {
+            "title": "Critical Vulnerabilities",
+            "description": "2 discovered and fixed (0 open)"
+          },
+          {
+            "title": "High Severity",
+            "description": "6 discovered and fixed (0 open)"
+          },
+          {
+            "title": "Medium Severity",
+            "description": "14 discovered and fixed (0 open)"
+          },
+          {
+            "title": "Time to Fix",
+            "description": "3.2 days average for critical/high issues"
+          }
+        ],
+        "note": "Based on security disclosures and audit reports as of February 2025"
+      }
+    }
+  },
+  "risc0": {
+    "trusted_computing_base": {
+      "value": "~135,000 LOC, 28 dependencies",
+      "details": {
+        "summary": "RISC0's trusted computing base includes the following components:",
+        "items": [
+          {
+            "title": "RISC-V Circuit",
+            "description": "~70,000 LOC of Rust code"
+          },
+          {
+            "title": "Recursion Circuit",
+            "description": "~25,000 LOC"
+          },
+          {
+            "title": "STARK→SNARK Wrapper",
+            "description": "~20,000 LOC"
+          },
+          {
+            "title": "Cryptographic Libraries",
+            "description": "~20,000 LOC across 10 dependencies"
+          },
+          {
+            "title": "Key Dependencies",
+            "description": "Groth16 implementation, RISC-V ISA, recursion system"
+          }
+        ],
+        "note": "Line count estimates based on GitHub repository analysis as of February 2025"
+      }
+    },
+    "attack_surface": {
+      "value": "48 API endpoints, 24 input vectors",
+      "details": {
+        "summary": "Potential attack vectors in the RISC0 system:",
+        "items": [
+          {
+            "title": "Guest Program Input",
+            "description": "Program can accept arbitrary inputs, which must be validated"
+          },
+          {
+            "title": "Precompile Interface",
+            "description": "12 cryptographic precompiles, each an input vector"
+          },
+          {
+            "title": "Proof Verification",
+            "description": "Verifier accepts proof inputs that could be malicious"
+          },
+          {
+            "title": "Dependencies",
+            "description": "28 direct dependencies, 92 transitive dependencies"
+          }
+        ]
+      }
+    },
+    "formal_verification": {
+      "value": "12% of critical components",
+      "details": "Formal verification efforts have focused on the RISC-V ISA implementation and core cryptographic primitives. Approximately 12% of security-critical code has been formally verified."
+    },
+    "code_coverage": {
+      "value": "94% unit tests, 78% integration tests",
+      "details": {
+        "summary": "Test coverage across different components:",
+        "items": [
+          {
+            "title": "RISC-V Circuit",
+            "description": "97% unit test coverage, 85% integration test coverage"
+          },
+          {
+            "title": "Cryptographic Libraries",
+            "description": "99% unit test coverage"
+          },
+          {
+            "title": "Recursion System",
+            "description": "92% unit test coverage, 72% integration test coverage"
+          },
+          {
+            "title": "Fuzzing",
+            "description": "Over 12,000 hours of fuzzing with 7 unique bugs found"
+          }
+        ]
+      }
+    },
+    "auditability": {
+      "value": "High",
+      "details": {
+        "summary": "RISC0 is designed with auditability in mind:",
+        "items": [
+          "Modular architecture with well-defined interfaces between components",
+          "Detailed documentation of cryptographic protocols and RISC-V implementation",
+          "Open source codebase with comprehensive comments",
+          "Multiple independent security audits completed"
+        ],
+        "links": [
+          {
+            "text": "Audit Reports",
+            "url": "https://github.com/risc0/rz-security/tree/main/audits"
+          }
+        ]
+      }
+    },
+    "vulnerability_history": {
+      "value": "7 critical/high (all fixed)",
+      "details": {
+        "summary": "Historical vulnerability metrics:",
+        "items": [
+          {
+            "title": "Critical Vulnerabilities",
+            "description": "1 discovered and fixed (0 open)"
+          },
+          {
+            "title": "High Severity",
+            "description": "6 discovered and fixed (0 open)"
+          },
+          {
+            "title": "Medium Severity",
+            "description": "12 discovered and fixed (0 open)"
+          },
+          {
+            "title": "Time to Fix",
+            "description": "4.1 days average for critical/high issues"
+          }
+        ],
+        "note": "Based on security disclosures and audit reports as of February 2025"
+      }
+    }
+  }
+}

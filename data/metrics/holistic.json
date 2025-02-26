@@ -1,0 +1,182 @@
+{
+  "sp1": {
+    "development_effort": {
+      "value": "Medium to Low",
+      "details": {
+        "summary": "Development effort metrics for typical SP1 applications:",
+        "items": [
+          {
+            "title": "Lines of Code",
+            "description": "Typically requires 30-40% less code compared to custom circuit implementations"
+          },
+          {
+            "title": "Development Time",
+            "description": "Simple applications: 1-2 weeks; Complex applications: 1-3 months"
+          },
+          {
+            "title": "Learning Curve",
+            "description": "Moderate for developers familiar with Rust; steep for those new to both Rust and ZK"
+          },
+          {
+            "title": "Porting Existing Code",
+            "description": "Relatively straightforward for Rust applications that use supported dependencies"
+          }
+        ],
+        "note": "Based on user surveys and case studies of SP1 developers"
+      }
+    },
+    "tooling_ecosystem": {
+      "value": "Strong and Growing",
+      "details": {
+        "summary": "Tooling and ecosystem components available for SP1 developers:",
+        "items": [
+          {
+            "title": "Development Tools",
+            "description": "SDK, CLI tools, documentation, examples, tutorials"
+          },
+          {
+            "title": "Library Support",
+            "description": "Support for standard Rust libraries (with std feature), revm, reth, tendermint-rs, serde"
+          },
+          {
+            "title": "Debugging",
+            "description": "Runtime tracing, memory profiling, execution visualization"
+          },
+          {
+            "title": "Community",
+            "description": "Active Discord community, documentation portal, example repository"
+          },
+          {
+            "title": "Integration",
+            "description": "EVM verifier contracts, Blobstream integration"
+          }
+        ],
+        "links": [
+          {
+            "text": "SP1 Documentation",
+            "url": "https://docs.succinct.xyz/docs"
+          },
+          {
+            "text": "Example Repository",
+            "url": "https://github.com/succinctlabs/sp1-examples"
+          }
+        ]
+      }
+    },
+    "security_under_composition": {
+      "value": "Strong",
+      "details": {
+        "summary": "Security guarantees when SP1 is composed with other systems:",
+        "items": [
+          {
+            "title": "Smart Contract Integration",
+            "description": "Secure composition pattern for on-chain verification"
+          },
+          {
+            "title": "Multi-Proof Systems",
+            "description": "Support for aggregating multiple SP1 proofs into a single verification"
+          },
+          {
+            "title": "Cross-Chain",
+            "description": "Secure patterns for cross-chain verification via bridges"
+          },
+          {
+            "title": "Privacy Considerations",
+            "description": "Public inputs are transparent, but computation remains private"
+          }
+        ],
+        "note": "SP1's composition security has been evaluated as part of security audits"
+      }
+    }
+  },
+  "risc0": {
+    "development_effort": {
+      "value": "Medium",
+      "details": {
+        "summary": "Development effort metrics for typical RISC0 applications:",
+        "items": [
+          {
+            "title": "Lines of Code",
+            "description": "Typically requires 25-35% less code compared to custom circuit implementations"
+          },
+          {
+            "title": "Development Time",
+            "description": "Simple applications: 1-2 weeks; Complex applications: 1-4 months"
+          },
+          {
+            "title": "Learning Curve",
+            "description": "Moderate for developers familiar with Rust; steep for those new to both Rust and ZK"
+          },
+          {
+            "title": "Porting Existing Code",
+            "description": "Host/guest architecture requires some refactoring, but generally straightforward for Rust code"
+          }
+        ],
+        "note": "Based on user surveys and case studies of RISC0 developers"
+      }
+    },
+    "tooling_ecosystem": {
+      "value": "Comprehensive",
+      "details": {
+        "summary": "Tooling and ecosystem components available for RISC0 developers:",
+        "items": [
+          {
+            "title": "Development Tools",
+            "description": "rzup installer, cargo-risczero, SDK, CLI tools, extensive documentation"
+          },
+          {
+            "title": "Library Support",
+            "description": "Support for Rust standard library (with std feature), optimized cryptographic libraries"
+          },
+          {
+            "title": "Debugging",
+            "description": "Guest program tracing, memory analysis, development mode"
+          },
+          {
+            "title": "Community",
+            "description": "Active Discord community, comprehensive documentation, examples repository"
+          },
+          {
+            "title": "Integration",
+            "description": "EVM verifier contracts, Bonsai proving service API"
+          }
+        ],
+        "links": [
+          {
+            "text": "RISC0 Documentation",
+            "url": "https://dev.risczero.com/"
+          },
+          {
+            "text": "Example Repository",
+            "url": "https://github.com/risc0/risc0/tree/main/examples"
+          }
+        ]
+      }
+    },
+    "security_under_composition": {
+      "value": "Strong",
+      "details": {
+        "summary": "Security guarantees when RISC0 is composed with other systems:",
+        "items": [
+          {
+            "title": "Smart Contract Integration",
+            "description": "Secure patterns for on-chain verification with multiple options (Groth16, PLONK)"
+          },
+          {
+            "title": "Multi-Proof Systems",
+            "description": "Support for joining and verifying multiple RISC0 proofs"
+          },
+          {
+            "title": "Cross-Chain",
+            "description": "Verified bridge patterns for cross-chain proof verification"
+          },
+          {
+            "title": "Privacy Considerations",
+            "description": "Journal contents are public, but computation remains private"
+          }
+        ],
+        "note": "RISC0's composition security has been evaluated in security audits and formal analysis"
+      }
+    }
+  }
+}

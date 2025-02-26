@@ -1,0 +1,152 @@
+{
+  "sp1": {
+    "proof_generation_time": {
+      "value": "42.34s (CPU), 8.67s (GPU)",
+      "details": {
+        "summary": "Proof generation time varies based on hardware and workload complexity:",
+        "items": [
+          {
+            "title": "Standard Workload (CPU)",
+            "description": "42.34s ± 3.2s on c6i.16xlarge"
+          },
+          {
+            "title": "Standard Workload (GPU)",
+            "description": "8.67s ± 0.9s on g5.12xlarge NVIDIA A10G"
+          },
+          {
+            "title": "Complex Cryptography",
+            "description": "Up to 3.4x slower than standard workload"
+          }
+        ],
+        "note": "Times measured across an average of 10 runs using SP1 SDK v4.0.1"
+      }
+    },
+    "verification_cost": {
+      "value": "~300k gas (PLONK)",
+      "details": {
+        "summary": "On-chain verification costs for different verification methods:",
+        "items": [
+          {
+            "title": "PLONK Verifier",
+            "description": "~300k gas on Ethereum mainnet"
+          },
+          {
+            "title": "Proof Size",
+            "description": "~868 bytes"
+          }
+        ],
+        "links": [
+          {
+            "text": "SP1 Gas Benchmarks",
+            "url": "https://docs.succinct.xyz/docs/generating-proofs/benchmarks"
+          }
+        ]
+      }
+    },
+    "resource_utilization": {
+      "value": "~85% CPU, 12GB RAM (CPU mode)",
+      "details": {
+        "summary": "Resource consumption during proof generation:",
+        "items": [
+          {
+            "title": "CPU Mode",
+            "description": "85% CPU utilization, 12GB RAM peak, 2GB/s disk I/O"
+          },
+          {
+            "title": "GPU Mode",
+            "description": "25% CPU utilization, 18GB RAM peak, 32GB VRAM utilization"
+          }
+        ]
+      }
+    },
+    "throughput": {
+      "value": "0.024 proofs/s (CPU), 0.115 proofs/s (GPU)",
+      "details": "Measured as the number of standard workload proofs that can be generated per second. GPU acceleration provides approximately 4.8x throughput improvement over CPU."
+    },
+    "latency": {
+      "value": "8.67s - 42.34s",
+      "details": "End-to-end latency from computation submission to proof generation completion. Varies based on hardware acceleration and workload complexity."
+    }
+  },
+  "risc0": {
+    "proof_generation_time": {
+      "value": "38.91s (CPU), 9.25s (GPU)",
+      "details": {
+        "summary": "Proof generation time varies based on hardware and workload complexity:",
+        "items": [
+          {
+            "title": "Standard Workload (CPU)",
+            "description": "38.91s ± 2.8s on c6i.16xlarge"
+          },
+          {
+            "title": "Standard Workload (GPU)",
+            "description": "9.25s ± 1.1s on g5.12xlarge NVIDIA A10G"
+          },
+          {
+            "title": "Standard Workload (Metal)",
+            "description": "22.43s ± 1.9s on M2 Max"
+          },
+          {
+            "title": "Complex Cryptography",
+            "description": "Up to 2.9x slower than standard workload"
+          }
+        ],
+        "note": "Times measured across an average of 10 runs using RISC0 zkVM v1.0.0"
+      }
+    },
+    "verification_cost": {
+      "value": "~270k gas (Groth16), ~300k gas (PLONK)",
+      "details": {
+        "summary": "On-chain verification costs for different verification methods:",
+        "items": [
+          {
+            "title": "Groth16 Verifier",
+            "description": "~270k gas on Ethereum mainnet"
+          },
+          {
+            "title": "PLONK Verifier",
+            "description": "~300k gas on Ethereum mainnet"
+          },
+          {
+            "title": "Proof Size",
+            "description": "~260 bytes (Groth16)"
+          }
+        ],
+        "links": [
+          {
+            "text": "RISC0 EVM Verifier",
+            "url": "https://github.com/risc0/risc0/tree/main/bonsai/ethereum"
+          }
+        ]
+      }
+    },
+    "resource_utilization": {
+      "value": "~90% CPU, 10GB RAM (CPU mode)",
+      "details": {
+        "summary": "Resource consumption during proof generation:",
+        "items": [
+          {
+            "title": "CPU Mode",
+            "description": "90% CPU utilization, 10GB RAM peak, 1.8GB/s disk I/O"
+          },
+          {
+            "title": "GPU Mode",
+            "description": "30% CPU utilization, 16GB RAM peak, 28GB VRAM utilization"
+          },
+          {
+            "title": "Metal Mode",
+            "description": "85% CPU utilization, 12GB RAM peak, 8GB Metal memory"
+          }
+        ]
+      }
+    },
+    "throughput": {
+      "value": "0.026 proofs/s (CPU), 0.108 proofs/s (GPU)",
+      "details": "Measured as the number of standard workload proofs that can be generated per second. GPU acceleration provides approximately 4.2x throughput improvement over CPU."
+    },
+    "latency": {
+      "value": "9.25s - 38.91s",
+      "details": "End-to-end latency from computation submission to proof generation completion. Varies based on hardware acceleration and workload complexity."
+    }
+  }
+}

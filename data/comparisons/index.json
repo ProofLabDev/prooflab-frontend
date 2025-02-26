@@ -1,0 +1,5 @@
+{
+  "systems": ["sp1", "risc0"],
+  "last_updated": "2025-02-25",
+  "available_metrics": ["features", "performance", "security", "holistic"]
+}
