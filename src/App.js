@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import posthog from 'posthog-js';
 
 // Import layouts
@@ -33,21 +34,23 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainLayout><Home /></MainLayout>} />
-        <Route path="/programs" element={<MainLayout><Programs /></MainLayout>} />
-        <Route path="/programs/:id" element={<MainLayout><ProgramDetails /></MainLayout>} />
-        <Route path="/zkvms" element={<MainLayout><ZKVMs /></MainLayout>} />
-        <Route path="/zkvms/:id" element={<MainLayout><ZKVMDetails /></MainLayout>} />
-        <Route path="/benchmarks/:id" element={<MainLayout><BenchmarkDetails /></MainLayout>} />
-        <Route path="/faq" element={<MainLayout><FAQ /></MainLayout>} />
-        <Route path="/about" element={<MainLayout><About /></MainLayout>} />
-        <Route path="/benchmarks" element={<MainLayout><TelemetryDashboard /></MainLayout>} />
-        <Route path="/compare" element={<MainLayout><ComparisonTable /></MainLayout>} />
-        <Route path="/learn/*" element={<MainLayout><Learn /></MainLayout>} />
-      </Routes>
-    </Router>
+    <HelmetProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<MainLayout><Home /></MainLayout>} />
+          <Route path="/programs" element={<MainLayout><Programs /></MainLayout>} />
+          <Route path="/programs/:id" element={<MainLayout><ProgramDetails /></MainLayout>} />
+          <Route path="/zkvms" element={<MainLayout><ZKVMs /></MainLayout>} />
+          <Route path="/zkvms/:id" element={<MainLayout><ZKVMDetails /></MainLayout>} />
+          <Route path="/benchmarks/:id" element={<MainLayout><BenchmarkDetails /></MainLayout>} />
+          <Route path="/faq" element={<MainLayout><FAQ /></MainLayout>} />
+          <Route path="/about" element={<MainLayout><About /></MainLayout>} />
+          <Route path="/benchmarks" element={<MainLayout><TelemetryDashboard /></MainLayout>} />
+          <Route path="/compare" element={<MainLayout><ComparisonTable /></MainLayout>} />
+          <Route path="/learn/*" element={<MainLayout><Learn /></MainLayout>} />
+        </Routes>
+      </Router>
+    </HelmetProvider>
   );
 }
 

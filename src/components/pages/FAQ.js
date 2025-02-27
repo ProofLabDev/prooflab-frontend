@@ -338,7 +338,8 @@ const FAQ = () => {
             {
               title: "Our prooflab-rs Approach",
               description: `ProofLab's SDK, prooflab-rs, is a powerful abstraction layer that allows developers to 
-                write Rust code once and run it across multiple zkVMs. This is a fork of zkRust with significant 
+                write Rust code once and run it across multiple zkVMs. This is a fork of 
+                https://github.com/yetanotherco/zkRust which we forked with significant 
                 new functionality added.`,
               features: [
                 "Truly comparable: The exact same code is executed across different zkVMs",
@@ -490,6 +491,11 @@ const FAQ = () => {
           answer: "ProofLab builds upon and is inspired by existing work in the ZK benchmarking space.",
           details: [
             {
+              title: "zkRust",
+              description: `An open-source project that provides Rust support for zkVM development, which we forked and built upon for our cross-zkVM abstraction layer.`,
+              url: "https://github.com/yetanotherco/zkRust"
+            },
+            {
               title: "zkbench.dev",
               description: `A pioneering open-source project that established early methodologies for 
                 comparing ZK framework performance and helped shape the benchmarking landscape.`,
@@ -498,8 +504,8 @@ const FAQ = () => {
             {
               title: "prooflab-rs",
               description: `Our SDK that enables cross-zkVM benchmarking, providing the abstraction layer that makes 
-                our comparable benchmarks possible. It was forked from zkRust but has since added significant new
-                functionality.`,
+                our comparable benchmarks possible. It was forked from zkRust which we forked and have since
+                added significant new functionality.`,
               url: "https://github.com/ProofLabDev/prooflab-rs"
             },
             {

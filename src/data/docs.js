@@ -13,11 +13,7 @@ const docs = {
               type: "text",
               content: "prooflab-rs is a powerful SDK that allows developers to write zero-knowledge applications in Rust that can run on multiple zkVMs without modification. It provides a unified interface for zkVM development, letting you write once and deploy to any supported system."
             },
-            {
-              type: "info",
-              title: "About prooflab-rs",
-              content: "prooflab-rs is a fork of zkRust with significant new functionality added. It maintains compatibility with the original codebase while extending it with additional features and optimizations."
-            },
+
             {
               type: "heading",
               level: 2,
@@ -64,6 +60,32 @@ const docs = {
             {
               type: "heading",
               level: 2,
+              id: "project-structure",
+              content: "Project Structure"
+            },
+            {
+              type: "text",
+              content: "The project is organized as a Cargo workspace with the following crates:"
+            },
+            {
+              type: "list",
+              style: "unordered",
+              items: [
+                "`crates/prooflab`: Core CLI tool and zkVM integration",
+                "`crates/prooflab_io`: I/O marshalling between host and guest programs",
+              ]
+            },
+            {
+              type: "text",
+              content: "It abstracts away the complexity of zkVM integration while giving developers the choice of which zkVM backend to use for their applications."
+            },
+            {
+              type: "text",
+              content: "For performance benchmarks and detailed reports on each supported zkVM, visit [prooflab.dev](https://prooflab.dev) - our benchmark platform that helps you compare and select the right zkVM for your specific needs."
+            },
+            {
+              type: "heading",
+              level: 2,
               id: "key-features",
               content: "Key Features"
             },
@@ -103,8 +125,7 @@ const docs = {
               items: [
                 "Rust (latest stable version, 1.75.0+)",
                 "Cargo package manager",
-                "Git version control",
-                "C++ build tools (gcc/clang on Linux/macOS, MSVC on Windows)"
+                "Git version control"
               ]
             },
             {
@@ -120,7 +141,7 @@ const docs = {
             },
             {
               type: "text",
-              content: "There are two primary ways to install prooflab-rs:"
+              content: "There are several ways to install prooflab-rs:"
             },
             {
               type: "heading",
@@ -149,18 +170,31 @@ const docs = {
             },
             {
               type: "text",
-              content: "If you prefer to build from source or want to contribute to the project, you can clone the repository and build it manually:"
+              content: "If you prefer to build from source or want to contribute to the project, you can build it manually:"
             },
             {
               type: "code",
               language: "bash",
-              content: "# Clone the repository\ngit clone https://github.com/ProofLabDev/prooflab-rs.git\ncd prooflab-rs\n\n# Build and install\nmake install"
+              content: "make install"
             },
             {
-              type: "info",
-              variant: "warning",
-              title: "Build Time Warning",
-              content: "Building from source may take several minutes, especially on the first build, as it compiles all dependencies."
+              type: "heading",
+              level: 3,
+              id: "method-3-docker",
+              content: "Method 3: Using Docker"
+            },
+            {
+              type: "text",
+              content: "prooflab-rs can also be run in a Docker container with all dependencies pre-configured."
+            },
+            {
+              type: "code",
+              language: "bash",
+              content: "# Building the Docker Image\ndocker build -t prooflab-rs .\n\n# Running the Docker Container (basic usage)\ndocker run -it prooflab-rs bash\n\n# For faster builds and better performance, mount your local Rust cache\ndocker run -it \\\n  -v \"$HOME/.cargo/registry:/root/.cargo/registry\" \\\n  -v \"$HOME/.cargo/git:/root/.cargo/git\" \\\n  prooflab-rs bash"
+            },
+            {
+              type: "text",
+              content: "Using Docker with mounted volumes significantly speeds up builds by reusing your local Rust package cache."
             },
             {
               type: "heading",
@@ -180,26 +214,6 @@ const docs = {
             {
               type: "text",
               content: "You should see output showing the installed version of prooflab-rs. If the command is not found, make sure your PATH includes the installation directory."
-            },
-            {
-              type: "heading",
-              level: 2,
-              id: "installing-zkvms",
-              content: "Installing zkVMs"
-            },
-            {
-              type: "text",
-              content: "prooflab-rs works with multiple zkVMs, but you'll need to install them separately. Here's how to install the most common ones:"
-            },
-            {
-              type: "code",
-              language: "bash",
-              content: "# Install RISC0\nprooflab-rs install risc0\n\n# Install SP1\nprooflab-rs install sp1"
-            },
-            {
-              type: "info",
-              title: "Optional Components",
-              content: "You can install additional components and precompiles using the prooflab-rs install command. Run prooflab-rs install --help to see all available options."
             }
           ]
         },
@@ -211,7 +225,7 @@ const docs = {
           content: [
             {
               type: "text",
-              content: "This guide will walk you through creating and running a simple prooflab-rs application. We'll build a program that computes a Fibonacci number and generates a zero-knowledge proof of the computation."
+              content: "This guide will walk you through creating and running a simple prooflab-rs application."
             },
             {
               type: "heading",
@@ -221,16 +235,16 @@ const docs = {
             },
             {
               type: "text",
-              content: "First, let's create a new prooflab-rs project using the CLI:"
+              content: "First, let's create a new Rust project using Cargo:"
             },
             {
               type: "code",
               language: "bash",
-              content: "prooflab-rs new fibonacci-example\ncd fibonacci-example"
+              content: "cargo new my_zkvm_program\ncd my_zkvm_program"
             },
             {
               type: "text",
-              content: "This creates a new directory with the basic project structure needed for a prooflab-rs application."
+              content: "This creates a new directory with the basic project structure needed for a Rust application."
             },
             {
               type: "heading",
@@ -240,28 +254,108 @@ const docs = {
             },
             {
               type: "text",
-              content: "The generated project has the following structure:"
+              content: "Your project should have the following structure:"
             },
             {
               type: "code",
               language: "text",
-              content: "fibonacci-example/\n├── Cargo.toml           # Project dependencies\n├── src/\n│   └── main.rs          # Main program code\n└── prooflab.toml        # prooflab-rs configuration"
+              content: "my_zkvm_program/\n├── Cargo.toml           # Project dependencies\n└── src/\n    └── main.rs          # Main program code"
             },
             {
               type: "heading",
               level: 2,
-              id: "write-program",
-              content: "Write the Program"
+              id: "program-components",
+              content: "Program Components"
             },
             {
               type: "text",
-              content: "Now, let's edit src/main.rs to implement our Fibonacci calculator:"
+              content: "A prooflab-rs program consists of three main functions:"
+            },
+            {
+              type: "list",
+              style: "unordered",
+              items: [
+                "`main()`: Required function that runs inside the zkVM and is proven",
+                "`input()`: Optional function that runs on the host before zkVM execution to prepare inputs",
+                "`output()`: Optional function that runs on the host after zkVM execution to process results"
+              ]
+            },
+            {
+              type: "heading",
+              level: 3,
+              id: "main-function",
+              content: "The `main()` Function (Required)"
+            },
+            {
+              type: "text",
+              content: "This function runs inside the zkVM and is the code that will be proven:"
+            },
+            {
+              type: "code",
+              language: "rust",
+              content: "use prooflab_io;\n\nfn main() {\n    // Read input from the host\n    let input_value: u32 = prooflab_io::read();\n    \n    // Perform computation logic\n    let result = input_value * 2;\n    \n    // Commit results to be read by the host\n    prooflab_io::commit(&result);\n}"
+            },
+            {
+              type: "heading",
+              level: 3,
+              id: "input-function",
+              content: "The `input()` Function (Optional)"
+            },
+            {
+              type: "text",
+              content: "This function runs on the host before the zkVM execution and prepares inputs:"
+            },
+            {
+              type: "code",
+              language: "rust",
+              content: "use prooflab_io;\n\nfn input() {\n    // Define input data for the zkVM\n    let value = 42u32;\n    \n    // Send it to the zkVM\n    prooflab_io::write(&value);\n}"
+            },
+            {
+              type: "heading",
+              level: 3,
+              id: "output-function",
+              content: "The `output()` Function (Optional)"
+            },
+            {
+              type: "text",
+              content: "This function runs on the host after the zkVM execution and processes the results:"
+            },
+            {
+              type: "code",
+              language: "rust",
+              content: "use prooflab_io;\n\nfn output() {\n    // Read the committed data from the zkVM\n    let result: u32 = prooflab_io::out();\n    \n    // Process the output\n    println!(\"The result is: {}\", result);\n}"
+            },
+            {
+              type: "heading",
+              level: 2,
+              id: "update-dependencies",
+              content: "Add Dependencies"
+            },
+            {
+              type: "text",
+              content: "Update your Cargo.toml file to include the prooflab_io dependency:"
+            },
+            {
+              type: "code",
+              language: "toml",
+              filename: "Cargo.toml",
+              content: "[dependencies]\nprooflab_io = { git = \"https://github.com/ProofLabDev/prooflab-rs.git\", package = \"prooflab_io\" }"
+            },
+            {
+              type: "heading",
+              level: 2,
+              id: "simple-example",
+              content: "Complete Example: Fibonacci"
+            },
+            {
+              type: "text",
+              content: "Let's create a simple Fibonacci calculator as a complete example:"
             },
             {
               type: "code",
               language: "rust",
               filename: "src/main.rs",
-              content: "use prooflab_io;\n\n// Input function: runs before the zkVM execution\npub fn input() {\n    // The number we want to calculate fibonacci for\n    let n: u32 = 10;\n    prooflab_io::write(&n);\n}\n\n// Main function: runs inside the zkVM\npub fn main() {\n    // Read the input value\n    let n: u32 = prooflab_io::read();\n    \n    // Calculate the nth Fibonacci number\n    let result = fibonacci(n);\n    \n    // Commit the result (will be part of the proof)\n    prooflab_io::commit(&result);\n}\n\n// Output function: runs after the zkVM execution\npub fn output() {\n    // Read the result\n    let fibonacci_result: u64 = prooflab_io::out();\n    println!(\"The result is: {}\", fibonacci_result);\n}\n\n// Recursive Fibonacci function\nfn fibonacci(n: u32) -> u64 {\n    match n {\n        0 => 0,\n        1 => 1,\n        _ => fibonacci(n - 1) + fibonacci(n - 2),\n    }\n}"
+              content: "use prooflab_io;\n\nfn main() {\n    let n: u32 = prooflab_io::read();\n    prooflab_io::commit(&n);\n\n    let mut a: u32 = 0;\n    let mut b: u32 = 1;\n    for _ in 0..n {\n        let mut c = a + b;\n        c %= 7919; // Modulus to prevent overflow\n        a = b;\n        b = c;\n    }\n\n    prooflab_io::commit(&a);\n    prooflab_io::commit(&b);\n}\n\nfn input() {\n    let n = 1000u32;\n    prooflab_io::write(&n);\n}\n\nfn output() {\n    let (n, a, b): (u32, u32, u32) = prooflab_io::out();\n    println!(\"n: {}\", n);\n    println!(\"a: {}\", a);\n    println!(\"b: {}\", b);\n}"
             },
             {
               type: "heading",
@@ -276,44 +370,29 @@ const docs = {
             {
               type: "heading",
               level: 3,
-              id: "run-with-risc0",
-              content: "Run with RISC0"
-            },
-            {
-              type: "code",
-              language: "bash",
-              content: "prooflab-rs run --zkvm risc0"
-            },
-            {
-              type: "heading",
-              level: 3,
               id: "run-with-sp1",
               content: "Run with SP1"
             },
             {
               type: "code",
               language: "bash",
-              content: "prooflab-rs run --zkvm sp1"
-            },
-            {
-              type: "info",
-              title: "Expected Output",
-              content: "In both cases, you should see output indicating that the proof was generated successfully, along with the final result: The result is: 55"
+              content: "cargo run --release -p prooflab -- prove-sp1 my_zkvm_program"
             },
             {
               type: "heading",
-              level: 2,
-              id: "verify-proof",
-              content: "Verify the Proof"
-            },
-            {
-              type: "text",
-              content: "After running the program, a proof file is generated. You can verify this proof separately:"
+              level: 3,
+              id: "run-with-risc0",
+              content: "Run with RISC0"
             },
             {
               type: "code",
               language: "bash",
-              content: "prooflab-rs verify --zkvm risc0 --proof target/proofs/risc0_proof.json"
+              content: "cargo run --release -p prooflab -- prove-risc0 my_zkvm_program"
+            },
+            {
+              type: "info",
+              title: "Expected Output",
+              content: "In both cases, you should see output indicating that the proof was generated successfully, along with the final result from your output() function."
             },
             {
               type: "heading",
@@ -539,117 +618,93 @@ const docs = {
             {
               type: "heading",
               level: 2,
-              id: "program-structure",
-              content: "Program Structure"
+              id: "data-flow",
+              content: "Data Flow Between Host and Guest"
             },
             {
               type: "text",
-              content: "A typical prooflab-rs program consists of three main functions:"
-            },
-            {
-              type: "code",
-              language: "rust",
-              content: "// Host environment: Runs before zkVM execution\npub fn input() {\n    // Prepare and write inputs\n}\n\n// Guest environment: Runs inside the zkVM\npub fn main() {\n    // Read inputs, perform computation, commit outputs\n}\n\n// Host environment: Runs after zkVM execution\npub fn output() {\n    // Read and process outputs\n}"
-            },
-            {
-              type: "info",
-              title: "Function Execution Environment",
-              content: "Only the main() function runs inside the zkVM and generates a proof. The input() and output() functions run in the host environment and are not part of the proven computation."
+              content: "Let's examine how data flows between the host and the zkVM environment:"
             },
             {
               type: "heading",
-              level: 2,
-              id: "input-api",
-              content: "Input API"
+              level: 3,
+              id: "host-to-guest",
+              content: "Sending Data to the zkVM (Host → Guest)"
             },
             {
               type: "text",
-              content: "The input API allows you to send data to the zkVM guest environment."
-            },
-            {
-              type: "heading",
-              level: 3,
-              id: "writing-inputs",
-              content: "Writing Inputs (Host Side)"
+              content: "In your input() function, use prooflab_io::write() to send data to the zkVM:"
             },
             {
               type: "code",
               language: "rust",
-              content: "pub fn input() {\n    // Write a single value\n    let number: u32 = 42;\n    prooflab_io::write(&number);\n    \n    // Write a vector\n    let vector: Vec<u8> = vec![1, 2, 3, 4, 5];\n    prooflab_io::write(&vector);\n    \n    // Write a complex structure\n    let data = MyStruct { field1: 123, field2: \"hello\".to_string() };\n    prooflab_io::write(&data);\n}"
-            },
-            {
-              type: "info",
-              title: "Serialization",
-              content: "All types passed to prooflab_io::write() must implement the Serialize trait from serde."
+              content: "fn input() {\n    // You can write multiple values\n    let a = 5u32;\n    let b = 10u32;\n    let c = \"hello\".to_string();\n    \n    prooflab_io::write(&a);\n    prooflab_io::write(&b);\n    prooflab_io::write(&c);\n}"
             },
             {
               type: "heading",
               level: 3,
-              id: "reading-inputs",
-              content: "Reading Inputs (Guest Side)"
-            },
-            {
-              type: "code",
-              language: "rust",
-              content: "pub fn main() {\n    // Read a single value\n    let number: u32 = prooflab_io::read();\n    \n    // Read a vector\n    let vector: Vec<u8> = prooflab_io::read();\n    \n    // Read a complex structure\n    let data: MyStruct = prooflab_io::read();\n}"
-            },
-            {
-              type: "info",
-              title: "Deserialization",
-              content: "All types read using prooflab_io::read() must implement the Deserialize trait from serde."
-            },
-            {
-              type: "heading",
-              level: 3,
-              id: "public-inputs",
-              content: "Public Inputs"
+              id: "guest-reading",
+              content: "Reading Data in the zkVM (Guest)"
             },
             {
               type: "text",
-              content: "Public inputs are values that are visible to both the prover and verifier. They can be used to constrain the proof."
+              content: "In your main() function, use prooflab_io::read() to get the input data:"
             },
             {
               type: "code",
               language: "rust",
-              content: "// Host side\npub fn input() {\n    // Write a public input\n    prooflab_io::write_public(&public_value);\n}\n\n// Guest side\npub fn main() {\n    // Read a public input\n    let public_value: u32 = prooflab_io::read_public();\n}"
+              content: "fn main() {\n    // Read values in the same order they were written\n    let a: u32 = prooflab_io::read();\n    let b: u32 = prooflab_io::read();\n    let c: String = prooflab_io::read();\n    \n    // Process the data...\n}"
             },
             {
               type: "heading",
-              level: 2,
-              id: "output-api",
-              content: "Output API"
+              level: 3,
+              id: "guest-to-host",
+              content: "Sending Data from the zkVM (Guest → Host)"
             },
             {
               type: "text",
-              content: "The output API allows you to get data from the zkVM guest environment."
-            },
-            {
-              type: "heading",
-              level: 3,
-              id: "committing-outputs",
-              content: "Committing Outputs (Guest Side)"
+              content: "In your main() function, use prooflab_io::commit() to commit results:"
             },
             {
               type: "code",
               language: "rust",
-              content: "pub fn main() {\n    // Perform computation...\n    \n    // Commit a single result value\n    let result: u64 = compute_result();\n    prooflab_io::commit(&result);\n    \n    // Commit multiple values\n    let result2 = compute_another_result();\n    prooflab_io::commit(&result2);\n}"
+              content: "fn main() {\n    // ... computation ...\n    \n    // You can commit multiple values\n    let result1 = 42u32;\n    let result2 = \"done\".to_string();\n    \n    prooflab_io::commit(&result1);\n    prooflab_io::commit(&result2);\n}"
             },
             {
               type: "heading",
               level: 3,
-              id: "reading-outputs",
-              content: "Reading Outputs (Host Side)"
+              id: "host-reading",
+              content: "Reading zkVM Results (Host)"
+            },
+            {
+              type: "text",
+              content: "In your output() function, use prooflab_io::out() to get the committed data:"
             },
             {
               type: "code",
               language: "rust",
-              content: "pub fn output() {\n    // Read committed outputs in the same order they were committed\n    let result1: u64 = prooflab_io::out();\n    let result2: SomeType = prooflab_io::out();\n    \n    println!(\"Results: {} and {:?}\", result1, result2);\n}"
+              content: "fn output() {\n    // Option 1: Read each value separately\n    let result1: u32 = prooflab_io::out();\n    let result2: String = prooflab_io::out();\n    \n    println!(\"Result 1: {}\", result1);\n    println!(\"Result 2: {}\", result2);\n    \n    // Option 2: Read multiple values as a tuple\n    // let (result1, result2): (u32, String) = prooflab_io::out();\n}"
             },
             {
               type: "info",
               variant: "warning",
               title: "Order Matters",
               content: "Outputs must be read in the same order they were committed. Each call to prooflab_io::out() reads the next committed value."
+            },
+            {
+              type: "heading",
+              level: 2,
+              id: "working-with-complex-data",
+              content: "Handling Complex Data Structures"
+            },
+            {
+              type: "text",
+              content: "For complex data types, ensure they implement Serde's Serialize and Deserialize traits:"
+            },
+            {
+              type: "code",
+              language: "rust",
+              content: "use serde::{Serialize, Deserialize};\n\n#[derive(Serialize, Deserialize, Debug)]\nstruct MyData {\n    id: u32,\n    name: String,\n    values: Vec<f64>,\n}\n\nfn main() {\n    let data: MyData = prooflab_io::read();\n    // Process the data...\n    prooflab_io::commit(&data);\n}\n\nfn input() {\n    let data = MyData {\n        id: 1,\n        name: \"Example\".to_string(),\n        values: vec![1.0, 2.0, 3.0],\n    };\n    prooflab_io::write(&data);\n}\n\nfn output() {\n    let data: MyData = prooflab_io::out();\n    println!(\"Data: {:?}\", data);\n}"
             },
             {
               type: "heading",
@@ -664,13 +719,28 @@ const docs = {
             {
               type: "code",
               language: "rust",
-              content: "// Inside the guest environment\npub fn main() {\n    // Log a message (only visible during development)\n    prooflab_io::log(\"Processing started\");\n    \n    // Log with formatted values\n    prooflab_io::log(&format!(\"Processing value: {}\", value));\n}"
+              content: "// Inside the guest environment\nfn main() {\n    // Log a message (only visible during development)\n    prooflab_io::log(\"Processing started\");\n    \n    // Log with formatted values\n    prooflab_io::log(&format!(\"Processing value: {}\", value));\n}"
             },
             {
               type: "info",
               variant: "warning",
               title: "Log Performance Impact",
               content: "Logging can significantly impact proof generation performance. Use it sparingly in production code."
+            },
+            {
+              type: "heading",
+              level: 2,
+              id: "type-annotations",
+              content: "Use Clear Type Annotations"
+            },
+            {
+              type: "text",
+              content: "Always use explicit type annotations to avoid confusion:"
+            },
+            {
+              type: "code",
+              language: "rust",
+              content: "// Good: Type is explicitly stated\nlet input_value: u32 = prooflab_io::read();\n\n// Avoid: Implicit typing\nlet input_value = prooflab_io::read();  // What type is this?"
             }
           ]
         },
@@ -753,12 +823,34 @@ const docs = {
             {
               type: "heading",
               level: 2,
-              id: "recommended-practices",
-              content: "Recommended Practices"
+              id: "examples",
+              content: "Example Programs"
+            },
+            {
+              type: "text",
+              content: "prooflab-rs comes with several example programs that demonstrate different use cases:"
+            },
+            {
+              type: "list",
+              style: "unordered",
+              items: [
+                "Fibonacci: Computing and reading Fibonacci numbers",
+                "RSA: Key verification",
+                "ECDSA: Signature verification",
+                "JSON: Verification of blockchain state diffs",
+                "SHA256: Computing cryptographic hashes",
+                "Tendermint: Block verification",
+                "ZK Quiz: Interactive user quiz with zero-knowledge proofs"
+              ]
+            },
+            {
+              type: "code",
+              language: "bash",
+              content: "# Run examples with either Risc0 or SP1 backend\nmake prove_risc0_fibonacci\nmake prove_sp1_fibonacci"
             },
             {
               type: "heading",
-              level: 3,
+              level: 2,
               id: "deterministic-computation",
               content: "Ensure Deterministic Computation"
             },
@@ -778,27 +870,27 @@ const docs = {
             },
             {
               type: "heading",
-              level: 3,
+              level: 2,
               id: "memory-management",
-              content: "Efficient Memory Management"
+              content: "Memory Management"
             },
             {
               type: "text",
-              content: "Memory usage directly impacts proving time and cost. To optimize memory usage:"
+              content: "zkVMs have limits on memory usage. For large computations:"
             },
             {
               type: "list",
               style: "unordered",
               items: [
-                "Prefer stack allocation over heap allocation when possible",
-                "Reuse buffers instead of allocating new ones",
-                "Use appropriate data structures for your use case",
-                "Be mindful of memory layout and alignment"
+                "Break processing into smaller chunks",
+                "Avoid excessive memory allocation",
+                "Use fixed-size arrays where possible",
+                "Consider memory-efficient algorithms"
               ]
             },
             {
               type: "heading",
-              level: 3,
+              level: 2,
               id: "error-handling",
               content: "Error Handling"
             },
@@ -809,39 +901,13 @@ const docs = {
             {
               type: "code",
               language: "rust",
-              content: "// Preferred approach: Use Result for error handling\nfn process_data(input: &[u8]) -> Result<u32, &'static str> {\n    if input.is_empty() {\n        return Err(\"Input cannot be empty\");\n    }\n    // Process data...\n    Ok(result)\n}\n\n// In the main function\npub fn main() {\n    let input: Vec<u8> = prooflab_io::read();\n    match process_data(&input) {\n        Ok(result) => prooflab_io::commit(&result),\n        Err(err) => {\n            // Log the error and commit a failure indicator\n            prooflab_io::log(err);\n            prooflab_io::commit(&0u32); // Indicate failure\n        }\n    }\n}"
+              content: "// Preferred approach: Use Result for error handling\nfn process_data(input: &[u8]) -> Result<u32, &'static str> {\n    if input.is_empty() {\n        return Err(\"Input cannot be empty\");\n    }\n    // Process data...\n    Ok(result)\n}\n\n// In the main function\nfn main() {\n    let input: Vec<u8> = prooflab_io::read();\n    match process_data(&input) {\n        Ok(result) => prooflab_io::commit(&result),\n        Err(err) => {\n            // Log the error and commit a failure indicator\n            prooflab_io::log(err);\n            prooflab_io::commit(&0u32); // Indicate failure\n        }\n    }\n}"
             },
             {
               type: "info",
               variant: "warning",
               title: "Avoid Panics",
               content: "Panic behavior can vary between zkVMs. Use Result for error handling instead of panic or assert when possible."
-            },
-            {
-              type: "heading",
-              level: 2,
-              id: "testing-verification",
-              content: "Testing and Verification"
-            },
-            {
-              type: "text",
-              content: "To ensure your code works across zkVMs, follow these testing practices:"
-            },
-            {
-              type: "list",
-              style: "ordered",
-              items: [
-                "Write unit tests using the prooflab-rs test framework",
-                "Test on all target zkVMs",
-                "Compare performance characteristics across systems",
-                "Use the prooflab-rs benchmarking tools to identify performance bottlenecks",
-                "Verify your code with different input sizes and edge cases"
-              ]
-            },
-            {
-              type: "code",
-              language: "bash",
-              content: "# Test on all supported zkVMs\nprooflab-rs test --all-zkvms\n\n# Benchmark on specific zkVMs\nprooflab-rs bench --zkvm risc0 --zkvm sp1"
             }
           ]
         }
@@ -863,6 +929,37 @@ const docs = {
             {
               type: "heading",
               level: 2,
+              id: "accelerated-libraries",
+              content: "Using Accelerated Libraries"
+            },
+            {
+              type: "text",
+              content: "ProofLab-rs supports hardware-accelerated versions of common cryptographic libraries. To use them, add the --precompiles flag when running your program."
+            },
+            {
+              type: "info",
+              title: "SP1 Accelerated Crates",
+              content: [
+                "sha2 v0.10.6",
+                "sha3 v0.10.8",
+                "crypto-bigint v0.5.5", 
+                "tiny-keccak v2.0.2",
+                "ed25519-consensus v2.1.0",
+                "ecdsa-core v0.16.9"
+              ]
+            },
+            {
+              type: "info",
+              title: "RISC0 Accelerated Crates",
+              content: [
+                "sha2 v0.10.6",
+                "k256 v0.13.1",
+                "crypto-bigint v0.5.5"
+              ]
+            },
+            {
+              type: "heading",
+              level: 2,
               id: "hash-functions",
               content: "Hash Functions"
             },
@@ -873,7 +970,7 @@ const docs = {
             {
               type: "code",
               language: "rust",
-              content: "use prooflab_crypto::hash::{sha256, sha512, keccak256};\n\npub fn main() {\n    let data: Vec<u8> = prooflab_io::read();\n    \n    // Compute SHA-256 hash\n    let sha256_result = sha256(&data);\n    prooflab_io::commit(&sha256_result);\n    \n    // Compute SHA-512 hash\n    let sha512_result = sha512(&data);\n    prooflab_io::commit(&sha512_result);\n    \n    // Compute Keccak-256 hash (used in Ethereum)\n    let keccak_result = keccak256(&data);\n    prooflab_io::commit(&keccak_result);\n}"
+              content: "use sha3::{Digest as _, Keccak256};\n\nfn main() {\n    let data: Vec<u8> = prooflab_io::read();\n    let hash: [u8; 32] = Keccak256::digest(&data).into();\n    prooflab_io::commit(&hash);\n}\n\nfn input() {\n    let message = b\"Hello, world!\".to_vec();\n    prooflab_io::write(&message);\n}\n\nfn output() {\n    let hash: [u8; 32] = prooflab_io::out();\n    println!(\"Keccak256 hash: {:?}\", hash);\n}"
             },
             {
               type: "info",
@@ -888,59 +985,22 @@ const docs = {
             },
             {
               type: "text",
-              content: "Verifying digital signatures in zero-knowledge is a powerful capability. prooflab-rs supports various signature schemes:"
-            },
-            {
-              type: "heading",
-              level: 3,
-              id: "ecdsa",
-              content: "ECDSA Signatures"
-            },
-            {
-              type: "code",
-              language: "rust",
-              content: "use prooflab_crypto::signatures::ecdsa;\n\npub fn main() {\n    // Read the message, signature, and public key\n    let message: Vec<u8> = prooflab_io::read();\n    let signature: ecdsa::Signature = prooflab_io::read();\n    let public_key: ecdsa::PublicKey = prooflab_io::read();\n    \n    // Verify the signature\n    let is_valid = ecdsa::verify(&message, &signature, &public_key);\n    \n    // Commit the result\n    prooflab_io::commit(&is_valid);\n}"
-            },
-            {
-              type: "heading",
-              level: 3,
-              id: "ed25519",
-              content: "Ed25519 Signatures"
-            },
-            {
-              type: "code",
-              language: "rust",
-              content: "use prooflab_crypto::signatures::ed25519;\n\npub fn main() {\n    // Read the message, signature, and public key\n    let message: Vec<u8> = prooflab_io::read();\n    let signature: ed25519::Signature = prooflab_io::read();\n    let public_key: ed25519::PublicKey = prooflab_io::read();\n    \n    // Verify the signature\n    let is_valid = ed25519::verify(&message, &signature, &public_key);\n    \n    // Commit the result\n    prooflab_io::commit(&is_valid);\n}"
+              content: "Verifying digital signatures in zero-knowledge is a powerful capability. prooflab-rs supports various signature schemes like ECDSA and Ed25519."
             },
             {
               type: "heading",
               level: 2,
-              id: "merkle-trees",
-              content: "Merkle Trees"
+              id: "precompile-flag",
+              content: "Using the Precompiles Flag"
             },
             {
               type: "text",
-              content: "Merkle trees are fundamental data structures in many cryptographic applications. prooflab-rs provides a Merkle tree implementation:"
+              content: "To leverage hardware-accelerated cryptographic operations, use the --precompiles flag when running your program:"
             },
             {
               type: "code",
-              language: "rust",
-              content: "use prooflab_crypto::merkle::{MerkleTree, Proof};\n\npub fn main() {\n    // Read leaf values\n    let leaves: Vec<Vec<u8>> = prooflab_io::read();\n    \n    // Create a Merkle tree\n    let tree = MerkleTree::new(&leaves);\n    let root = tree.root();\n    \n    // Create and verify a proof for a specific leaf\n    let leaf_index = 3; // Example index\n    let proof = tree.create_proof(leaf_index);\n    let is_valid = proof.verify(&root, &leaves[leaf_index], leaf_index);\n    \n    // Commit the root and verification result\n    prooflab_io::commit(&root);\n    prooflab_io::commit(&is_valid);\n}"
-            },
-            {
-              type: "heading",
-              level: 2,
-              id: "encryption",
-              content: "Encryption"
-            },
-            {
-              type: "text",
-              content: "While encryption inside a zkVM is less common, prooflab-rs supports some symmetric encryption algorithms:"
-            },
-            {
-              type: "code",
-              language: "rust",
-              content: "use prooflab_crypto::symmetric::{aes, chacha20};\n\npub fn main() {\n    // Read plaintext and key\n    let plaintext: Vec<u8> = prooflab_io::read();\n    let key: [u8; 32] = prooflab_io::read();\n    \n    // Encrypt using ChaCha20\n    let nonce = [0u8; 12];\n    let ciphertext = chacha20::encrypt(&plaintext, &key, &nonce);\n    \n    // Verify encryption/decryption works\n    let decrypted = chacha20::decrypt(&ciphertext, &key, &nonce);\n    let is_correct = plaintext == decrypted;\n    \n    // Commit the results\n    prooflab_io::commit(&ciphertext);\n    prooflab_io::commit(&is_correct);\n}"
+              language: "bash",
+              content: "# With SP1\ncargo run --release -p prooflab -- prove-sp1 /path/to/my_zkvm_program --precompiles\n\n# With RISC0\ncargo run --release -p prooflab -- prove-risc0 /path/to/my_zkvm_program --precompiles"
             },
             {
               type: "heading",
@@ -1027,21 +1087,23 @@ const docs = {
             {
               type: "heading",
               level: 2,
-              id: "measuring-performance",
-              content: "Measuring Performance"
+              id: "command-line-options",
+              content: "Command-line Options"
             },
             {
               type: "text",
-              content: "Before optimizing, you need to measure the current performance. prooflab-rs provides built-in benchmarking tools:"
+              content: "prooflab-rs provides several command-line options to optimize your applications:"
             },
             {
-              type: "code",
-              language: "bash",
-              content: "# Run benchmark with detailed metrics\nprooflab-rs bench --detailed\n\n# Compare performance across zkVMs\nprooflab-rs bench --zkvm risc0 --zkvm sp1"
-            },
-            {
-              type: "text",
-              content: "This will output detailed performance metrics including execution time, memory usage, and proving time."
+              type: "table",
+              headers: ["Flag", "Description", "Default"],
+              rows: [
+                ["--submit-to-aligned", "Sends the proof to Aligned for verification after generation", ""],
+                ["--keystore-path", "Path to your wallet keystore", "~/keystore"],
+                ["--rpc-url", "Ethereum RPC URL for submitting proofs", "https://ethereum-holesky-rpc.publicnode.com"],
+                ["--network", "Chain ID of the Ethereum network where Aligned is deployed", "holesky"],
+                ["--precompiles", "Enables hardware acceleration for specific cryptographic operations", ""]
+              ]
             },
             {
               type: "heading",
@@ -1061,13 +1123,8 @@ const docs = {
             },
             {
               type: "code",
-              language: "rust",
-              content: "// Instead of implementing SHA-256 yourself\nuse prooflab_crypto::hash::sha256;\n\npub fn main() {\n    let data: Vec<u8> = prooflab_io::read();\n    \n    // Uses optimized precompiled implementation\n    let hash = sha256(&data);\n    \n    prooflab_io::commit(&hash);\n}"
-            },
-            {
-              type: "info",
-              title: "Available Precompiles",
-              content: "prooflab-rs provides precompiles for common operations like hashing, signature verification, and elliptic curve operations."
+              language: "bash",
+              content: "# Use precompiles for hardware acceleration\ncargo run --release -p prooflab -- prove-sp1 /path/to/my_zkvm_program --precompiles"
             },
             {
               type: "heading",
@@ -1117,135 +1174,291 @@ const docs = {
               ]
             },
             {
-              type: "code",
-              language: "rust",
-              content: "// Instead of computing values in the zkVM\npub fn input() {\n    let values = compute_expensive_values();\n    prooflab_io::write(&values);\n}\n\npub fn main() {\n    // Read pre-computed values\n    let values: Vec<u32> = prooflab_io::read();\n    \n    // Use the pre-computed values\n    let result = process_values(&values);\n    prooflab_io::commit(&result);\n}"
-            },
-            {
               type: "heading",
               level: 3,
-              id: "parallelize",
-              content: "Leverage Parallelism"
+              id: "gpu-acceleration",
+              content: "Use GPU Acceleration"
             },
             {
               type: "text",
-              content: "Some zkVMs support parallel proving, which can significantly speed up proof generation:"
+              content: "For faster proof generation, you can use GPU acceleration with compatible hardware:"
             },
             {
               type: "code",
               language: "bash",
-              content: "# Enable parallel proving with 8 threads\nprooflab-rs run --parallel --threads 8"
+              content: "# With GPU acceleration\ncargo run --release -p prooflab -- prove-sp1 /path/to/my_zkvm_program --gpu"
             },
             {
               type: "info",
               variant: "warning",
-              title: "Parallel Execution Limitations",
-              content: "Parallel execution is only available for proof generation, not for the guest code execution itself, which remains sequential."
+              title: "Hardware Requirements",
+              content: "GPU acceleration requires compatible hardware and may not be available for all zkVMs."
             },
             {
               type: "heading",
               level: 2,
-              id: "zkvm-specific-optimizations",
-              content: "zkVM-Specific Optimizations"
-            },
-            {
-              type: "text",
-              content: "Different zkVMs have different performance characteristics. Here are some zkVM-specific optimizations:"
+              id: "troubleshooting",
+              content: "Troubleshooting Common Issues"
             },
             {
               type: "heading",
               level: 3,
-              id: "risc0-optimizations",
-              content: "RISC0 Optimizations"
+              id: "common-issues",
+              content: "Common Issues and Solutions"
             },
             {
               type: "list",
               style: "unordered",
               items: [
-                "Use the RISC0 accelerator for supported operations",
-                "Minimize branching in performance-critical code",
-                "Use the appropriate alignment for data structures",
-                "Enable GPU acceleration for faster proving",
-                "Consider using RISC0-specific memory optimizations"
+                "**Proof generation fails with memory error**: Reduce memory usage in your program or break large computations into smaller parts",
+                "**Cryptographic operations are slow**: Use the --precompiles flag for hardware acceleration and ensure you're using compatible versions of crypto libraries",
+                "**Type mismatch errors**: Ensure types match exactly between write() and read() calls and use explicit type annotations",
+                "**Proof verification fails**: Ensure deterministic computation (avoid random numbers) and check for undefined behavior or race conditions",
+                "**Build errors with dependencies**: Some crates may not be compatible with zkVMs, check for zkVM-specific versions of libraries"
               ]
+            },
+            {
+              type: "heading",
+              level: 3,
+              id: "getting-help",
+              content: "Getting Help"
+            },
+            {
+              type: "text",
+              content: "If you encounter issues not covered here:"
+            },
+            {
+              type: "list",
+              style: "unordered",
+              items: [
+                "Check the [ProofLab GitHub repository](https://github.com/ProofLabDev/prooflab-rs) for updates",
+                "Join the [Telegram support group](https://t.me/+7Qd3EutBDwZhM2U5)",
+                "Review the examples provided with ProofLab for reference implementations",
+                "Look at the test suite in the `crates/prooflab/tests` directory to understand the internals"
+              ]
+            },
+            {
+              type: "heading",
+              level: 2,
+              id: "submitting-proofs",
+              content: "Submitting Proofs to Aligned"
+            },
+            {
+              type: "text",
+              content: "To submit proofs to Aligned, follow these steps:"
+            },
+            {
+              type: "list",
+              style: "ordered",
+              items: [
+                "Generate a local wallet keystore using cast: `cast wallet new-mnemonic`",
+                "Import your created keystore: `cast wallet import --interactive <PATH_TO_KEYSTORE.json>`",
+                "Generate and submit your proof using the --submit-to-aligned flag: `cargo run --release -- prove-sp1 <PROGRAM_DIRECTORY_PATH> --submit-to-aligned --keystore-path <PATH_TO_KEYSTORE>`"
+              ]
+            },
+            {
+              type: "info",
+              title: "Note",
+              content: "Aligned currently supports verification of Risc0 proofs from release version v1.0.1."
+            }
+          ]
+        },
+        {
+          slug: "best-practices",
+          title: "Best Practices",
+          description: "Recommended patterns for prooflab-rs development",
+          updated: "March 2025",
+          content: [
+            {
+              type: "text",
+              content: "This guide covers recommended patterns and best practices for developing efficient and maintainable prooflab-rs applications."
+            },
+            {
+              type: "heading",
+              level: 2,
+              id: "project-organization",
+              content: "Project Organization"
+            },
+            {
+              type: "heading",
+              level: 3,
+              id: "directory-structure",
+              content: "Directory Structure"
+            },
+            {
+              type: "text",
+              content: "For larger projects, move shared code to a library:"
             },
             {
               type: "code",
-              language: "bash",
-              content: "# Enable GPU acceleration for RISC0\nprooflab-rs run --zkvm risc0 --gpu"
+              language: "text",
+              content: "my_project/\n├── Cargo.toml\n├── lib/\n│   ├── Cargo.toml\n│   └── src/\n│       └── lib.rs      # Shared utility functions and data structures\n└── src/\n    └── main.rs         # Contains main(), input(), and output() functions"
             },
             {
               type: "heading",
               level: 3,
-              id: "sp1-optimizations",
-              content: "SP1 Optimizations"
-            },
-            {
-              type: "list",
-              style: "unordered",
-              items: [
-                "Leverage SP1's optimized cryptographic operations",
-                "Use SP1's batch processing capabilities for similar operations",
-                "Consider SP1's memory model when designing your application",
-                "Take advantage of SP1's LLVM-based optimizations",
-                "Utilize SP1's specialized hardware acceleration"
-              ]
-            },
-            {
-              type: "heading",
-              level: 2,
-              id: "case-studies",
-              content: "Case Studies"
+              id: "function-responsibilities",
+              content: "Keep Input and Output Functions Small"
             },
             {
               type: "text",
-              content: "Let's look at a real-world optimization example: optimizing a Merkle tree verification."
-            },
-            {
-              type: "heading",
-              level: 3,
-              id: "unoptimized-merkle",
-              content: "Unoptimized Version"
+              content: "The input() and output() functions should primarily handle data preparation and presentation, not complex logic:"
             },
             {
               type: "code",
               language: "rust",
-              content: "pub fn verify_merkle_proof(leaf: &[u8], proof: &[Vec<u8>], root: &[u8]) -> bool {\n    let mut current = leaf.to_vec();\n    \n    for (i, sibling) in proof.iter().enumerate() {\n        let mut combined = Vec::new();\n        if i % 2 == 0 {\n            combined.extend_from_slice(&current);\n            combined.extend_from_slice(sibling);\n        } else {\n            combined.extend_from_slice(sibling);\n            combined.extend_from_slice(&current);\n        }\n        \n        // Compute hash\n        current = sha256(&combined).to_vec();\n    }\n    \n    current == root\n}"
-            },
-            {
-              type: "heading",
-              level: 3,
-              id: "optimized-merkle",
-              content: "Optimized Version"
-            },
-            {
-              type: "code",
-              language: "rust",
-              content: "pub fn verify_merkle_proof_optimized(leaf: &[u8], proof: &[Vec<u8>], root: &[u8]) -> bool {\n    // Pre-allocate buffers to avoid repeated allocations\n    let mut current = [0u8; 32];\n    let mut combined = [0u8; 64];\n    \n    // Copy initial leaf to current buffer\n    current.copy_from_slice(leaf);\n    \n    for (i, sibling) in proof.iter().enumerate() {\n        // Directly copy into the combined buffer without creating new vectors\n        if i % 2 == 0 {\n            combined[..32].copy_from_slice(&current);\n            combined[32..].copy_from_slice(sibling);\n        } else {\n            combined[..32].copy_from_slice(sibling);\n            combined[32..].copy_from_slice(&current);\n        }\n        \n        // Use the optimized precompile directly\n        let hash = sha256(&combined);\n        current.copy_from_slice(&hash);\n    }\n    \n    // Direct comparison without creating new vector\n    &current[..] == root\n}"
-            },
-            {
-              type: "text",
-              content: "The optimized version eliminates unnecessary memory allocations, reuses buffers, and leverages precompiled operations for better performance."
+              content: "fn input() {\n    // Good: Simple data preparation\n    let data = load_data_from_file(\"input.json\");\n    prooflab_io::write(&data);\n}\n\nfn output() {\n    // Good: Simple result presentation\n    let result = prooflab_io::out();\n    save_results_to_file(\"output.json\", &result);\n}"
             },
             {
               type: "heading",
               level: 2,
-              id: "optimization-tips",
-              content: "Summary of Optimization Tips"
+              id: "code-quality",
+              content: "Code Quality Practices"
+            },
+            {
+              type: "heading",
+              level: 3,
+              id: "type-annotations",
+              content: "Use Clear Type Annotations"
+            },
+            {
+              type: "text",
+              content: "Always use explicit type annotations to avoid confusion:"
+            },
+            {
+              type: "code",
+              language: "rust",
+              content: "// Good: Type is explicitly stated\nlet input_value: u32 = prooflab_io::read();\n\n// Avoid: Implicit typing\nlet input_value = prooflab_io::read();  // What type is this?"
+            },
+            {
+              type: "heading",
+              level: 3,
+              id: "error-handling",
+              content: "Handle Errors Gracefully"
+            },
+            {
+              type: "text",
+              content: "Since panics inside the zkVM will fail proof generation, handle errors gracefully:"
+            },
+            {
+              type: "code",
+              language: "rust",
+              content: "fn main() {\n    let input: Result<Vec<u8>, String> = prooflab_io::read();\n    \n    match input {\n        Ok(data) => {\n            // Process valid data\n            let result = process_data(data);\n            prooflab_io::commit(&Ok::<_, String>(result));\n        },\n        Err(err) => {\n            // Handle error case\n            prooflab_io::commit(&Err::<Vec<u8>, _>(err));\n        }\n    }\n}"
+            },
+            {
+              type: "heading",
+              level: 3,
+              id: "debugging",
+              content: "Debugging zkVM Programs"
+            },
+            {
+              type: "text",
+              content: "Since zkVMs don't support traditional debugging, use these strategies:"
             },
             {
               type: "list",
               style: "unordered",
               items: [
-                "Measure first: Use the benchmarking tools to identify bottlenecks",
-                "Use precompiled operations for cryptographic functions",
-                "Minimize memory allocations and reuse buffers",
-                "Move expensive computations outside the zkVM when possible",
-                "Choose efficient algorithms with lower complexity",
-                "Enable hardware acceleration (GPU) for faster proving",
-                "Use zkVM-specific optimizations when appropriate",
-                "Balance readability with performance for maintainability"
+                "Test outside the zkVM first by creating a normal Rust binary",
+                "Use the commit mechanism to output intermediate values",
+                "Break complex logic into smaller, testable functions",
+                "Add assertions to verify program correctness"
               ]
+            },
+            {
+              type: "heading",
+              level: 2,
+              id: "dependencies",
+              content: "Working with Dependencies"
+            },
+            {
+              type: "text",
+              content: "You can use many standard Rust crates in your zkVM program. However, there are some limitations:"
+            },
+            {
+              type: "list",
+              style: "unordered",
+              items: [
+                "Standard I/O operations like println!() won't work inside the zkVM (in your main() function)",
+                "Some system calls may not be available inside the zkVM",
+                "Some crates may need special versions optimized for zkVMs"
+              ]
+            },
+            {
+              type: "text",
+              content: "For best results, prefer pure computation libraries that don't rely on external resources."
+            },
+            {
+              type: "heading",
+              level: 2,
+              id: "memory-management",
+              content: "Memory Management"
+            },
+            {
+              type: "text",
+              content: "zkVMs have limits on memory usage. For large computations:"
+            },
+            {
+              type: "list",
+              style: "unordered",
+              items: [
+                "Break processing into smaller chunks",
+                "Avoid excessive memory allocation",
+                "Use fixed-size arrays where possible",
+                "Consider memory-efficient algorithms"
+              ]
+            },
+            {
+              type: "heading",
+              level: 2,
+              id: "example-patterns",
+              content: "Example Patterns"
+            },
+            {
+              type: "heading",
+              level: 3,
+              id: "pattern-bubble-sort",
+              content: "Bubble Sort Example"
+            },
+            {
+              type: "code",
+              language: "rust",
+              content: "use prooflab_io;\n\nfn main() {\n    // Read the input array\n    let mut input: Vec<i32> = prooflab_io::read();\n\n    // Commit the original array\n    prooflab_io::commit(&input);\n\n    // Bubble sort implementation\n    let n = input.len();\n    for i in 0..n {\n        for j in 0..n - i - 1 {\n            if input[j] > input[j + 1] {\n                input.swap(j, j + 1);\n            }\n        }\n    }\n\n    // Commit the sorted array\n    prooflab_io::commit(&input);\n}\n\nfn input() {\n    // Example input array\n    let numbers = vec![64, 34, 25, 12, 22, 11, 90];\n    prooflab_io::write(&numbers);\n}\n\nfn output() {\n    let (original, sorted): (Vec<i32>, Vec<i32>) = prooflab_io::out();\n    println!(\"Original array: {:?}\", original);\n    println!(\"Sorted array:   {:?}\", sorted);\n}"
+            },
+            {
+              type: "heading",
+              level: 3,
+              id: "pattern-cryptographic-hash",
+              content: "Cryptographic Hash Example"
+            },
+            {
+              type: "code",
+              language: "rust",
+              content: "use sha3::{Digest as _, Keccak256};\n\nfn main() {\n    let data: Vec<u8> = prooflab_io::read();\n    let hash: [u8; 32] = Keccak256::digest(&data).into();\n    prooflab_io::commit(&hash);\n}\n\nfn input() {\n    let message = b\"Hello, world!\".to_vec();\n    prooflab_io::write(&message);\n}\n\nfn output() {\n    let hash: [u8; 32] = prooflab_io::out();\n    println!(\"Keccak256 hash: {:?}\", hash);\n}"
+            },
+            {
+              type: "heading",
+              level: 2,
+              id: "key-workflow",
+              content: "Key Workflow"
+            },
+            {
+              type: "text",
+              content: "Remember the key workflow for prooflab-rs development:"
+            },
+            {
+              type: "list",
+              style: "ordered",
+              items: [
+                "Define your computation in main()",
+                "Prepare inputs in input()",
+                "Process outputs in output()",
+                "Generate proofs with your preferred zkVM"
+              ]
+            },
+            {
+              type: "text",
+              content: "By following these best practices, you can create efficient and effective zkVM programs with your choice of backend."
             }
           ]
         }

@@ -140,7 +140,7 @@ const FAQ = () => {
               <p className="text-gray-700 leading-relaxed mb-4">
                 ProofLab's SDK, <a href="https://github.com/ProofLabDev/prooflab-rs" className="text-blue-600 hover:text-blue-800 underline">prooflab-rs</a>, 
                 is a powerful abstraction layer that allows developers to write Rust code once and run it across multiple zkVMs. 
-                This is a fork of <a href="https://github.com/yetanotherco/zkRust" className="text-blue-600 hover:text-blue-800 underline">zkRust</a> with significant new functionality added.
+                This is a fork of <a href="https://github.com/yetanotherco/zkRust" className="text-blue-600 hover:text-blue-800 underline">zkRust</a> which we forked with significant new functionality added.
                 This approach ensures our benchmarks are:
               </p>
               <ul className="space-y-3 text-gray-700">
@@ -236,8 +236,9 @@ const FAQ = () => {
                   <a href="https://github.com/ProofLabDev/prooflab-rs" className="text-blue-600 hover:text-blue-800 underline font-medium">prooflab-rs</a>
                   <p className="mt-1">
                     Our SDK that enables cross-zkVM benchmarking, providing the abstraction layer
-                    that makes our comparable benchmarks possible. It was forked from zkRust but has 
-                    since added significant new functionality.
+                    that makes our comparable benchmarks possible. It was forked from 
+                    <a href="https://github.com/yetanotherco/zkRust" className="text-blue-600 hover:text-blue-800 underline"> zkRust</a> which we forked and 
+                    have since added significant new functionality.
                   </p>
                 </div>
               </li>
