@@ -57,12 +57,40 @@ const blogPosts = {
         <h2 class="text-3xl font-bold text-gray-900 mt-12 mb-6">How It Works</h2>
         
         <p class="text-gray-700 leading-relaxed mb-6">
-          Starting this week, the ZKarnage project will begin deploying a series of targeted transactions on the Ethereum mainnet at regular intervals. These attacks will simulate worst-case scenarios for provers, focusing on areas like high gas consumption, memory-intensive operations, and complex precompile usage.
+          Starting this week, the ZKarnage project will begin deploying a series of targeted transactions on the Ethereum mainnet. These transactions are not random; they are carefully crafted "prover-killer" operations designed to exploit discrepancies between an operation's gas cost and its actual computational cost for a ZK prover.
         </p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-10 mb-4">The Science of "Prover-Killer" Transactions</h3>
+        <p class="text-gray-700 leading-relaxed mb-6">
+          The core of ZKarnage is identifying and exploiting EVM operations where the gas cost doesn't align with the actual proving resources required. This discrepancy allows us to create transactions that are cheap to execute on L1 but create significant computational stress for ZK provers. Our research has identified two primary categories of such operations:
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-8 my-8">
+          <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+            <h4 class="font-semibold text-lg text-gray-800 mb-2">1. Expensive EVM Opcodes</h4>
+            <p class="text-gray-700 leading-relaxed mb-4 text-sm">
+              These are fundamental EVM instructions that are cheap in gas but require intensive computation for ZK circuits to prove.
+            </p>
+            <ul class="list-disc list-inside text-gray-700 space-y-2 pl-2 text-sm">
+              <li><strong><code>JUMPDEST</code>:</strong> Exploits a massive 1,000x+ cycle-to-gas ratio to stress state verification.</li>
+              <li><strong><code>MCOPY</code> / <code>CALLDATACOPY</code>:</strong> Test a prover's efficiency in handling large memory operations.</li>
+            </ul>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+            <h4 class="font-semibold text-lg text-gray-800 mb-2">2. Intensive Precompiles</h4>
+            <p class="text-gray-700 leading-relaxed mb-4 text-sm">
+              Precompiles for complex cryptography are another key vector. Their fixed gas costs often hide immense computational depth.
+            </p>
+            <ul class="list-disc list-inside text-gray-700 space-y-2 pl-2 text-sm">
+              <li><strong><code>MODEXP</code>:</strong> Our most potent attack, with a cycle-to-gas ratio also exceeding 1,000x by using worst-case parameters.</li>
+              <li><strong>Elliptic Curve Ops:</strong> <code>BN_PAIRING</code>, <code>BN_MUL</code>, and <code>ECRECOVER</code> attacks target complex and costly cryptographic computations.</li>
+            </ul>
+          </div>
+        </div>
         
         <div class="bg-indigo-50 border-l-4 border-indigo-400 p-6 my-8">
           <p class="text-gray-700 leading-relaxed">
-            The impact of these transactions on various ZK proving systems will be monitored in near real-time, with data and findings made publicly available.
+            The impact of these transactions on various ZK proving systems will be monitored in near real-time, with data and findings made publicly available on our dashboard.
           </p>
         </div>
 
