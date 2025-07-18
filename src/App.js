@@ -7,17 +7,26 @@ import posthog from 'posthog-js';
 import MainLayout from './components/layouts/MainLayout';
 
 // Import pages
-import Home from './components/pages/Home';
-import Programs from './components/pages/Programs';
-import ProgramDetails from './components/pages/ProgramDetails';
-import ZKVMs from './components/pages/ZKVMs';
-import ZKVMDetails from './components/pages/ZKVMDetails';
-import BenchmarkDetails from './components/pages/BenchmarkDetails';
+import Home from './components/Home/Home';
 import FAQ from './components/pages/FAQ';
 import About from './components/About/About';
-import TelemetryDashboard from './components/TelemetryDashboard/TelemetryDashboard';
-import ComparisonTable from './components/ComparisonTable/ComparisonTable';
 import Learn from './components/Learn/Learn';
+
+// Import new Research Collective components
+import Projects from './components/Projects/Projects';
+import ZKarnageDetails from './components/Projects/ZKarnageDetails';
+import Blog from './components/Blog/Blog';
+import BlogPost from './components/Blog/BlogPost';
+import Research from './components/Research/Research';
+
+// Archived pages (commented out but preserved)
+// import Programs from './components/pages/Programs';
+// import ProgramDetails from './components/pages/ProgramDetails';
+// import ZKVMs from './components/pages/ZKVMs';
+// import ZKVMDetails from './components/pages/ZKVMDetails';
+// import BenchmarkDetails from './components/pages/BenchmarkDetails';
+// import TelemetryDashboard from './components/TelemetryDashboard/TelemetryDashboard';
+// import ComparisonTable from './components/ComparisonTable/ComparisonTable';
 
 function App() {
   useEffect(() => {
@@ -38,16 +47,23 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<MainLayout><Home /></MainLayout>} />
-          <Route path="/programs" element={<MainLayout><Programs /></MainLayout>} />
-          <Route path="/programs/:id" element={<MainLayout><ProgramDetails /></MainLayout>} />
-          <Route path="/zkvms" element={<MainLayout><ZKVMs /></MainLayout>} />
-          <Route path="/zkvms/:id" element={<MainLayout><ZKVMDetails /></MainLayout>} />
-          <Route path="/benchmarks/:id" element={<MainLayout><BenchmarkDetails /></MainLayout>} />
-          <Route path="/faq" element={<MainLayout><FAQ /></MainLayout>} />
+          <Route path="/projects" element={<MainLayout><Projects /></MainLayout>} />
+          <Route path="/projects/zkarnage" element={<MainLayout><ZKarnageDetails /></MainLayout>} />
+          <Route path="/research" element={<MainLayout><Research /></MainLayout>} />
+          <Route path="/blog" element={<MainLayout><Blog /></MainLayout>} />
+          <Route path="/blog/:slug" element={<MainLayout><BlogPost /></MainLayout>} />
           <Route path="/about" element={<MainLayout><About /></MainLayout>} />
-          <Route path="/benchmarks" element={<MainLayout><TelemetryDashboard /></MainLayout>} />
-          <Route path="/compare" element={<MainLayout><ComparisonTable /></MainLayout>} />
           <Route path="/learn/*" element={<MainLayout><Learn /></MainLayout>} />
+          <Route path="/faq" element={<MainLayout><FAQ /></MainLayout>} />
+          
+          {/* Archived routes - commented out but preserved */}
+          {/* <Route path="/programs" element={<MainLayout><Programs /></MainLayout>} /> */}
+          {/* <Route path="/programs/:id" element={<MainLayout><ProgramDetails /></MainLayout>} /> */}
+          {/* <Route path="/zkvms" element={<MainLayout><ZKVMs /></MainLayout>} /> */}
+          {/* <Route path="/zkvms/:id" element={<MainLayout><ZKVMDetails /></MainLayout>} /> */}
+          {/* <Route path="/benchmarks/:id" element={<MainLayout><BenchmarkDetails /></MainLayout>} /> */}
+          {/* <Route path="/benchmarks" element={<MainLayout><TelemetryDashboard /></MainLayout>} /> */}
+          {/* <Route path="/compare" element={<MainLayout><ComparisonTable /></MainLayout>} /> */}
         </Routes>
       </Router>
     </HelmetProvider>

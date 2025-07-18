@@ -14,9 +14,9 @@ const Footer = () => {
               alt="ProofLab"
             />
             <p className="mt-4 text-sm text-gray-500">
-              ProofLab builds cutting-edge zero-knowledge tools and solutions, empowering developers to create
-              scalable and secure applications. Our comprehensive benchmarks and tooling help teams make informed
-              decisions about their zkVM implementations.
+              Prooflab is a research collective dedicated to improving the security, performance, and reliability of 
+              cryptographic proving systems. We conduct rigorous research and share our findings openly to advance 
+              the entire ecosystem.
             </p>
           </div>
 
@@ -27,18 +27,23 @@ const Footer = () => {
             </h3>
             <ul className="mt-4 space-y-4">
               <li>
-                <Link to="/programs" className="text-base text-gray-500 hover:text-gray-900">
-                  Programs
+                <Link to="/projects" className="text-base text-gray-500 hover:text-gray-900">
+                  Research Projects
                 </Link>
               </li>
               <li>
-                <Link to="/zkvms" className="text-base text-gray-500 hover:text-gray-900">
-                  zkVMs
+                <Link to="/research" className="text-base text-gray-500 hover:text-gray-900">
+                  Research Reports
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="text-base text-gray-500 hover:text-gray-900">
-                  FAQ
+                <Link to="/blog" className="text-base text-gray-500 hover:text-gray-900">
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="text-base text-gray-500 hover:text-gray-900">
+                  About
                 </Link>
               </li>
             </ul>
@@ -47,7 +52,7 @@ const Footer = () => {
           {/* Resources */}
           <div>
             <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">
-              Resources
+              Connect
             </h3>
             <ul className="mt-4 space-y-4">
               <li>
@@ -62,17 +67,17 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="https://github.com/prooflab/docs"
+                  href="https://github.com/yourbuddyconner/zkarnage"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-base text-gray-500 hover:text-gray-900"
                 >
-                  Documentation
+                  ZKarnage Project
                 </a>
               </li>
               <li>
                 <a
-                  href="https://twitter.com/theprooflab"
+                  href="https://twitter.com/TheProofLab"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-base text-gray-500 hover:text-gray-900"
@@ -110,7 +115,7 @@ const Footer = () => {
 
             {/* Twitter */}
             <a
-              href="https://twitter.com/theprooflab"
+              href="https://twitter.com/TheProofLab"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-gray-500"
@@ -121,12 +126,12 @@ const Footer = () => {
                 fill="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
             </a>
           </div>
           <p className="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
-            &copy; {new Date().getFullYear()} ProofLab. All rights reserved.
+            &copy; {new Date().getFullYear()} Prooflab Research Collective. All rights reserved.
           </p>
         </div>
       </div>

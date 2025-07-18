@@ -17,15 +17,19 @@ const MainLayout = ({ children }) => {
     const pageTitles = {
       '/': 'Home',
       '/about': 'About',
+      '/projects': 'Research Projects',
+      '/research': 'Research Reports',
+      '/blog': 'Blog',
+      '/faq': 'FAQ',
+      '/learn': 'Learn',
+      // Legacy routes (keeping for redirects)
       '/programs': 'Benchmark Programs',
       '/zkvms': 'ZK Virtual Machines',
       '/compare': 'Compare ZKVMs',
-      '/benchmarks': 'Benchmarks',
-      '/faq': 'Frequently Asked Questions',
-      '/learn': 'Learn'
+      '/benchmarks': 'Benchmarks'
     };
     
-    return pageTitles[path] || 'ProofLab';
+    return pageTitles[path] || 'Prooflab Research Collective';
   };
 
   return (

@@ -1,441 +1,141 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const CodeBlock = () => (
-  <div className="relative rounded-lg overflow-hidden bg-[#1a1b26] border border-[#292e42] shadow-2xl">
-    <div className="flex items-center justify-between px-4 py-3 bg-[#1f2335] border-b border-[#292e42]">
-      <div className="flex items-center space-x-2">
-        <div className="flex space-x-2">
-          <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-          <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
-          <div className="w-3 h-3 rounded-full bg-[#28c840]" />
-        </div>
-        <div className="ml-2 text-[#565f89] text-sm font-medium">range_proof.rs</div>
-      </div>
-      <div className="flex items-center space-x-2">
-        <div className="text-xs text-[#565f89] bg-[#292e42] px-2 py-1 rounded">rust</div>
-      </div>
-    </div>
-    <div className="p-6 text-sm font-mono">
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">1</div>
-        <div>
-          <span className="text-[#bb9af7]">use</span>
-          <span className="text-[#c0caf5]"> zk_rust_sdk::prelude::*;</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">2</div>
-        <div><span className="text-[#c0caf5]">&nbsp;</span></div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">3</div>
-        <div>
-          <span className="text-[#89ddff]">#[</span>
-          <span className="text-[#f7768e]">circuit</span>
-          <span className="text-[#89ddff]">]</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">4</div>
-        <div>
-          <span className="text-[#bb9af7]">pub struct</span>
-          <span className="text-[#e0af68]"> RangeProof</span>
-          <span className="text-[#c0caf5]"> {'{'}</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">5</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#9aa5ce]">{"/// The secret value to prove is within range"}</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">6</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#bb9af7]">secret</span>
-          <span className="text-[#c0caf5]">: Field,</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">7</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#9aa5ce]">{"/// The range bounds [min, max]"}</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">8</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#bb9af7]">public</span>
-          <span className="text-[#c0caf5]"> bounds: (Field, Field),</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">9</div>
-        <div>
-          <span className="text-[#c0caf5]">{'}'}</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">10</div>
-        <div><span className="text-[#c0caf5]">&nbsp;</span></div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">11</div>
-        <div>
-          <span className="text-[#bb9af7]">pub fn</span>
-          <span className="text-[#7aa2f7]"> input</span>
-          <span className="text-[#c0caf5]">() {'{'}</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">12</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#bb9af7]">let</span>
-          <span className="text-[#c0caf5]"> secret = Field::from(42);</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">13</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#bb9af7]">let</span>
-          <span className="text-[#c0caf5]"> bounds = (Field::from(0), Field::from(100));</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">14</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#c0caf5]">zk_rust_io::write(&secret);</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">15</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#c0caf5]">zk_rust_io::write(&bounds);</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">16</div>
-        <div>
-          <span className="text-[#c0caf5]">{'}'}</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">17</div>
-        <div><span className="text-[#c0caf5]">&nbsp;</span></div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">18</div>
-        <div>
-          <span className="text-[#bb9af7]">pub fn</span>
-          <span className="text-[#7aa2f7]"> main</span>
-          <span className="text-[#c0caf5]">() {'{'}</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">19</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#bb9af7]">let</span>
-          <span className="text-[#c0caf5]"> secret: Field = zk_rust_io::read();</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">20</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#bb9af7]">let</span>
-          <span className="text-[#c0caf5]"> bounds: (Field, Field) = zk_rust_io::read();</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">21</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#bb9af7]">let</span>
-          <span className="text-[#c0caf5]"> (min, max) = bounds;</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">22</div>
-        <div><span className="text-[#c0caf5]">&nbsp;</span></div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">23</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#9aa5ce]">{"// Prove: min ≤ secret ≤ max"}</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">24</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#c0caf5]">assert!(secret {'>'}= min);</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">25</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#c0caf5]">assert!(secret {'<'}= max);</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">26</div>
-        <div><span className="text-[#c0caf5]">&nbsp;</span></div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">27</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#c0caf5]">zk_rust_io::commit(&true);</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">28</div>
-        <div>
-          <span className="text-[#c0caf5]">{'}'}</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">29</div>
-        <div><span className="text-[#c0caf5]">&nbsp;</span></div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">30</div>
-        <div>
-          <span className="text-[#bb9af7]">pub fn</span>
-          <span className="text-[#7aa2f7]"> output</span>
-          <span className="text-[#c0caf5]">() {'{'}</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">31</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#bb9af7]">let</span>
-          <span className="text-[#c0caf5]"> result: bool = zk_rust_io::out();</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">32</div>
-        <div>
-          <span className="text-[#c0caf5]">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <span className="text-[#c0caf5]">println!("Range proof verified: {}", result);</span>
-        </div>
-      </div>
-      <div className="flex">
-        <div className="text-[#3b4261] select-none mr-4">33</div>
-        <div>
-          <span className="text-[#c0caf5]">{'}'}</span>
-        </div>
-      </div>
-    </div>
+const FeatureCard = ({ icon, title, description, link, linkText }) => (
+  <div className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow border border-gray-100">
+    <div className="text-4xl mb-4">{icon}</div>
+    <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
+    <p className="text-gray-600 mb-4">{description}</p>
+    <Link to={link} className="text-indigo-600 hover:text-indigo-700 font-medium">
+      {linkText} →
+    </Link>
   </div>
 );
 
-const TrendingCard = ({ title, subtitle, stats, link, lastUpdated }) => (
-  <Link to={link} className="block bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 hover:bg-gray-800/70 transition-colors border border-gray-700">
-    <div className="flex items-center justify-between">
-      <h3 className="text-lg font-semibold text-white">{title}</h3>
-      <div className="flex items-center space-x-2">
-        {stats.map((stat, index) => (
-          <div key={index} className="flex items-center text-sm">
-            <span className="text-gray-400">•</span>
-            <span className="ml-2 text-gray-300">{stat.value}</span>
-          </div>
-        ))}
-      </div>
+const LatestUpdate = ({ title, date, excerpt, link }) => (
+  <Link to={link} className="block bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow border border-gray-200">
+    <div className="flex items-center justify-between mb-2">
+      <h4 className="text-lg font-semibold text-gray-900">{title}</h4>
+      <span className="text-sm text-gray-500">{date}</span>
     </div>
-    <p className="mt-1 text-sm text-gray-400">{subtitle}</p>
-    <div className="mt-2 text-xs text-gray-500">
-      Updated {lastUpdated}
-    </div>
+    <p className="text-gray-600 text-sm">{excerpt}</p>
   </Link>
 );
 
-const TaskCategory = ({ title, tasks }) => (
-  <div className="mb-8">
-    <h3 className="text-gray-400 text-sm font-medium mb-3">{title}</h3>
-    <div className="grid grid-cols-2 gap-3">
-      {tasks.map((task, index) => (
-        <div key={index} className="flex items-center space-x-2 text-gray-300 text-sm p-2 rounded hover:bg-gray-800/50 cursor-pointer backdrop-blur-sm border border-gray-800">
-          <span className={`text-lg ${task.iconColor}`}>{task.icon}</span>
-          <span>{task.name}</span>
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
 const Home = () => {
-  const trendingZKVMs = [
-    {
-      title: "RISC Zero",
-      subtitle: "High-performance RISC-V based ZK virtual machine",
-      stats: [
-        { value: "44.6k" },
-        { value: "2.03k" }
-      ],
-      lastUpdated: "about 14 hours ago",
-      link: "/zkvms"
-    },
-    {
-      title: "SP1",
-      subtitle: "STARK-based virtual machine for zero-knowledge proofs",
-      stats: [
-        { value: "32.6k" },
-        { value: "2.29k" }
-      ],
-      lastUpdated: "2 days ago",
-      link: "/zkvms"
-    }
-  ];
-
-  const trendingPrograms = [
-    {
-      title: "ECDSA Verification",
-      subtitle: "Zero-knowledge ECDSA signature verification",
-      stats: [
-        { value: "63.7k" },
-        { value: "396" }
-      ],
-      lastUpdated: "about 14 hours ago",
-      link: "/programs"
-    },
-    {
-      title: "SHA-256",
-      subtitle: "Zero-knowledge SHA-256 hash computation",
-      stats: [
-        { value: "50.8k" },
-        { value: "791" }
-      ],
-      lastUpdated: "about 15 hours ago",
-      link: "/programs"
-    }
-  ];
-
-  const tasks = {
-    cryptography: [
-      { name: "ECDSA", icon: "🔐", iconColor: "text-yellow-500" },
-      { name: "SHA-256", icon: "🔒", iconColor: "text-green-500" },
-      { name: "RSA", icon: "🔑", iconColor: "text-blue-500" },
-      { name: "Merkle Trees", icon: "🌳", iconColor: "text-green-500" }
-    ],
-    computation: [
-      { name: "Fibonacci", icon: "🔢", iconColor: "text-purple-500" },
-      { name: "Matrix Multiplication", icon: "📊", iconColor: "text-blue-500" },
-      { name: "Sorting", icon: "📈", iconColor: "text-green-500" },
-      { name: "Graph Algorithms", icon: "🕸️", iconColor: "text-yellow-500" }
-    ],
-    dataProcessing: [
-      { name: "JSON Parser", icon: "📝", iconColor: "text-yellow-500" },
-      { name: "Regex Matcher", icon: "🔍", iconColor: "text-blue-500" },
-      { name: "Data Validation", icon: "✅", iconColor: "text-green-500" },
-      { name: "Compression", icon: "📦", iconColor: "text-purple-500" }
-    ]
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-900 to-indigo-900">
-      <div className="absolute inset-0 opacity-10 grid-pattern" />
-      
-      <div className="relative">
+    <div className="min-h-screen bg-white">
+      <div className="relative overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gray-900 mix-blend-multiply" />
-          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-gray-900" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-indigo-50" />
+          <div className="absolute inset-0 opacity-10" style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(99, 102, 241, 0.1) 1px, transparent 1px)',
+            backgroundSize: '40px 40px'
+          }} />
         </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="pt-20 pb-16 text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
-              <span className="block">Open Source ZK Toolkit</span>
-              <span className="block text-indigo-400 mt-2">Build zero-knowledge applications together</span>
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
+              <span className="block">Prooflab Research Collective</span>
+              <span className="block text-indigo-600 mt-2">Advancing the State of Cryptographic Systems</span>
             </h1>
-            <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-300">
-              A community-driven toolkit for developing, testing, and comparing zero-knowledge proof implementations.
+            <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-600">
+              A research collective dedicated to improving the security, performance, and reliability of cryptographic proving systems through rigorous research and open collaboration.
             </p>
             <div className="mt-8 flex justify-center space-x-4">
               <Link
-                to="/learn"
+                to="/projects"
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
               >
-                Get Started
+                View Current Projects
               </Link>
               <Link
-                to="/programs"
-                className="inline-flex items-center px-6 py-3 border border-gray-700 text-base font-medium rounded-md text-gray-300 bg-gray-800/50 hover:bg-gray-800"
+                to="/blog"
+                className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
               >
-                Browse Programs
+                Read Our Blog
               </Link>
             </div>
           </div>
 
-          {/* Code Editor Preview */}
-          <div className="max-w-3xl mx-auto mb-16">
-            <CodeBlock />
+          {/* Feature Cards */}
+          <div className="py-16 bg-gray-50 rounded-2xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <FeatureCard
+                icon="🔬"
+                title="Research Projects"
+                description="Cutting-edge research initiatives focused on advancing cryptographic systems and zero-knowledge proofs."
+                link="/projects"
+                linkText="Explore Projects"
+              />
+              <FeatureCard
+                icon="📊"
+                title="Research Reports"
+                description="Published findings, technical reports, and papers documenting our research outcomes."
+                link="/research"
+                linkText="View Reports"
+              />
+              <FeatureCard
+                icon="📝"
+                title="Blog & Updates"
+                description="Latest announcements, insights, and updates from the Prooflab collective."
+                link="/blog"
+                linkText="Read Blog"
+              />
+            </div>
           </div>
 
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 pb-24">
-            {/* Left Column - Task Categories */}
-            <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-2">
-                  <span className="text-white text-lg font-semibold">Tasks</span>
-                  <span className="bg-gray-700/50 text-gray-300 text-sm px-2 py-1 rounded">12 categories</span>
-                </div>
-                <input
-                  type="text"
-                  placeholder="Filter tasks by name"
-                  className="bg-gray-700/50 text-gray-300 px-3 py-1 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
+          {/* Current Focus Section */}
+          <div className="py-16 border-t border-gray-200">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Current Focus: ZKarnage</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Our flagship project, supported by the Ethereum Foundation, is conducting live stress-testing of zero-knowledge proving systems on Ethereum mainnet to identify vulnerabilities and improve ecosystem resilience.
+              </p>
+              <div className="mt-8 flex justify-center space-x-4">
+                <a
+                  href="https://github.com/yourbuddyconner/zkarnage"
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                  View on GitHub
+                </a>
+                <Link
+                  to="/projects/zkarnage"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                >
+                  Learn More
+                </Link>
               </div>
-              <TaskCategory title="Cryptography" tasks={tasks.cryptography} />
-              <TaskCategory title="Computation" tasks={tasks.computation} />
-              <TaskCategory title="Data Processing" tasks={tasks.dataProcessing} />
-            </div>
-
-            {/* Right Column - Trending */}
-            <div className="space-y-8">
-              {/* Trending ZKVMs */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-white">Trending Reports</h2>
-                  <Link to="/zkvms" className="text-indigo-400 hover:text-indigo-300 text-sm">
-                    Browse all Reports →
-                  </Link>
-                </div>
-                <div className="space-y-4">
-                  {trendingZKVMs.map((zkvm, index) => (
-                    <TrendingCard key={index} {...zkvm} />
-                  ))}
                 </div>
               </div>
 
-              {/* Trending Programs */}
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-white">Popular Programs</h2>
-                  <Link to="/programs" className="text-indigo-400 hover:text-indigo-300 text-sm">
-                    Browse all programs →
+          {/* Latest Updates */}
+          <div className="pb-24">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold text-gray-900">Latest Updates</h2>
+              <Link to="/blog" className="text-indigo-600 hover:text-indigo-700">
+                View all →
                   </Link>
                 </div>
                 <div className="space-y-4">
-                  {trendingPrograms.map((program, index) => (
-                    <TrendingCard key={index} {...program} />
-                  ))}
-                </div>
-              </div>
+              <LatestUpdate
+                title="Announcing ZKarnage: Mainnet Stress Testing Initiative"
+                date="July 21, 2025"
+                excerpt="With support from the Ethereum Foundation, we're launching a comprehensive stress-testing program for zero-knowledge provers..."
+                link="/blog/announcing-zkarnage"
+              />
+              <LatestUpdate
+                title="Introducing Prooflab Research Collective"
+                date="July 15, 2025"
+                excerpt="We're excited to announce the transformation of Prooflab into a research collective focused on advancing cryptographic systems..."
+                link="/blog/prooflab-research-collective"
+              />
             </div>
           </div>
         </div>
