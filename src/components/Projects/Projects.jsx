@@ -85,6 +85,24 @@ const Projects = () => {
         dashboard: 'https://prooflab.dev',
         github: 'https://github.com/yourbuddyconner/zkarnage'
       }
+    },
+    {
+      id: 'zkvm-spreadsheet',
+      title: 'zkVM Comparison Framework',
+      description: 'A comprehensive research initiative documenting and comparing zero-knowledge virtual machines across 50+ technical dimensions. This living dataset tracks architectural decisions, proof systems, verification costs, and ecosystem maturity for 20+ zkVM implementations.',
+      status: 'Active',
+      timeline: 'December 2024 - Ongoing',
+      funder: null,
+      tags: ['Zero-Knowledge', 'Research', 'Data Analysis', 'zkVMs'],
+      leadResearcher: {
+        name: 'Prooflab Collective',
+        initials: 'PL',
+        twitter: 'TheProofLab'
+      },
+      links: {
+        dashboard: null,
+        github: null
+      }
     }
   ];
 

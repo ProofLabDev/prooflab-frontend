@@ -288,7 +288,7 @@ const About = () => {
                     <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full blur opacity-30"></div>
                     <img
                       className="relative h-32 w-32 rounded-full object-cover shadow-md"
-                      src="https://pbs.twimg.com/profile_images/1609309028462784513/Z8Cco7rb_400x400.jpg"
+                      src="/conner-profile.png"
                       alt="Conner Swann"
                     />
                   </div>

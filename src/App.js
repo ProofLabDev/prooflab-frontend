@@ -15,6 +15,7 @@ import Learn from './components/Learn/Learn';
 // Import new Research Collective components
 import Projects from './components/Projects/Projects';
 import ZKarnageDetails from './components/Projects/ZKarnageDetails';
+import ZKVMSpreadsheetDetails from './components/Projects/ZKVMSpreadsheetDetails';
 import Blog from './components/Blog/Blog';
 import BlogPost from './components/Blog/BlogPost';
 import Research from './components/Research/Research';
@@ -49,6 +50,7 @@ function App() {
           <Route path="/" element={<MainLayout><Home /></MainLayout>} />
           <Route path="/projects" element={<MainLayout><Projects /></MainLayout>} />
           <Route path="/projects/zkarnage" element={<MainLayout><ZKarnageDetails /></MainLayout>} />
+          <Route path="/projects/zkvm-spreadsheet" element={<MainLayout><ZKVMSpreadsheetDetails /></MainLayout>} />
           <Route path="/research" element={<MainLayout><Research /></MainLayout>} />
           <Route path="/blog" element={<MainLayout><Blog /></MainLayout>} />
           <Route path="/blog/:slug" element={<MainLayout><BlogPost /></MainLayout>} />
